@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="580.00" prefWidth="824.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.MainController">
+   <children>
+      <VBox layoutX="74.0" layoutY="55.0" prefHeight="200.0" prefWidth="107.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="30.0" prefWidth="132.0" text="MENOT">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="expense" alignment="CENTER" prefHeight="17.0" prefWidth="112.0" text="0" textAlignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="addExpense" prefHeight="25.0" prefWidth="131.0" />
+            <HBox prefHeight="100.0" prefWidth="106.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onExpenseAddClick" prefHeight="25.0" prefWidth="50.0" text="Lisää" />
+                  <Button mnemonicParsing="false" onAction="#none" prefHeight="25.0" prefWidth="69.0" text="Vähennä" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox layoutX="622.0" layoutY="55.0" prefHeight="200.0" prefWidth="107.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="127.0" text="TULOT">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="income" alignment="CENTER" prefHeight="17.0" prefWidth="106.0" text="0" textAlignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="addIncome" />
+            <HBox prefHeight="100.0" prefWidth="106.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onIncomeAddClick" prefHeight="25.0" prefWidth="50.0" text="Lisää" />
+                  <Button mnemonicParsing="false" onAction="#none" prefHeight="25.0" prefWidth="69.0" text="Vähennä" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox layoutX="379.0" layoutY="255.0" prefHeight="200.0" prefWidth="107.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="BUDJETTI">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="budget" alignment="CENTER" prefHeight="17.0" prefWidth="158.0" text="0" textAlignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="addBudget" />
+            <HBox prefHeight="100.0" prefWidth="106.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onBudgetAddClick" prefHeight="25.0" prefWidth="50.0" text="Lisää" />
+                  <Button mnemonicParsing="false" onAction="#onBudgetRemoveClick" prefHeight="25.0" prefWidth="69.0" text="Vähennä" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

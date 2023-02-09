@@ -12,4 +12,6 @@ module fi.metropolia.expensetracker {
 
     opens fi.metropolia.expensetracker to javafx.fxml;
     exports fi.metropolia.expensetracker;
+    exports fi.metropolia.expensetracker.controller;
+    opens fi.metropolia.expensetracker.controller to javafx.fxml;
 }
