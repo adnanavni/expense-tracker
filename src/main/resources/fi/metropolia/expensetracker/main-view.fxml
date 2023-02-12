@@ -69,5 +69,15 @@
             </HBox>
          </children>
       </VBox>
+      <VBox layoutX="362.0" layoutY="29.0" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Label text="Valuutta">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="selectCurrency" prefWidth="150.0" />
+            <Button mnemonicParsing="false" onAction="#onChooseCurrencyBtnClick" text="Valitse" />
+         </children></VBox>
    </children>
 </AnchorPane>
