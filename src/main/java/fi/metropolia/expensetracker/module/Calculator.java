@@ -1,11 +1,29 @@
 package fi.metropolia.expensetracker.module;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Currency;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 public class Calculator {
     private Double currentCourseMultiplier = 1.00;
+    private String currentCurrency = "EUR";
+    Map<String, Double> currencies = Map.ofEntries(
+            entry("EUR", 1.00),
+            entry("USD", 1.08),
+            entry("SEK", 11.1091),
+            entry("JPY", 140.64),
+            entry("ISK", 152.58),
+            entry("CAD", 1.43),
+            entry("RUB", 78.21),
+            entry("CHF", 0.99),
+            entry("NOK", 10.84),
+            entry("DKK", 7.45),
+            entry("GBP", 0.89)
+    );
+
     private Double budget = 0.00;
     private Double expense = 0.00;
     private Double income = 0.00;
@@ -43,46 +61,25 @@ public class Calculator {
     }
 
     public void setCurrentCourseMultiplier(String course){
-        switch(course){
-            case("SEK"):
-                budget = budget/currentCourseMultiplier;
-                income = income/currentCourseMultiplier;
-                expense = expense/currentCourseMultiplier;
-                currentCourseMultiplier = 11.1091;
-                budget = budget*currentCourseMultiplier;
-                income = income*currentCourseMultiplier;
-                expense = expense*currentCourseMultiplier;
-                expense = Math.round(expense * 100.0) / 100.0;
-                budget = Math.round(budget * 100.0) / 100.0;
-                income = Math.round(income * 100.0) / 100.0;
-                break;
-            case("EUR"):
-                budget = budget/currentCourseMultiplier;
-                income = income/currentCourseMultiplier;
-                expense = expense/currentCourseMultiplier;
-                currentCourseMultiplier = 1.00;
-                budget = budget*currentCourseMultiplier;
-                income = income*currentCourseMultiplier;
-                expense = expense*currentCourseMultiplier;
-                expense = Math.round(expense * 100.0) / 100.0;
-                budget = Math.round(budget * 100.0) / 100.0;
-                income = Math.round(income * 100.0) / 100.0;
-                break;
-            case("USD"):
-                budget = budget/currentCourseMultiplier;
-                income = income/currentCourseMultiplier;
-                expense = expense/currentCourseMultiplier;
-                currentCourseMultiplier = 1.08;
-                budget = budget*currentCourseMultiplier;
-                income = income*currentCourseMultiplier;
-                expense = expense*currentCourseMultiplier;
-                expense = Math.round(expense * 100.0) / 100.0;
-                budget = Math.round(budget * 100.0) / 100.0;
-                income = Math.round(income * 100.0) / 100.0;
-                break;
-        }
+
+        budget = budget/currentCourseMultiplier;
+        income = income/currentCourseMultiplier;
+        expense = expense/currentCourseMultiplier;
+        currentCourseMultiplier = currencies.get(course);
+        currentCurrency = course;
+        budget = budget*currentCourseMultiplier;
+        income = income*currentCourseMultiplier;
+        expense = expense*currentCourseMultiplier;
+        expense = Math.round(expense * 100.0) / 100.0;
+        budget = Math.round(budget * 100.0) / 100.0;
+        income = Math.round(income * 100.0) / 100.0;
+
     }
     public Double getCurrentCourseMultiplier(){return currentCourseMultiplier;}
+    public String getCurrentCurrency(){return currentCurrency;}
+    public ArrayList<String> getCurrencyCodes(){
+        return new ArrayList<String>(currencies.keySet());
+    }
     public Double getBudget() {
         return budget;
     }
