@@ -1,73 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="580.00" prefWidth="824.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.MainController">
+<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="550.0" minHeight="800.0" minWidth="550.0" prefHeight="800.0" prefWidth="550.0" styleClass="background" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.MainController">
    <children>
-      <VBox layoutX="74.0" layoutY="55.0" prefHeight="200.0" prefWidth="107.0">
+      <Label alignment="CENTER" layoutX="129.0" layoutY="150.0" styleClass="titleText" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="25.0" />
+      <Label fx:id="budget" alignment="CENTER" layoutX="261.0" layoutY="137.0" prefHeight="17.0" prefWidth="42.0" styleClass="titleText" text="0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="150.0" />
+      <ComboBox fx:id="selectCurrency" layoutX="200.0" layoutY="211.0" onAction="#onChooseCurrencyBtnClick" prefWidth="150.0" promptText="Currency" styleClass="button" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="200.0" />
+      <VBox alignment="CENTER" layoutX="192.0" layoutY="329.0" prefHeight="350.0" prefWidth="166.0" spacing="100.0" AnchorPane.leftAnchor="192.0" AnchorPane.rightAnchor="192.0" AnchorPane.topAnchor="329.0">
          <children>
-            <Label alignment="CENTER" prefHeight="30.0" prefWidth="132.0" text="MENOT">
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToBudget" prefHeight="50.0" prefWidth="165.0" text="Budget">
                <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="expense" alignment="CENTER" prefHeight="17.0" prefWidth="112.0" text="0" textAlignment="CENTER">
+                  <Font size="20.0" />
+               </font></Button>
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToExpense" prefHeight="50.0" prefWidth="166.0" text="Expense">
                <font>
-                  <Font size="15.0" />
+                  <Font size="20.0" />
+               </font></Button>
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToIncome" prefHeight="50.0" prefWidth="166.0" text="Income">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
                </font>
-            </Label>
-            <TextField fx:id="addExpense" prefHeight="25.0" prefWidth="131.0" />
-            <HBox prefHeight="100.0" prefWidth="106.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#onExpenseAddClick" prefHeight="25.0" prefWidth="50.0" text="Lisää" />
-                  <Button mnemonicParsing="false" onAction="#none" prefHeight="25.0" prefWidth="69.0" text="Vähennä" />
-               </children>
-            </HBox>
+            </Button>
          </children>
-      </VBox>
-      <VBox layoutX="622.0" layoutY="55.0" prefHeight="200.0" prefWidth="107.0">
-         <children>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="127.0" text="TULOT">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="income" alignment="CENTER" prefHeight="17.0" prefWidth="106.0" text="0" textAlignment="CENTER">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="addIncome" />
-            <HBox prefHeight="100.0" prefWidth="106.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#onIncomeAddClick" prefHeight="25.0" prefWidth="50.0" text="Lisää" />
-                  <Button mnemonicParsing="false" onAction="#none" prefHeight="25.0" prefWidth="69.0" text="Vähennä" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <VBox layoutX="379.0" layoutY="255.0" prefHeight="200.0" prefWidth="107.0">
-         <children>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="BUDJETTI">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="budget" alignment="CENTER" prefHeight="17.0" prefWidth="158.0" text="0" textAlignment="CENTER">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="addBudget" />
-            <HBox prefHeight="100.0" prefWidth="106.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#onBudgetAddClick" prefHeight="25.0" prefWidth="50.0" text="Lisää" />
-                  <Button mnemonicParsing="false" onAction="#onBudgetRemoveClick" prefHeight="25.0" prefWidth="69.0" text="Vähennä" />
-               </children>
-            </HBox>
-         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </VBox>
    </children>
+   <stylesheets>
+      <URL value="@css/main.css" />
+   </stylesheets>
 </AnchorPane>
