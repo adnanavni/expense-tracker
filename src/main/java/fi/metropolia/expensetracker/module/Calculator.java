@@ -8,8 +8,19 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 public class Calculator {
+    private static Calculator INSTANCE = null;
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
+
+    private Calculator(){}
+
+    public static Calculator getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new Calculator();
+        return INSTANCE;
+    }
+
+
     Map<String, Double> currencies = Map.ofEntries(
             entry("EUR", 1.00),
             entry("USD", 1.08),

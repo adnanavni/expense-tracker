@@ -22,8 +22,9 @@ public class MainController {
     @FXML
     private AnchorPane content;
 
-    private Calculator calculator = new Calculator();
+    private Calculator calculator = Calculator.getInstance();
     private Currency currency = Currency.getInstance(calculator.getCurrentCurrency());
+    ;
 
     @FXML
     public void initialize() {
