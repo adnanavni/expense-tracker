@@ -5,38 +5,16 @@ import fi.metropolia.expensetracker.module.Calculator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Currency;
 
 public class MainController {
-    @FXML
-    private Label expense;
-
-    @FXML
-    private Label income;
 
     @FXML
     private Label budget;
-
-    @FXML
-    private TextField addExpense;
-
-    @FXML
-    private TextField addIncome;
-
-    @FXML
-    private TextField addBudget;
 
     @FXML
     private ComboBox selectCurrency;
