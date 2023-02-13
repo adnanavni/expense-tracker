@@ -1,34 +1,26 @@
 package fi.metropolia.expensetracker.controller;
 
+import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Calculator;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
+import javafx.scene.layout.AnchorPane;
+import java.io.IOException;
 import java.util.Currency;
 
 public class MainController {
-    @FXML
-    private Label expense;
-
-    @FXML
-    private Label income;
 
     @FXML
     private Label budget;
 
     @FXML
-    private TextField addExpense;
-
-    @FXML
-    private TextField addIncome;
-
-    @FXML
-    private TextField addBudget;
-
-    @FXML
     private ComboBox selectCurrency;
+
+    @FXML
+    private AnchorPane content;
 
     private Calculator calculator = new Calculator();
     private Currency currency = Currency.getInstance(calculator.getCurrentCurrency());
@@ -36,11 +28,34 @@ public class MainController {
     @FXML
     public void initialize() {
         selectCurrency.getItems().addAll(calculator.getCurrencyCodes());
-        expense.setText(calculator.getExpense().toString() + " " + currency.getSymbol());
         budget.setText(calculator.getBudget().toString() + " " + currency.getSymbol());
-        income.setText(calculator.getIncome().toString() + " " + currency.getSymbol());
     }
 
+    public void changeWindowToBudget(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("budget-view.fxml"));
+        content.getChildren().setAll(pane);
+    }
+
+    public void changeWindowToIncome(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("income-view.fxml"));
+        content.getChildren().setAll(pane);
+    }
+
+    public void changeWindowToExpense(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("expense-view.fxml"));
+        content.getChildren().setAll(pane);
+    }
+
+    @FXML
+    protected void onChooseCurrencyBtnClick() {
+
+        calculator.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
+        currency = Currency.getInstance(calculator.getCurrentCurrency());
+        budget.setText(calculator.getBudget().toString() + " " + currency.getSymbol());
+
+    }
+
+/*
     @FXML
     protected void onExpenseAddClick() {
         if(calculator.getBudget() > 0 && addExpense.getText() != "") {
@@ -75,17 +90,8 @@ public class MainController {
     }
 
     @FXML
-    protected void onChooseCurrencyBtnClick() {
-
-            calculator.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
-            currency = Currency.getInstance(calculator.getCurrentCurrency());
-            income.setText(calculator.getIncome().toString() + " " + currency.getSymbol());
-            expense.setText(calculator.getExpense().toString() + " " + currency.getSymbol());
-            budget.setText(calculator.getBudget().toString() + " " + currency.getSymbol());
-
-    }
-    @FXML
     protected void none() {
         System.out.println("Somethinghere");
     }
+*/
 }
