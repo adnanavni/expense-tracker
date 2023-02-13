@@ -25,7 +25,8 @@ public class BudgetController {
     public void setCalculator(Calculator calculator) {
         this.calculator = calculator;
         currency = Currency.getInstance(calculator.getCurrentCurrency());
-        budget.setText(calculator.getBudget().toString() + " " + currency.getSymbol());
+        String budgetText = String.format("%.2f", calculator.getBudget());
+        budget.setText(budgetText + " " + currency.getSymbol());
     }
 
     public void backToMain(ActionEvent event) throws IOException {
