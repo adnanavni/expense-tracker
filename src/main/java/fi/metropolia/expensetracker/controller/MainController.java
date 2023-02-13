@@ -32,18 +32,31 @@ public class MainController {
     }
 
     public void changeWindowToBudget(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("budget-view.fxml"));
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("budget-view.fxml"));
+        AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
+
+        BudgetController budgetController = fxmloader.getController();
+        budgetController.setCalculator(calculator);
+
     }
 
     public void changeWindowToIncome(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("income-view.fxml"));
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("income-view.fxml"));
+        AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
+
+        IncomeController incomeController = fxmloader.getController();
+        incomeController.setCalculator(calculator);
     }
 
     public void changeWindowToExpense(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("expense-view.fxml"));
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("expense-view.fxml"));
+        AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
+
+        ExpenseController expenseController = fxmloader.getController();
+        expenseController.setCalculator(calculator);
     }
 
     @FXML
@@ -53,6 +66,10 @@ public class MainController {
         currency = Currency.getInstance(calculator.getCurrentCurrency());
         budget.setText(calculator.getBudget().toString() + " " + currency.getSymbol());
 
+    }
+
+    public Calculator getCalculator() {
+        return calculator;
     }
 
 /*
