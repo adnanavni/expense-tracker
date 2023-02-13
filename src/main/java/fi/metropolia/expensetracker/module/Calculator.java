@@ -32,9 +32,7 @@ public class Calculator {
         switch (calculation) {
             case("addToBudget"):
                 budget += amount;
-
                 budget = Math.round(budget * 100.0) / 100.0;
-
                 break;
             case("addWithIncome"):
                 income += amount;
@@ -54,6 +52,7 @@ public class Calculator {
             case("subtractWithExpenses"):
                 expense += amount;
                 budget -= expense;
+
                 budget = Math.round(budget * 100.0) / 100.0;
                 expense = Math.round(expense * 100.0) / 100.0;
                 break;
@@ -65,11 +64,14 @@ public class Calculator {
         budget = budget/currentCourseMultiplier;
         income = income/currentCourseMultiplier;
         expense = expense/currentCourseMultiplier;
+
         currentCourseMultiplier = currencies.get(course);
         currentCurrency = course;
+
         budget = budget*currentCourseMultiplier;
         income = income*currentCourseMultiplier;
         expense = expense*currentCourseMultiplier;
+
         expense = Math.round(expense * 100.0) / 100.0;
         budget = Math.round(budget * 100.0) / 100.0;
         income = Math.round(income * 100.0) / 100.0;
