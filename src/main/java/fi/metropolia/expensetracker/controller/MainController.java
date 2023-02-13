@@ -28,7 +28,8 @@ public class MainController {
     @FXML
     public void initialize() {
         selectCurrency.getItems().addAll(calculator.getCurrencyCodes());
-        budget.setText(calculator.getBudget().toString() + " " + currency.getSymbol());
+        String budgetText = String.format("%.2f", calculator.getBudget());
+        budget.setText(budgetText + " " + currency.getSymbol());
     }
 
     public void changeWindowToBudget(ActionEvent event) throws IOException {
@@ -51,7 +52,9 @@ public class MainController {
 
         calculator.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
         currency = Currency.getInstance(calculator.getCurrentCurrency());
-        budget.setText(calculator.getBudget().toString() + " " + currency.getSymbol());
+
+        String budgetText = String.format("%.2f", calculator.getBudget());
+        budget.setText(budgetText + " " + currency.getSymbol());
 
     }
 
