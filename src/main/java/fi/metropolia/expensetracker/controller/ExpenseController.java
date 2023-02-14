@@ -1,18 +1,18 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
+import fi.metropolia.expensetracker.module.Expense;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Currency;
+import java.util.Date;
 
 public class ExpenseController {
     @FXML
@@ -29,7 +29,11 @@ public class ExpenseController {
     private Button addBtn;
     private Variables variables;
     private Currency currency;
+    @FXML
+    private DatePicker selectedDate;
 
+    @FXML
+    private ListView expenseHistory;
 
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
@@ -51,6 +55,14 @@ public class ExpenseController {
             String budgetText = String.format("%.2f", variables.getExpense());
             expense.setText(budgetText + " " + currency.getSymbol());
             variables.setCategories(selectTopic.getSelectionModel().getSelectedItem().toString(), Double.parseDouble(addExpense.getText()));
+            LocalDate expenseDate = LocalDate.now();
+            if(selectedDate.getValue() != null){
+                expenseDate = selectedDate.getValue();
+            }
+            String expensePrice = String.format("%.2f", Double.parseDouble(addExpense.getText()));
+            Expense addedExpense = new Expense(String.format("%.2f", Double.parseDouble(addExpense.getText())),
+                    selectTopic.getSelectionModel().getSelectedItem().toString(), expenseDate, currency.getSymbol());
+            expenseHistory.getItems().add(addedExpense);
         }
     }
 
