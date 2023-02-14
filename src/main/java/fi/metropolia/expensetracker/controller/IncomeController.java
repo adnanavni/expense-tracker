@@ -1,7 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Calculator;
+import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,15 +12,15 @@ import java.io.IOException;
 public class IncomeController {
     @FXML
     private AnchorPane content;
-    private Calculator calculator;
+    private Variables variables;
 
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
 
-    public void setCalculator(Calculator calculator) {
-        this.calculator = calculator;
-        System.out.println(calculator.getIncome().toString());
+    public void setCalculator(Variables variables) {
+        this.variables = variables;
+        System.out.println(variables.getIncome().toString());
     }
 }

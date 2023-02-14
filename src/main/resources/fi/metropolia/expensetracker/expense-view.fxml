@@ -6,8 +6,14 @@
 <AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.ExpenseController">
     <children>
         <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0" />
-      <Label fx:id="expense" layoutX="224.0" layoutY="88.0" text="Label" />
-      <TextField fx:id="addExpense" layoutX="178.0" layoutY="131.0" />
-      <Button layoutX="194.0" layoutY="180.0" mnemonicParsing="false" onAction="#onExpenseAddClick" text="Add" />
+      <Label fx:id="expense" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="224.0" layoutY="88.0" styleClass="titleText" text="Expenses" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <TextField fx:id="addExpense" layoutX="100.0" layoutY="7.0" onAction="#BtnEnable" promptText="Amount:" styleClass="button" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
+            <Button fx:id="addBtn" alignment="CENTER" disable="true" layoutX="137.0" layoutY="147.0" mnemonicParsing="false" onAction="#onExpenseAddClick" text="Add" AnchorPane.leftAnchor="135.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="147.0" />
+            <ComboBox fx:id="selectTopic" layoutX="80.0" layoutY="59.0" onAction="#BtnEnable" prefWidth="150.0" styleClass="button" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="60.0" />
+            <DatePicker layoutX="74.0" layoutY="109.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="110.0" />
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

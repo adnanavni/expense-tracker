@@ -1,7 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Calculator;
+import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,14 +22,13 @@ public class MainController {
     @FXML
     private AnchorPane content;
 
-    private Calculator calculator = Calculator.getInstance();
-    private Currency currency = Currency.getInstance(calculator.getCurrentCurrency());
-    ;
+    private Variables variables = Variables.getInstance();
+    private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
 
     @FXML
     public void initialize() {
-        selectCurrency.getItems().addAll(calculator.getCurrencyCodes());
-        String budgetText = String.format("%.2f", calculator.getBudget());
+        selectCurrency.getItems().addAll(variables.getCurrencyCodes());
+        String budgetText = String.format("%.2f", variables.getBudget());
         budget.setText(budgetText + " " + currency.getSymbol());
     }
 
@@ -39,7 +38,7 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         BudgetController budgetController = fxmloader.getController();
-        budgetController.setCalculator(calculator);
+        budgetController.setCalculator(variables);
 
     }
 
@@ -49,7 +48,7 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         IncomeController incomeController = fxmloader.getController();
-        incomeController.setCalculator(calculator);
+        incomeController.setCalculator(variables);
     }
 
     public void changeWindowToExpense(ActionEvent event) throws IOException {
@@ -58,22 +57,18 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         ExpenseController expenseController = fxmloader.getController();
-        expenseController.setCalculator(calculator);
+        expenseController.setCalculator(variables);
     }
 
     @FXML
     protected void onChooseCurrencyBtnClick() {
 
-        calculator.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
-        currency = Currency.getInstance(calculator.getCurrentCurrency());
+        variables.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
+        currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        String budgetText = String.format("%.2f", calculator.getBudget());
+        String budgetText = String.format("%.2f", variables.getBudget());
         budget.setText(budgetText + " " + currency.getSymbol());
 
-    }
-
-    public Calculator getCalculator() {
-        return calculator;
     }
 
 /*
