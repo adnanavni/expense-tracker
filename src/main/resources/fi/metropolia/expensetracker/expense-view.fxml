@@ -10,18 +10,18 @@
       <Label fx:id="expense" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="224.0" layoutY="88.0" styleClass="titleText" text="Expenses" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
       <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="100.0">
          <children>
-            <TextField fx:id="addExpense" layoutX="100.0" layoutY="7.0" onAction="#BtnEnable" promptText="Amount:" styleClass="button" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
+            <TextField fx:id="addExpense" layoutX="100.0" layoutY="7.0" onAction="#btnEnable" promptText="Amount:" styleClass="button" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
             <Button fx:id="addBtn" alignment="CENTER" disable="true" layoutX="137.0" layoutY="147.0" mnemonicParsing="false" onAction="#onExpenseAddClick" text="Add" AnchorPane.leftAnchor="135.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="147.0" />
-            <ComboBox fx:id="selectTopic" layoutX="80.0" layoutY="59.0" onAction="#BtnEnable" prefWidth="150.0" styleClass="button" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="60.0" />
+            <ComboBox fx:id="selectTopic" layoutX="80.0" layoutY="59.0" onAction="#btnEnable" prefWidth="150.0" styleClass="button" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="60.0" />
             <DatePicker fx:id="selectedDate" layoutX="74.0" layoutY="109.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="110.0" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="17.0" layoutY="363.0" prefHeight="420.0" prefWidth="515.0">
+      <AnchorPane layoutX="17.0" layoutY="363.0" prefHeight="420.0" prefWidth="515.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="370.0">
          <children>
-            <ListView fx:id="expenseHistory" layoutX="1.0" layoutY="13.0" prefHeight="394.0" prefWidth="515.0" />
+            <ListView fx:id="expenseHistory" layoutX="1.0" layoutY="13.0" prefHeight="394.0" prefWidth="515.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" />
          </children>
       </AnchorPane>
-      <Label layoutX="142.0" layoutY="300.0" text="Expense history" textAlignment="CENTER">
+      <Label alignment="CENTER" layoutX="142.0" layoutY="300.0" styleClass="titleText" text="Expense history" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="300.0">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
