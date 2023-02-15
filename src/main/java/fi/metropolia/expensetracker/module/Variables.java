@@ -10,7 +10,7 @@ import static java.util.Map.entry;
 public class Variables {
     private static Variables INSTANCE = null;
 
-    Map<String, Double> currencies = Map.ofEntries(
+    private Map<String, Double> currencies = Map.ofEntries(
             entry("EUR", 1.00),
             entry("USD", 1.08),
             entry("SEK", 11.1091),
@@ -24,20 +24,23 @@ public class Variables {
             entry("GBP", 0.89)
     );
 
-    Map<String, Double> categories = new HashMap<>() {{
+    private Map<String, Double> categories = new HashMap<>() {{
         put("Groceries", 0.00);
         put("Restaurants", 0.00);
         put("Hobbies", 0.00);
         put("Clothes", 0.00);
         put("Well-being", 0.00);
         put("Medicines", 0.00);
+        put("Transport", 0.00);
         put("Other", 0.00);
     }};
 
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
 
-    private Double budget = 0.00;
+    private ArrayList<Budget> budgets = new ArrayList<Budget>();
+    private Budget budgetObject;
+    private Double totalBudget = 0.00;
     private Double expense = 0.00;
     private Double income = 0.00;
 
@@ -53,35 +56,34 @@ public class Variables {
     public void calculate(String calculation, Double amount) {
         switch (calculation) {
             case ("addToBudget"):
-                budget += amount;
+                totalBudget += amount;
                 break;
             case ("addWithIncome"):
                 income += amount;
-                budget += amount;
+                totalBudget += amount;
                 break;
             case ("addToIncome"):
                 income += amount;
                 break;
             case ("subtractFromBudget"):
-                budget -= amount;
+                totalBudget -= amount;
                 break;
             case ("subtractWithExpenses"):
                 expense += amount;
-                budget -= amount;
+                totalBudget -= amount;
                 break;
             case ("subtractExpense"):
                 expense -= amount;
-                budget += amount;
+                totalBudget += amount;
                 break;
         }
     }
 
     public void setCategories(String category, Double amount, Boolean addMoney) {
         double newAmount = categories.get(category);
-        if(addMoney){
+        if (addMoney) {
             newAmount += amount;
-        }
-        else {
+        } else {
             newAmount -= amount;
         }
         newAmount += amount;
@@ -90,16 +92,41 @@ public class Variables {
 
     public void setCurrentCourseMultiplier(String course) {
 
-        budget = budget / currentCourseMultiplier;
+        totalBudget = totalBudget / currentCourseMultiplier;
         income = income / currentCourseMultiplier;
         expense = expense / currentCourseMultiplier;
 
         currentCourseMultiplier = currencies.get(course);
         currentCurrency = course;
 
-        budget = budget * currentCourseMultiplier;
+        totalBudget = totalBudget * currentCourseMultiplier;
         income = income * currentCourseMultiplier;
         expense = expense * currentCourseMultiplier;
+    }
+
+    public void createNewBudget(double amount, String name) {
+        budgetObject = new Budget(amount, name);
+        budgets.add(budgetObject);
+    }
+
+    public ArrayList<String> getBudgetNames() {
+        ArrayList<String> names = new ArrayList<>();
+        names.add("New");
+
+        for (Budget budget : budgets) {
+            names.add(budget.getName());
+        }
+
+        return names;
+    }
+
+    public Double getSpecificBudget(String name) {
+        HashMap<String, Double> budgetsMap = new HashMap<>();
+
+        for (Budget budget : budgets) {
+            budgetsMap.put(budget.getName(), budget.getAmount());
+        }
+        return budgetsMap.get(name);
     }
 
     public String getCurrentCurrency() {
@@ -111,7 +138,7 @@ public class Variables {
     }
 
     public Double getBudget() {
-        return budget;
+        return totalBudget;
     }
 
     public Double getExpense() {

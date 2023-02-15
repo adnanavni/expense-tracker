@@ -47,8 +47,9 @@ public class ExpenseController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
         String budgetText = String.format("%.2f", variables.getExpense());
-        this.expense.setText(budgetText + " " + currency.getSymbol());
+        this.expense.setText("Expenses: " + budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getTopics());
+
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -102,7 +103,7 @@ public class ExpenseController {
     }
 
     @FXML
-    protected void BtnEnable() {
+    protected void btnEnable() {
         if (selectTopic.getSelectionModel().getSelectedItem() != null && addExpense.getText() != null) {
             addBtn.setDisable(false);
         }
