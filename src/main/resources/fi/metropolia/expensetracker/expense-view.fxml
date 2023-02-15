@@ -8,7 +8,7 @@
     <children>
         <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0" />
       <Label fx:id="expense" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="224.0" layoutY="88.0" styleClass="titleText" text="Expenses" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="100.0">
+      <AnchorPane layoutX="107.0" layoutY="127.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="127.0">
          <children>
             <TextField fx:id="addExpense" layoutX="100.0" layoutY="7.0" onAction="#btnEnable" promptText="Amount:" styleClass="button" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
             <Button fx:id="addBtn" alignment="CENTER" disable="true" layoutX="137.0" layoutY="147.0" mnemonicParsing="false" onAction="#onExpenseAddClick" text="Add" AnchorPane.leftAnchor="135.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="147.0" />
@@ -21,9 +21,19 @@
             <ListView fx:id="expenseHistory" layoutX="1.0" layoutY="13.0" prefHeight="394.0" prefWidth="515.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" />
          </children>
       </AnchorPane>
-      <Label alignment="CENTER" layoutX="142.0" layoutY="300.0" styleClass="titleText" text="Expense history" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="300.0">
+      <Label alignment="CENTER" layoutX="107.0" layoutY="318.0" styleClass="titleText" text="Expense history" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="318.0">
          <font>
             <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="229.0" layoutY="72.0" text="Of Budget:">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="activeBudgetTxt" layoutX="217.0" layoutY="99.0" text="BUDGETNAME">
+         <font>
+            <Font size="18.0" />
          </font>
       </Label>
     </children>

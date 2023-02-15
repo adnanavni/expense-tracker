@@ -18,7 +18,7 @@
                <font>
                   <Font size="20.0" />
                </font></Button>
-            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToExpense" prefHeight="50.0" prefWidth="166.0" text="Expense">
+            <Button fx:id="expenseBtn" contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToExpense" prefHeight="50.0" prefWidth="166.0" text="Expense">
                <font>
                   <Font size="20.0" />
                </font></Button>

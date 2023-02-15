@@ -11,11 +11,13 @@ public class Expense {
     private LocalDate date;
     private String usedCurrency;
 
-    public Expense(Double price, String type, LocalDate date, String usedCurrency){
+
+    public Expense(Double price, String type, LocalDate date, String usedCurrency ){
         this.price = price;
         this.type = type;
         this.date = date;
         this.usedCurrency = usedCurrency;
+
         id = currentId;
         currentId++;
     }
@@ -29,4 +31,11 @@ public class Expense {
     public Double getPrice(){
         return price;
     }
+    public void  setPrice(Double price) {
+        this.price = price;
+    }
+    public void setUsedCurrency(String currency){
+        usedCurrency = currency;
+    }
+
 }

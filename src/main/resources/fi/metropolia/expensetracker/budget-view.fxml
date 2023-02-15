@@ -2,12 +2,13 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="content" prefHeight="800" prefWidth="550" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.BudgetController">
    <children>
       <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0" />
-      <Label fx:id="budget" alignment="CENTER" contentDisplay="CENTER" layoutX="224.0" layoutY="10.0" styleClass="titleText" text="Total: " AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="100.0">
+      <Label fx:id="budget" alignment="CENTER" contentDisplay="CENTER" layoutX="224.0" layoutY="10.0" styleClass="titleText" text="Total:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
+      <AnchorPane layoutX="107.0" layoutY="145.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="145.0">
          <children>
             <ComboBox fx:id="selectTopic" layoutX="80.0" layoutY="59.0" onAction="#onSelectTopic" prefWidth="150.0" promptText="Budget" styleClass="button" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="10.0" />
             <TextField fx:id="budgetName" layoutX="100.0" layoutY="7.0" promptText="Name:" styleClass="button" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="60.0" />
@@ -15,6 +16,17 @@
             <Button fx:id="addBtn" alignment="CENTER" layoutX="137.0" layoutY="147.0" mnemonicParsing="false" onAction="#addToBudget" text="Add" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="150.0" />
          </children>
       </AnchorPane>
-      <Label fx:id="specificBudget" alignment="CENTER" contentDisplay="CENTER" styleClass="budgetText" text="Label" visible="false" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="320.0" />
+      <Label fx:id="specificBudget" alignment="CENTER" contentDisplay="CENTER" styleClass="budgetText" text="Label" visible="false" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="360.0" />
+      <Button fx:id="setActiveBudgetBtn" layoutX="218.0" layoutY="388.0" mnemonicParsing="false" text="Set Active" visible="false" />
+      <Label layoutX="148.0" layoutY="72.0" text="Currently active budget:">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="activeBudget" layoutX="213.0" layoutY="117.0" text="No active budget">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

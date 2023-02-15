@@ -37,6 +37,7 @@ public class Variables {
 
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
+    private Budget activeBudget;
 
     private ArrayList<Budget> budgets = new ArrayList<Budget>();
     private Budget budgetObject;
@@ -70,11 +71,11 @@ public class Variables {
                 break;
             case ("subtractWithExpenses"):
                 expense += amount;
-                totalBudget -= amount;
+                activeBudget.decreaseAmount(amount);
                 break;
             case ("subtractExpense"):
                 expense -= amount;
-                totalBudget += amount;
+                activeBudget.increaseAmount(amount);
                 break;
         }
     }
@@ -92,21 +93,47 @@ public class Variables {
 
     public void setCurrentCourseMultiplier(String course) {
 
-        totalBudget = totalBudget / currentCourseMultiplier;
-        income = income / currentCourseMultiplier;
-        expense = expense / currentCourseMultiplier;
+        //totalBudget = totalBudget / currentCourseMultiplier;
+        //income = income / currentCourseMultiplier;
+        //expense = expense / currentCourseMultiplier;
+        if(budgets.size() > 0){
+            for (Budget budget: budgets) {
+                budget.setAmount(budget.getAmount()/currentCourseMultiplier);
+            }
+
+        }
+        Double multiplierBefore = currentCourseMultiplier;
 
         currentCourseMultiplier = currencies.get(course);
         currentCurrency = course;
 
-        totalBudget = totalBudget * currentCourseMultiplier;
-        income = income * currentCourseMultiplier;
-        expense = expense * currentCourseMultiplier;
+        if(budgets.size() > 0){
+            for (Budget budget: budgets) {
+                budget.setCurrency(currentCurrency);
+                budget.setAmount(budget.getAmount()*currentCourseMultiplier);
+                if(budget.getExpenses().size() > 0){
+
+                    for (Expense expense:budget.getExpenses()) {
+                        Double newPrice = expense.getPrice()/multiplierBefore;
+                        newPrice = newPrice*currentCourseMultiplier;
+                        expense.setPrice(newPrice);
+                        expense.setUsedCurrency(activeBudget.getCurrency());
+                    }
+                }
+            }
+
+
+
+        }
+
+        //totalBudget = totalBudget * currentCourseMultiplier;
+        //income = income * currentCourseMultiplier;
+        //expense = expense * currentCourseMultiplier;
     }
 
-    public void createNewBudget(double amount, String name) {
-        budgetObject = new Budget(amount, name);
-        budgets.add(budgetObject);
+    public void createNewBudget(Budget newBudget) {
+
+        budgets.add(newBudget);
     }
 
     public ArrayList<String> getBudgetNames() {
@@ -119,7 +146,9 @@ public class Variables {
 
         return names;
     }
-
+    public ArrayList<Budget> getBudgets(){
+        return  budgets;
+    }
     public Double getSpecificBudget(String name) {
         HashMap<String, Double> budgetsMap = new HashMap<>();
 
@@ -129,10 +158,20 @@ public class Variables {
         return budgetsMap.get(name);
     }
 
+    public Double getTotalExpenses(){
+        Double totalExpenses = 0.00;
+        for(Integer i=0; i<activeBudget.getExpenses().size(); i++){
+            totalExpenses += activeBudget.getExpenses().get(i).getPrice();
+        }
+        return totalExpenses;
+    }
+
     public String getCurrentCurrency() {
         return currentCurrency;
     }
-
+    public Double getCurrentCourseMultiplier(){
+        return currentCourseMultiplier;
+    }
     public ArrayList<String> getCurrencyCodes() {
         return new ArrayList<>(currencies.keySet());
     }
@@ -151,5 +190,11 @@ public class Variables {
 
     public ArrayList<String> getTopics() {
         return new ArrayList<>(categories.keySet());
+    }
+    public void setActiveBudget(Budget budget){
+        activeBudget = budget;
+    }
+    public Budget getActiveBudget(){
+        return activeBudget;
     }
 }
