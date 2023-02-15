@@ -69,11 +69,21 @@ public class Variables {
                 expense += amount;
                 budget -= amount;
                 break;
+            case ("subtractExpense"):
+                expense -= amount;
+                budget += amount;
+                break;
         }
     }
 
-    public void setCategories(String category, Double amount) {
+    public void setCategories(String category, Double amount, Boolean addMoney) {
         double newAmount = categories.get(category);
+        if(addMoney){
+            newAmount += amount;
+        }
+        else {
+            newAmount -= amount;
+        }
         newAmount += amount;
         categories.put(category, newAmount);
     }
