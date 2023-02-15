@@ -4,14 +4,14 @@ import java.time.LocalDate;
 
 
 public class Expense {
-    private String price;
+    private Double price;
     private String type;
     private static Integer currentId = 1;
     private Integer id;
     private LocalDate date;
     private String usedCurrency;
 
-    public Expense(String price, String type, LocalDate date, String usedCurrency){
+    public Expense(Double price, String type, LocalDate date, String usedCurrency){
         this.price = price;
         this.type = type;
         this.date = date;
@@ -21,6 +21,12 @@ public class Expense {
     }
 
     public String toString(){
-        return type + ", added on: " + date + ", money spent: " + price + " " + usedCurrency;
+        return type + ", added on: " + date + ", money spent: " + String.format("%.2f", price) + " " + usedCurrency;
+    }
+    public String getType(){
+        return type;
+    }
+    public Double getPrice(){
+        return price;
     }
 }
