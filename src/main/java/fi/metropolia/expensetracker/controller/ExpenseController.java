@@ -1,6 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
+import fi.metropolia.expensetracker.module.Budget;
 import fi.metropolia.expensetracker.module.Expense;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
@@ -34,7 +35,8 @@ public class ExpenseController {
     private Currency currency;
     @FXML
     private DatePicker selectedDate;
-
+    @FXML
+    private Label activeBudgetTxt;
     @FXML
     private ListView expenseHistory;
 
@@ -46,10 +48,12 @@ public class ExpenseController {
     public void setCalculator(Variables variables) {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
-        String budgetText = String.format("%.2f", variables.getExpense());
-        this.expense.setText("Expenses: " + budgetText + " " + currency.getSymbol());
+        Budget activeBudget = variables.getActiveBudget();
+        activeBudgetTxt.setText(activeBudget.getName());
+        String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
+        this.expense.setText(budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getTopics());
-
+        expenseHistory.getItems().addAll(activeBudget.getExpenses());
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -66,10 +70,13 @@ public class ExpenseController {
 
                     if (option.get() == ButtonType.OK) {
                         expenseHistory.getItems().remove(selected);
+                        variables.getActiveBudget().removeExpenseFromBudget(selected);
+                        expenseHistory.getItems().clear();
+                        expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
                         variables.calculate("subtractExpense", selected.getPrice());
                         variables.setCategories(selected.getType(), selected.getPrice(), false);
-                        String expenseText = String.format("%.2f", variables.getExpense());
-                        expense.setText(expenseText + " " + currency.getSymbol());
+                        String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
+                        expense.setText(budgetText + " " + currency.getSymbol());
                     }
                 }
                 else {
@@ -88,7 +95,7 @@ public class ExpenseController {
     protected void onExpenseAddClick() {
         if(selectTopic.getSelectionModel().getSelectedItem() != null) {
             variables.calculate("subtractWithExpenses", Double.parseDouble(addExpense.getText()));
-            String budgetText = String.format("%.2f", variables.getExpense());
+            String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
             expense.setText(budgetText + " " + currency.getSymbol());
             variables.setCategories(selectTopic.getSelectionModel().getSelectedItem().toString(), Double.parseDouble(addExpense.getText()), true);
             LocalDate expenseDate = LocalDate.now();
@@ -98,7 +105,9 @@ public class ExpenseController {
 
             Expense addedExpense = new Expense(Double.parseDouble(addExpense.getText()),
                     selectTopic.getSelectionModel().getSelectedItem().toString(), expenseDate, currency.getSymbol());
-            expenseHistory.getItems().add(addedExpense);
+            variables.getActiveBudget().addExpenseToBudget(addedExpense);
+            expenseHistory.getItems().clear();
+            expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
         }
     }
 
