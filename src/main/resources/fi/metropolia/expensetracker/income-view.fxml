@@ -6,6 +6,20 @@
 <AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
     <children>
         <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0" />
+      <AnchorPane layoutX="149.0" layoutY="117.0" prefHeight="230.0" prefWidth="239.0">
+         <children>
+            <DatePicker fx:id="selectedDate" layoutX="32.0" layoutY="137.0" />
+            <TextField fx:id="addHourSalary" layoutX="45.0" layoutY="34.0" promptText="Hour Salary" />
+            <TextField fx:id="btnAddHours" layoutX="45.0" layoutY="79.0" promptText="Hours" />
+            <Button fx:id="addBtn" layoutX="87.0" layoutY="178.0" mnemonicParsing="false" onAction="#onSalaryAddClick" text="Add" />
+         </children></AnchorPane>
+      <AnchorPane layoutX="116.0" layoutY="371.0" prefHeight="345.0" prefWidth="398.0">
+         <children>
+            <Label layoutX="82.0" layoutY="5.0" text="SalaryHistory" />
+            <ListView fx:id="salaryHistory" layoutX="25.0" layoutY="33.0" prefHeight="299.0" prefWidth="358.0" />
+            <Label fx:id="salaryComing" layoutX="34.0" layoutY="337.0" text="Salary coming" />
+         </children>
+      </AnchorPane>
     </children>
 
 </AnchorPane>
