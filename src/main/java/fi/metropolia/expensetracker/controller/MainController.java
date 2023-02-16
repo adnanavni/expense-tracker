@@ -1,9 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Budget;
-import fi.metropolia.expensetracker.module.Expense;
-import fi.metropolia.expensetracker.module.Variables;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.Currency;
-
+import java.time.LocalDate;
 public class MainController {
 
     @FXML
@@ -27,6 +25,9 @@ public class MainController {
     private AnchorPane content;
 
     private Variables variables = Variables.getInstance();
+    SalarySingle salarySingle = SalarySingle.getInstance();
+    private LocalDate date;
+    private Salary salary = new Salary(0.0, date.now(),Currency.getInstance(variables.getCurrentCurrency()).toString());
     private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
 
     @FXML
@@ -68,7 +69,7 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         IncomeController incomeController = fxmloader.getController();
-        incomeController.setCalculator(variables);
+        incomeController.setCalculator(salarySingle, variables);
     }
 
     public void changeWindowToExpense(ActionEvent event) throws IOException {
