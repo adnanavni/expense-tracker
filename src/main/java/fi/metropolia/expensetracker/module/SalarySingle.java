@@ -21,8 +21,9 @@ public class SalarySingle {
 
         return salaries;
     }
-    public double getDaySalary(){//return salary.getDaySalary();
-        return this.daySalary; }
+    public double getDaySalary(){
+        return this.daySalary;
+    }
 
     public void createNewSalary(Salary salary) {
         salaries.add(salary);

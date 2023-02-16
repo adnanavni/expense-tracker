@@ -1,7 +1,7 @@
 package fi.metropolia.expensetracker.module;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+
 
 public class Salary {
 

@@ -58,21 +58,21 @@ public class IncomeController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Salary calculation");
-                    alert.setHeaderText("Add salary to calculation");
-                    alert.setContentText(selected.toString());
+                Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
+                //tee css valikoiduista riveistä
 
-                    Optional<ButtonType> option = alert.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Salary calculation");
+                alert.setHeaderText("Add salary to calculation");
+                alert.setContentText(selected.toString());
 
-                    if (option.get() == ButtonType.OK) {
-                        salaryTogether += selected.getDaySalary();
-                    }
-                    salaryComing.setText("Salary coming: " + salaryTogether);
+                Optional<ButtonType> option = alert.showAndWait();
+
+                if (option.get() == ButtonType.OK) {
+                    salaryTogether += selected.getDaySalary();
                 }
+                salaryComing.setText("Salary coming: " + salaryTogether);
             }
 
         });
@@ -80,22 +80,17 @@ public class IncomeController {
 
     @FXML
     protected void onSalaryAddClick() {
-       // salary.calculateDaySalary(Double.parseDouble(btnAddHours.getText()), Double.parseDouble(addHourSalary.getText()));
         salarySingle.CalculateDaySalary(Double.parseDouble(btnAddHours.getText()), Double.parseDouble(addHourSalary.getText()));
 
         LocalDate salaryDate = LocalDate.now();
         if(selectedDate.getValue() != null) {
             salaryDate = selectedDate.getValue();
         }
-
-        //Salary addedDaySalary = new Salary(salary.getDaySalary(), salaryDate, currency.toString());
         Salary addedDaySalary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString());
 
 
-        //salary.addDaySalaryToList(addedDaySalary);
         salarySingle.createNewSalary(addedDaySalary);
         salaryHistory.getItems().clear();
         salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
-        //        salaryHistory.getItems().addAll(salary.getDaySalaries());
     }
 }
