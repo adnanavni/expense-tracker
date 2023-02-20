@@ -3,6 +3,7 @@
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -35,6 +36,11 @@
             <Insets />
          </opaqueInsets>
       </VBox>
+      <ImageView fx:id="settingsIcon" fitHeight="65.0" fitWidth="40.0" layoutX="490.0" layoutY="746.0" onMouseClicked="#changeWindowToSettings" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="746.0">
+         <image>
+            <Image url="@images/setting.png" />
+         </image>
+      </ImageView>
    </children>
    <stylesheets>
       <URL value="@css/main.css" />

@@ -3,6 +3,7 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Salary;
 import fi.metropolia.expensetracker.module.SalarySingle;
+import fi.metropolia.expensetracker.module.ThemeManager;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,6 +41,10 @@ public class IncomeController {
     private Salary salary;
     private double salaryTogether;
 
+    public void initialize() {
+        ThemeManager themeManager = ThemeManager.getInstance();
+        content.setStyle(themeManager.getStyle());
+    }
 
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));

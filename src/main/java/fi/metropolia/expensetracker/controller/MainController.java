@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.Currency;
@@ -20,7 +21,8 @@ public class MainController {
     private Button expenseBtn;
     @FXML
     private ComboBox selectCurrency;
-
+    @FXML
+    private ImageView settingsIcon;
     @FXML
     private AnchorPane content;
 
@@ -32,6 +34,9 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        ThemeManager themeManager = ThemeManager.getInstance();
+        content.setStyle(themeManager.getStyle());
+
         selectCurrency.getItems().addAll(variables.getCurrencyCodes());
 
         if(variables.getBudgets().size()<1){
@@ -50,7 +55,13 @@ public class MainController {
             budget.setText(budgetText + " " + currency.getSymbol());
         }
 
-
+        settingsIcon.setOnMouseClicked(e -> {
+            try {
+                changeWindowToSettings();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     public void changeWindowToBudget(ActionEvent event) throws IOException {
@@ -79,6 +90,12 @@ public class MainController {
 
         ExpenseController expenseController = fxmloader.getController();
         expenseController.setCalculator(variables);
+    }
+
+    public void changeWindowToSettings() throws IOException {
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("settings-view.fxml"));
+        AnchorPane pane = fxmloader.load();
+        content.getChildren().setAll(pane);
     }
 
     @FXML
