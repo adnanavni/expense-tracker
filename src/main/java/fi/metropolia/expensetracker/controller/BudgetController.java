@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Budget;
+import fi.metropolia.expensetracker.module.ThemeManager;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,6 +42,11 @@ public class BudgetController {
 
     private Variables variables;
     private Currency currency;
+
+    public void initialize() {
+        ThemeManager themeManager = ThemeManager.getInstance();
+        content.setStyle(themeManager.getStyle());
+    }
 
     public void setCalculator(Variables variables) {
 
