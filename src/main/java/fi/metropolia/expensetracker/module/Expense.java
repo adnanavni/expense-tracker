@@ -12,7 +12,7 @@ public class Expense {
     private String usedCurrency;
 
 
-    public Expense(Double price, String type, LocalDate date, String usedCurrency ){
+    public Expense(Double price, String type, LocalDate date, String usedCurrency) {
         this.price = price;
         this.type = type;
         this.date = date;
@@ -22,19 +22,23 @@ public class Expense {
         currentId++;
     }
 
-    public String toString(){
+    public String toString() {
         return type + ", added on: " + date + ", money spent: " + String.format("%.2f", price) + " " + usedCurrency;
     }
-    public String getType(){
+
+    public String getType() {
         return type;
     }
-    public Double getPrice(){
+
+    public Double getPrice() {
         return price;
     }
-    public void  setPrice(Double price) {
+
+    public void setPrice(Double price) {
         this.price = price;
     }
-    public void setUsedCurrency(String currency){
+
+    public void setUsedCurrency(String currency) {
         usedCurrency = currency;
     }
 
