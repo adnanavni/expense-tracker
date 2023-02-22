@@ -18,8 +18,7 @@ public class BudgetController {
 
     @FXML
     private AnchorPane content;
-    @FXML
-    private Button setActiveBudgetBtn;
+
     @FXML
     private Label budget;
 
@@ -40,6 +39,12 @@ public class BudgetController {
     @FXML
     private Label specificBudget;
 
+    @FXML
+    private AnchorPane budgetPane;
+
+    @FXML
+    private ComboBox expenseCombo;
+
     private Variables variables;
     private Currency currency;
 
@@ -48,15 +53,17 @@ public class BudgetController {
         content.setStyle(themeManager.getStyle());
     }
 
-    public void setCalculator(Variables variables) {
+    public void setVariables(Variables variables) {
 
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        budget.setText("No selected budget");
+        budget.setText("Budget");
         selectTopic.getItems().addAll(variables.getBudgetNames());
-        if(variables.getActiveBudget() != null){
-            String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
+        expenseCombo.getItems().addAll(variables.getConstExpenses());
+
+        if (variables.getActiveBudget() != null) {
+            String budgetText = String.format("%.2f", variables.getBudget());
             activeBudget.setText(variables.getActiveBudget().getName());
             budget.setText("Total: " + budgetText + " " + currency.getSymbol());
         }
@@ -71,13 +78,11 @@ public class BudgetController {
     @FXML
     protected void addToBudget() {
         if (selectTopic.getSelectionModel().getSelectedItem() != null && addBudget.getText() != "") {
-            //variables.calculate("addToBudget", Double.parseDouble(addBudget.getText()));
-            //budget.setText("Total: " + variables.getBudget().toString() + " " + currency.getSymbol());
             if (selectTopic.getValue() == "New") {
-                Boolean willAdd =true;
-                for (Budget budget:variables.getBudgets()) {
-                    if(Objects.equals(budget.getName(), budgetName.getText())){
-                        willAdd=false;
+                boolean willAdd = true;
+                for (Budget budget : variables.getBudgets()) {
+                    if (Objects.equals(budget.getName(), budgetName.getText())) {
+                        willAdd = false;
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Name Exists");
                         alert.setHeaderText("Budget with given name already exists!");
@@ -85,19 +90,24 @@ public class BudgetController {
                         alert.showAndWait();
                     }
                 }
-                if(willAdd){
+                if (willAdd) {
                     Budget newBudget = new Budget(Double.parseDouble(addBudget.getText()), budgetName.getText(), variables.getCurrentCurrency());
                     variables.createNewBudget(newBudget);
                     variables.setActiveBudget(newBudget);
                     activeBudget.setText(variables.getActiveBudget().getName());
-                    String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
+                    String budgetText = String.format("%.2f", variables.getBudget());
                     budget.setText("Total: " + budgetText + " " + currency.getSymbol());
                 }
-
-
             }
         }
         selectTopic.getItems().setAll(variables.getBudgetNames());
+        specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
+
+        selectTopic.setValue(null);
+        budgetName.setText(null);
+        addBudget.setText(null);
+
+        budgetPane.setVisible(true);
     }
 
     @FXML
@@ -106,17 +116,33 @@ public class BudgetController {
             budgetName.setVisible(true);
         } else if (selectTopic.getValue() != null) {
             budgetName.setVisible(false);
-            specificBudget.setText(selectTopic.getValue().toString() + " " + (variables.getSpecificBudget(selectTopic.getValue().toString())).toString() + " " + currency.getSymbol());
-            for (Budget budget:variables.getBudgets()) {
-                if(budget.getName() == selectTopic.getValue()){
+            budgetPane.setVisible(true);
+            for (Budget budget : variables.getBudgets()) {
+                if (budget.getName() == selectTopic.getValue()) {
                     variables.setActiveBudget(budget);
-                    String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
+                    String budgetText = String.format("%.2f", variables.getBudget());
                     this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
                     activeBudget.setText(variables.getActiveBudget().getName());
+                    specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
                 }
             }
-            specificBudget.setVisible(true);
-            setActiveBudgetBtn.setVisible(true);
+        }
+    }
+
+    @FXML
+    protected void removeBtn() {
+        if (variables.getConstExpense(expenseCombo.getValue().toString()) == 0.00) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(expenseCombo.getValue().toString() + " not found");
+            alert.setHeaderText("Set the amount for " + expenseCombo.getValue().toString());
+            alert.setContentText("This can be found in expenses menu");
+            alert.showAndWait();
+        } else {
+            variables.calculate("subtractFromBudget", variables.getConstExpense(expenseCombo.getValue().toString()));
+            String budgetText = String.format("%.2f", variables.getBudget());
+            this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
+            specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
+
         }
     }
 }

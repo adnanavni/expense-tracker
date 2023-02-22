@@ -26,20 +26,27 @@ public class ExpenseController {
     private Label expense;
     @FXML
     private TextField addExpense;
-
     @FXML
     private ComboBox selectTopic;
-
     @FXML
     private Button addBtn;
-    private Variables variables;
-    private Currency currency;
     @FXML
     private DatePicker selectedDate;
     @FXML
     private Label activeBudgetTxt;
     @FXML
     private ListView expenseHistory;
+    @FXML
+    private ComboBox selectCategory;
+    @FXML
+    private TextField constExpenseName;
+    @FXML
+    private TextField constExpense;
+
+
+    private Variables variables;
+    private Currency currency;
+
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -51,7 +58,7 @@ public class ExpenseController {
         content.getChildren().setAll(pane);
     }
 
-    public void setCalculator(Variables variables) {
+    public void setVariables(Variables variables) {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
         Budget activeBudget = variables.getActiveBudget();
@@ -59,6 +66,8 @@ public class ExpenseController {
         String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
         this.expense.setText(budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getTopics());
+        selectCategory.getItems().addAll(variables.getConstExpenses());
+        selectCategory.getItems().add(0, "New");
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -84,8 +93,7 @@ public class ExpenseController {
                         String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
                         expense.setText(budgetText + " " + currency.getSymbol());
                     }
-                }
-                else {
+                } else {
                     // Nothing selected.
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection!");
@@ -99,13 +107,13 @@ public class ExpenseController {
 
     @FXML
     protected void onExpenseAddClick() {
-        if(selectTopic.getSelectionModel().getSelectedItem() != null) {
+        if (selectTopic.getSelectionModel().getSelectedItem() != null) {
             variables.calculate("subtractWithExpenses", Double.parseDouble(addExpense.getText()));
             String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
             expense.setText(budgetText + " " + currency.getSymbol());
             variables.setCategories(selectTopic.getSelectionModel().getSelectedItem().toString(), Double.parseDouble(addExpense.getText()), true);
             LocalDate expenseDate = LocalDate.now();
-            if(selectedDate.getValue() != null){
+            if (selectedDate.getValue() != null) {
                 expenseDate = selectedDate.getValue();
             }
 
@@ -115,6 +123,28 @@ public class ExpenseController {
             expenseHistory.getItems().clear();
             expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
         }
+
+        addExpense.setText(null);
+        selectTopic.setValue(null);
+        selectedDate.setValue(null);
+    }
+
+    @FXML
+    protected void selectConst() {
+        if (selectCategory.getValue() == "New") {
+            constExpenseName.setVisible(true);
+        } else if (selectCategory.getValue() != null) {
+            constExpenseName.setVisible(false);
+        }
+    }
+
+    @FXML
+    protected void setConstExpense() {
+        variables.setConstExpenses(selectCategory.getValue().toString(), Double.parseDouble(constExpense.getText()));
+
+        selectCategory.setValue(null);
+        constExpense.setText(null);
+        constExpenseName.setText(null);
     }
 
     @FXML
