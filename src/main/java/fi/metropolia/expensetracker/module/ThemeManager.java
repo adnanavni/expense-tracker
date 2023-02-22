@@ -5,7 +5,8 @@ public class ThemeManager {
 
     private String currentColor = "#85bb65"; // Default color is dollar green
 
-    private ThemeManager() {}
+    private ThemeManager() {
+    }
 
     public static ThemeManager getInstance() {
         return instance;

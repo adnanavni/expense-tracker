@@ -51,8 +51,7 @@ public class IncomeController {
         content.getChildren().setAll(pane);
     }
 
-    public void setCalculator(SalarySingle salary, Variables variables) {
-        //this.salary = salary;
+    public void setVariables(SalarySingle salary, Variables variables) {
         this.salarySingle = salary;
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
@@ -88,7 +87,7 @@ public class IncomeController {
         salarySingle.CalculateDaySalary(Double.parseDouble(btnAddHours.getText()), Double.parseDouble(addHourSalary.getText()));
 
         LocalDate salaryDate = LocalDate.now();
-        if(selectedDate.getValue() != null) {
+        if (selectedDate.getValue() != null) {
             salaryDate = selectedDate.getValue();
         }
         Salary addedDaySalary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString());

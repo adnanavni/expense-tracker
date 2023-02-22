@@ -9,7 +9,7 @@ public class Budget {
     private ArrayList<Expense> expenses = new ArrayList<Expense>();
     private static Integer currentId = 1;
     private Integer id;
-    private  String currency;
+    private String currency;
 
     public Budget(Double amount, String name, String currency) {
         this.amount = amount;
@@ -19,35 +19,47 @@ public class Budget {
         currentId++;
     }
 
-    public void addExpenseToBudget(Expense expense){
+    public void addExpenseToBudget(Expense expense) {
         expenses.add(expense);
     }
-    public void removeExpenseFromBudget(Expense expense){
+
+    public void removeExpenseFromBudget(Expense expense) {
         expenses.remove(expense);
     }
-    public ArrayList<Expense> getExpenses(){
+
+    public ArrayList<Expense> getExpenses() {
         return expenses;
     }
+
     public String getName() {
         return name;
     }
-    public void increaseAmount(Double amount){
+
+    public void increaseAmount(Double amount) {
         this.amount += amount;
     }
-    public void decreaseAmount(Double amount){
+
+    public void decreaseAmount(Double amount) {
         this.amount -= amount;
     }
-    public  void  setCurrency(String currency){
+
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
-    public void setAmount(Double amount){
+
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
-    public String getCurrency(){
+
+    public String getCurrency() {
         return currency;
     }
+
     public Double getAmount() {
         return amount;
     }
-    public Integer getId(){return id;}
+
+    public Integer getId() {
+        return id;
+    }
 }

@@ -6,8 +6,7 @@ import java.time.LocalDate;
 public class Salary {
 
     private static Integer currentId = 1;
-    private  static Salary INSTANCE = null;
-
+    private static Salary INSTANCE = null;
     private double daySalary;
     private double hours;
     private double hourSalary;
@@ -15,7 +14,7 @@ public class Salary {
     private LocalDate date;
     private String usedCurrency;
 
-    public Salary (Double daySalary, LocalDate date, String usedCurrency) {
+    public Salary(Double daySalary, LocalDate date, String usedCurrency) {
         this.daySalary = daySalary;
         this.date = date;
         this.usedCurrency = usedCurrency;
@@ -23,17 +22,34 @@ public class Salary {
         id = currentId;
         currentId++;
     }
-    public double getDaySalary(){return this.daySalary;}
 
-    public void setUsedCurrency(String currency){usedCurrency = currency;}
+    public double getDaySalary() {
+        return this.daySalary;
+    }
 
-    public Double getHourSalary(){return hourSalary;}
-    public void setHourSalaryAmount(Double hourAmount) {this.hourSalary = hourAmount;}
+    public void setUsedCurrency(String currency) {
+        usedCurrency = currency;
+    }
 
-    public double getHours(){return this.hours;}
-    public void setHours(double hours){this.hours = hours;}
+    public Double getHourSalary() {
+        return hourSalary;
+    }
 
-    public Integer getId(){return id;}
+    public void setHourSalaryAmount(Double hourAmount) {
+        this.hourSalary = hourAmount;
+    }
+
+    public double getHours() {
+        return this.hours;
+    }
+
+    public void setHours(double hours) {
+        this.hours = hours;
+    }
+
+    public Integer getId() {
+        return id;
+    }
 
     @Override
     public String toString() {
