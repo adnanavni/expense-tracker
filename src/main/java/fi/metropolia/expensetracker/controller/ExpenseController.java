@@ -1,10 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Budget;
-import fi.metropolia.expensetracker.module.Expense;
-import fi.metropolia.expensetracker.module.ThemeManager;
-import fi.metropolia.expensetracker.module.Variables;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,9 +12,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Currency;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 public class ExpenseController {
     @FXML
@@ -66,7 +61,14 @@ public class ExpenseController {
         String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
         this.expense.setText(budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getTopics());
-        selectCategory.getItems().addAll(variables.getConstExpenses());
+
+        ArrayList<String> constExpenseNames = variables.getConstExpenses();
+        for(Integer i = 0; i < constExpenseNames.size(); i++){
+            ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
+            , currency.getSymbol());
+            selectCategory.getItems().add(expenseToAdd);
+        }
+        //selectCategory.getItems().addAll(variables.getConstExpenses());
         selectCategory.getItems().add(0, "New");
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -89,7 +91,7 @@ public class ExpenseController {
                         expenseHistory.getItems().clear();
                         expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
                         variables.calculate("subtractExpense", selected.getPrice());
-                        variables.setCategories(selected.getType(), selected.getPrice(), false);
+
                         String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
                         expense.setText(budgetText + " " + currency.getSymbol());
                     }
@@ -111,7 +113,7 @@ public class ExpenseController {
             variables.calculate("subtractWithExpenses", Double.parseDouble(addExpense.getText()));
             String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
             expense.setText(budgetText + " " + currency.getSymbol());
-            variables.setCategories(selectTopic.getSelectionModel().getSelectedItem().toString(), Double.parseDouble(addExpense.getText()), true);
+
             LocalDate expenseDate = LocalDate.now();
             if (selectedDate.getValue() != null) {
                 expenseDate = selectedDate.getValue();
@@ -140,11 +142,53 @@ public class ExpenseController {
 
     @FXML
     protected void setConstExpense() {
-        variables.setConstExpenses(selectCategory.getValue().toString(), Double.parseDouble(constExpense.getText()));
+        if (selectCategory.getValue() == "New") {
+            if(constExpense.getText() == null){
+                variables.setConstExpenses(constExpenseName.getText(), 0.00);
+                selectCategory.setValue(null);
+                constExpense.setText(null);
+                constExpenseName.setText(null);
+                selectCategory.getItems().clear();
+                selectCategory.getItems().add(0, "New");
+                ArrayList<String> constExpenseNames = variables.getConstExpenses();
+                for(Integer i = 0; i < constExpenseNames.size(); i++){
+                    ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
+                            , currency.getSymbol());
+                    selectCategory.getItems().add(expenseToAdd);
+                }
+            }
+            else {
+                variables.setConstExpenses(constExpenseName.getText(), Double.parseDouble(constExpense.getText()));
+                selectCategory.setValue(null);
+                constExpense.setText(null);
+                constExpenseName.setText(null);
+                selectCategory.getItems().clear();
+                selectCategory.getItems().add(0, "New");
+                ArrayList<String> constExpenseNames = variables.getConstExpenses();
+                for (String expenseName : constExpenseNames) {
+                    ConstantExpense expenseToAdd = new ConstantExpense(expenseName, variables.getConstExpense(expenseName)
+                            , currency.getSymbol());
+                    selectCategory.getItems().add(expenseToAdd);
+                }
+            }
 
-        selectCategory.setValue(null);
-        constExpense.setText(null);
-        constExpenseName.setText(null);
+        }
+        else {
+            ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
+            variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
+            selectCategory.setValue(null);
+            constExpense.setText(null);
+            constExpenseName.setText(null);
+            selectCategory.getItems().clear();
+            selectCategory.getItems().add(0, "New");
+            ArrayList<String> constExpenseNames = variables.getConstExpenses();
+            for (String expenseName : constExpenseNames) {
+                ConstantExpense expenseToAdd = new ConstantExpense(expenseName, variables.getConstExpense(expenseName)
+                        , currency.getSymbol());
+                selectCategory.getItems().add(expenseToAdd);
+            }
+        }
+
     }
 
     @FXML

@@ -1,9 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Budget;
-import fi.metropolia.expensetracker.module.ThemeManager;
-import fi.metropolia.expensetracker.module.Variables;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Objects;
 
@@ -60,7 +60,12 @@ public class BudgetController {
 
         budget.setText("Budget");
         selectTopic.getItems().addAll(variables.getBudgetNames());
-        expenseCombo.getItems().addAll(variables.getConstExpenses());
+        ArrayList<String> constExpenseNames = variables.getConstExpenses();
+        for(Integer i = 0; i < constExpenseNames.size(); i++){
+            ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
+                    , currency.getSymbol());
+            expenseCombo.getItems().add(expenseToAdd);
+        }
 
         if (variables.getActiveBudget() != null) {
             String budgetText = String.format("%.2f", variables.getBudget());
@@ -131,18 +136,21 @@ public class BudgetController {
 
     @FXML
     protected void removeBtn() {
-        if (variables.getConstExpense(expenseCombo.getValue().toString()) == 0.00) {
+        ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
+        if (variables.getConstExpense(selectedConstExpense.getType()) == 0.00) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(expenseCombo.getValue().toString() + " not found");
-            alert.setHeaderText("Set the amount for " + expenseCombo.getValue().toString());
+            alert.setTitle(selectedConstExpense.getType() + " not found");
+            alert.setHeaderText("Set the amount for " + selectedConstExpense.getType());
             alert.setContentText("This can be found in expenses menu");
             alert.showAndWait();
         } else {
-            variables.calculate("subtractFromBudget", variables.getConstExpense(expenseCombo.getValue().toString()));
+            variables.calculate("subtractFromBudget", variables.getConstExpense(selectedConstExpense.getType()));
             String budgetText = String.format("%.2f", variables.getBudget());
             this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
             specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
-
+            Expense newExpense = new Expense(selectedConstExpense.getAmount(), selectedConstExpense.getType(), LocalDate.now(),
+                    currency.getSymbol());
+            variables.getActiveBudget().addExpenseToBudget(newExpense);
         }
     }
 }

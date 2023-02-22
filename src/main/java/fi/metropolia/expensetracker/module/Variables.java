@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.module;
 
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,7 +125,7 @@ public class Variables {
                         double newPrice = expense.getPrice() / multiplierBefore;
                         newPrice = newPrice * currentCourseMultiplier;
                         expense.setPrice(newPrice);
-                        expense.setUsedCurrency(activeBudget.getCurrency());
+                        expense.setUsedCurrency(Currency.getInstance(currentCurrency).getSymbol());
                     }
                 }
             }
@@ -217,6 +218,7 @@ public class Variables {
         for (Map.Entry<String, Double> entry : constExpenses.entrySet()) {
             String expense = entry.getKey();
             Double cost = entry.getValue() * currentCourseMultiplier;
+            setConstExpenses(expense, cost);
             System.out.println(expense + ": " + cost);
         }
     }
