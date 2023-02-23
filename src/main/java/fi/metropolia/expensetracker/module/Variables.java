@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.module;
 
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,11 +36,20 @@ public class Variables {
         put("Other", 0.00);
     }};
 
+    private Map<String, Double> constExpenses = new HashMap<>() {{
+        put("Rent", 0.00);
+        put("Water bill", 0.00);
+        put("Insurance", 0.00);
+        put("Car payment", 0.00);
+        put("Cell phone", 0.00);
+        put("Internet", 0.00);
+    }};
+
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
     private Budget activeBudget;
 
-    private ArrayList<Budget> budgets = new ArrayList<Budget>();
+    private ArrayList<Budget> budgets = new ArrayList<>();
     private Budget budgetObject;
     private Double totalBudget = 0.00;
     private Double expense = 0.00;
@@ -68,6 +78,7 @@ public class Variables {
                 break;
             case ("subtractFromBudget"):
                 totalBudget -= amount;
+                activeBudget.decreaseAmount(amount);
                 break;
             case ("subtractWithExpenses"):
                 expense += amount;
@@ -93,12 +104,9 @@ public class Variables {
 
     public void setCurrentCourseMultiplier(String course) {
 
-        //totalBudget = totalBudget / currentCourseMultiplier;
-        //income = income / currentCourseMultiplier;
-        //expense = expense / currentCourseMultiplier;
-        if(budgets.size() > 0){
-            for (Budget budget: budgets) {
-                budget.setAmount(budget.getAmount()/currentCourseMultiplier);
+        if (budgets.size() > 0) {
+            for (Budget budget : budgets) {
+                budget.setAmount(budget.getAmount() / currentCourseMultiplier);
             }
 
         }
@@ -107,32 +115,24 @@ public class Variables {
         currentCourseMultiplier = currencies.get(course);
         currentCurrency = course;
 
-        if(budgets.size() > 0){
-            for (Budget budget: budgets) {
+        if (budgets.size() > 0) {
+            for (Budget budget : budgets) {
                 budget.setCurrency(currentCurrency);
-                budget.setAmount(budget.getAmount()*currentCourseMultiplier);
-                if(budget.getExpenses().size() > 0){
+                budget.setAmount(budget.getAmount() * currentCourseMultiplier);
+                if (budget.getExpenses().size() > 0) {
 
-                    for (Expense expense:budget.getExpenses()) {
-                        Double newPrice = expense.getPrice()/multiplierBefore;
-                        newPrice = newPrice*currentCourseMultiplier;
+                    for (Expense expense : budget.getExpenses()) {
+                        double newPrice = expense.getPrice() / multiplierBefore;
+                        newPrice = newPrice * currentCourseMultiplier;
                         expense.setPrice(newPrice);
-                        expense.setUsedCurrency(activeBudget.getCurrency());
+                        expense.setUsedCurrency(Currency.getInstance(currentCurrency).getSymbol());
                     }
                 }
             }
-
-
-
         }
-
-        //totalBudget = totalBudget * currentCourseMultiplier;
-        //income = income * currentCourseMultiplier;
-        //expense = expense * currentCourseMultiplier;
     }
 
     public void createNewBudget(Budget newBudget) {
-
         budgets.add(newBudget);
     }
 
@@ -146,9 +146,23 @@ public class Variables {
 
         return names;
     }
-    public ArrayList<Budget> getBudgets(){
-        return  budgets;
+
+    public ArrayList<String> getConstExpenses() {
+        return new ArrayList<>(constExpenses.keySet());
     }
+
+    public void setConstExpenses(String key, Double amount) {
+        constExpenses.put(key, amount);
+    }
+
+    public Double getConstExpense(String key) {
+        return constExpenses.get(key);
+    }
+
+    public ArrayList<Budget> getBudgets() {
+        return budgets;
+    }
+
     public Double getSpecificBudget(String name) {
         HashMap<String, Double> budgetsMap = new HashMap<>();
 
@@ -158,9 +172,9 @@ public class Variables {
         return budgetsMap.get(name);
     }
 
-    public Double getTotalExpenses(){
+    public Double getTotalExpenses() {
         Double totalExpenses = 0.00;
-        for(Integer i=0; i<activeBudget.getExpenses().size(); i++){
+        for (Integer i = 0; i < activeBudget.getExpenses().size(); i++) {
             totalExpenses += activeBudget.getExpenses().get(i).getPrice();
         }
         return totalExpenses;
@@ -169,32 +183,43 @@ public class Variables {
     public String getCurrentCurrency() {
         return currentCurrency;
     }
-    public Double getCurrentCourseMultiplier(){
-        return currentCourseMultiplier;
-    }
+
     public ArrayList<String> getCurrencyCodes() {
         return new ArrayList<>(currencies.keySet());
     }
 
     public Double getBudget() {
-        return totalBudget;
-    }
-
-    public Double getExpense() {
-        return expense;
-    }
-
-    public Double getIncome() {
-        return income;
+        Double allBudgets = 0.00;
+        for (Integer i = 0; i < getBudgets().size(); i++) {
+            allBudgets += getBudgets().get(i).getAmount();
+        }
+        return allBudgets;
     }
 
     public ArrayList<String> getTopics() {
         return new ArrayList<>(categories.keySet());
     }
-    public void setActiveBudget(Budget budget){
+
+    public void setActiveBudget(Budget budget) {
         activeBudget = budget;
     }
-    public Budget getActiveBudget(){
+
+    public Budget getActiveBudget() {
         return activeBudget;
+    }
+
+    public void convertConstExpense() {
+        for (Map.Entry<String, Double> entry : constExpenses.entrySet()) {
+            String expense = entry.getKey();
+            Double cost = entry.getValue() / currentCourseMultiplier;
+            System.out.println(expense + ": " + cost);
+        }
+
+        for (Map.Entry<String, Double> entry : constExpenses.entrySet()) {
+            String expense = entry.getKey();
+            Double cost = entry.getValue() * currentCourseMultiplier;
+            setConstExpenses(expense, cost);
+            System.out.println(expense + ": " + cost);
+        }
     }
 }

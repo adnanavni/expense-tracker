@@ -3,40 +3,64 @@
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="550.0" minHeight="800.0" minWidth="550.0" prefHeight="800.0" prefWidth="550.0" styleClass="background" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.MainController">
-   <children>
-      <Label alignment="CENTER" layoutX="79.0" layoutY="14.0" prefHeight="60.0" prefWidth="411.0" styleClass="header" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="10.0" />
-      <Label alignment="CENTER" layoutX="224.0" layoutY="90.0" styleClass="titleText" text="Total budget:" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="120.0" />
-      <Label fx:id="budget" alignment="CENTER" layoutX="261.0" layoutY="137.0" prefHeight="17.0" prefWidth="41.0" styleClass="titleText" text="0" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="170.0" />
-      <ComboBox fx:id="selectCurrency" layoutX="200.0" layoutY="211.0" onAction="#onChooseCurrencyBtnClick" prefWidth="150.0" promptText="Currency" styleClass="button" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="230.0" />
-      <VBox alignment="CENTER" layoutX="192.0" layoutY="329.0" prefHeight="350.0" prefWidth="166.0" spacing="100.0" AnchorPane.leftAnchor="192.0" AnchorPane.rightAnchor="192.0" AnchorPane.topAnchor="329.0">
-         <children>
-            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToBudget" prefHeight="50.0" prefWidth="165.0" text="Budget">
-               <font>
-                  <Font size="20.0" />
-               </font></Button>
-            <Button fx:id="expenseBtn" contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToExpense" prefHeight="50.0" prefWidth="166.0" text="Expense">
-               <font>
-                  <Font size="20.0" />
-               </font></Button>
-            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToIncome" prefHeight="50.0" prefWidth="166.0" text="Income">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </VBox>
-   </children>
-   <stylesheets>
-      <URL value="@css/main.css" />
-   </stylesheets>
+<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="550.0" minHeight="800.0" minWidth="550.0" prefHeight="800.0"
+            prefWidth="550.0" styleClass="background" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.MainController">
+    <children>
+        <Label alignment="CENTER" layoutX="79.0" layoutY="14.0" prefHeight="60.0" prefWidth="411.0" styleClass="header"
+               text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0"
+               AnchorPane.topAnchor="10.0"/>
+        <Label alignment="CENTER" layoutX="224.0" layoutY="90.0" styleClass="titleText" text="Total budget:"
+               AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="120.0"/>
+        <Label fx:id="budget" alignment="CENTER" layoutX="261.0" layoutY="137.0" prefHeight="17.0" prefWidth="41.0"
+               styleClass="titleText" text="0" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0"
+               AnchorPane.topAnchor="170.0"/>
+        <ComboBox fx:id="selectCurrency" layoutX="200.0" layoutY="211.0" onAction="#onChooseCurrencyBtnClick"
+                  prefWidth="150.0" promptText="Currency" styleClass="button" AnchorPane.leftAnchor="150.0"
+                  AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="230.0"/>
+        <VBox alignment="CENTER" layoutX="192.0" layoutY="329.0" prefHeight="350.0" prefWidth="166.0" spacing="100.0"
+              AnchorPane.leftAnchor="192.0" AnchorPane.rightAnchor="192.0" AnchorPane.topAnchor="329.0">
+            <children>
+                <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToBudget"
+                        prefHeight="50.0" prefWidth="165.0" text="Budget">
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Button>
+                <Button fx:id="expenseBtn" contentDisplay="CENTER" mnemonicParsing="false"
+                        onAction="#changeWindowToExpense" prefHeight="50.0" prefWidth="166.0" text="Expense">
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Button>
+                <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeWindowToIncome"
+                        prefHeight="50.0" prefWidth="166.0" text="Income">
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Button>
+            </children>
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+        </VBox>
+        <ImageView fx:id="settingsIcon" fitHeight="65.0" fitWidth="40.0" layoutX="490.0" layoutY="746.0"
+                   onMouseClicked="#changeWindowToSettings" pickOnBounds="true" preserveRatio="true"
+                   AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="20.0"
+                   AnchorPane.topAnchor="746.0">
+            <image>
+                <Image url="@images/setting.png"/>
+            </image>
+        </ImageView>
+    </children>
+    <stylesheets>
+        <URL value="@css/main.css"/>
+    </stylesheets>
 </AnchorPane>
