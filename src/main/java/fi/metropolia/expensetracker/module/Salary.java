@@ -6,8 +6,6 @@ import java.time.LocalDate;
 public class Salary {
 
     private static Integer currentId = 1;
-    private  static Salary INSTANCE = null;
-
     private double daySalary;
     private double hours;
     private double hourSalary;
