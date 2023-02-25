@@ -18,83 +18,38 @@ import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Optional;
 
+
 public class IncomeController {
     @FXML
     private AnchorPane content;
-    @FXML
-    private TextField addHourSalary;
-    @FXML
-    private TextField btnAddHours;
-    @FXML
-    private ListView salaryHistory;
 
-    @FXML
-    private Label salaryComing;
-    private SalarySingle salarySingle;
-
-    @FXML
-    private DatePicker selectedDate;
-    @FXML
-    private Button addBtn;
-    private Variables variables;
-    private Currency currency;
-    private Salary salary;
-    private double salaryTogether;
-
-    public void initialize() {
-        ThemeManager themeManager = ThemeManager.getInstance();
-        content.setStyle(themeManager.getStyle());
-    }
+    private Variables variables = Variables.getInstance();
+    SalarySingle salarySingle = SalarySingle.getInstance();
 
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
 
-    public void setVariables(SalarySingle salary, Variables variables) {
-        this.salarySingle = salary;
-        this.variables = variables;
-        currency = Currency.getInstance(variables.getCurrentCurrency());
+    public void toDaySalaryView(ActionEvent event) throws IOException {
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("daySalary-view.fxml"));
 
-        salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+        AnchorPane pane = fxmloader.load();
+        content.getChildren().setAll(pane);
 
-        salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
-
-                Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
-                //tee css valikoiduista riveistä
-
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Salary calculation");
-                alert.setHeaderText("Add salary to calculation");
-                alert.setContentText(selected.toString());
-
-                Optional<ButtonType> option = alert.showAndWait();
-
-                if (option.get() == ButtonType.OK) {
-                    salaryTogether += selected.getDaySalary();
-                }
-                salaryComing.setText("Salary coming: " + salaryTogether);
-            }
-
-        });
+        DaySalaryController daySalaryController = fxmloader.getController();
+        daySalaryController.setVariables(salarySingle, variables);
     }
 
-    @FXML
-    protected void onSalaryAddClick() {
-        salarySingle.CalculateDaySalary(Double.parseDouble(btnAddHours.getText()), Double.parseDouble(addHourSalary.getText()));
+    public void toMonthSalaryView(ActionEvent event) throws IOException {
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("monthSalary-view.fxml"));
 
-        LocalDate salaryDate = LocalDate.now();
-        if (selectedDate.getValue() != null) {
-            salaryDate = selectedDate.getValue();
-        }
-        Salary addedDaySalary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString());
+        AnchorPane pane = fxmloader.load();
+        content.getChildren().setAll(pane);
 
-
-        salarySingle.createNewSalary(addedDaySalary);
-        salaryHistory.getItems().clear();
-        salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+        MonthSalaryController monthSalaryController = fxmloader.getController();
+        monthSalaryController.setVariables(salarySingle, variables);
     }
+
+
 }

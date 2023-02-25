@@ -3,51 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css"
-            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
-    <children>
-        <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0"
-                prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0"
-                AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0"/>
-        <AnchorPane layoutX="149.0" layoutY="117.0" prefHeight="230.0" prefWidth="239.0" AnchorPane.leftAnchor="107.0"
-                    AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="70.0">
-            <children>
-                <DatePicker fx:id="selectedDate" layoutX="45.0" layoutY="137.0" prefHeight="26.0" prefWidth="150.0"
-                            styleClass="button" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0"
-                            AnchorPane.topAnchor="150.0"/>
-                <TextField fx:id="addHourSalary" alignment="CENTER" layoutX="45.0" layoutY="34.0"
-                           promptText="Hour Salary" styleClass="button" AnchorPane.leftAnchor="40.0"
-                           AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="25.0"/>
-                <TextField fx:id="btnAddHours" layoutX="45.0" layoutY="79.0" promptText="Hours" styleClass="button"
-                           AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="85.0"/>
-                <Button fx:id="addBtn" layoutX="87.0" layoutY="178.0" mnemonicParsing="false"
-                        onAction="#onSalaryAddClick" text="Add" AnchorPane.leftAnchor="120.0"
-                        AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="225.0"/>
-                <Label alignment="CENTER" layoutX="45.0" layoutY="14.0" styleClass="smallHeader" text="Add hour salary"
-                       AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="5.0"/>
-                <Label alignment="CENTER" layoutX="45.0" layoutY="60.0" styleClass="smallHeader" text="Add hours"
-                       AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="65.0"/>
-                <Label alignment="CENTER" layoutX="45.0" layoutY="115.0" styleClass="smallHeader"
-                       text="Select working day" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0"
-                       AnchorPane.topAnchor="125.0"/>
-            </children>
-        </AnchorPane>
-        <AnchorPane layoutX="82.0" layoutY="372.0" prefHeight="345.0" prefWidth="398.0" AnchorPane.bottomAnchor="10.0"
-                    AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="400.0">
-            <children>
-                <Label alignment="CENTER" layoutX="20.0" layoutY="14.0" styleClass="smallHeader" text="Salary history"
-                       AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="410.0" AnchorPane.topAnchor="10.0"/>
-                <ListView fx:id="salaryHistory" layoutX="20.0" layoutY="46.0" opacity="0.85" prefHeight="299.0"
-                          prefWidth="358.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0"
-                          AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="40.0"/>
-                <Label fx:id="salaryComing" alignment="CENTER" layoutX="191.0" layoutY="14.0" styleClass="smallHeader"
-                       text="Salary coming" AnchorPane.leftAnchor="410.0" AnchorPane.rightAnchor="1.0"
-                       AnchorPane.topAnchor="10.0"/>
-            </children>
-        </AnchorPane>
-        <Label alignment="CENTER" styleClass="header" text="Income" AnchorPane.leftAnchor="107.0"
-               AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="5.0"/>
+<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
+
+  <children>
+        <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0" />
+
+        <Label alignment="CENTER" styleClass="header" text="Income" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="5.0" />
+      <AnchorPane layoutX="125.0" layoutY="216.0" prefHeight="305.0" prefWidth="301.0">
+         <children>
+            <Button layoutX="78.0" layoutY="65.0" mnemonicParsing="false" onAction="#toMonthSalaryView" text="Month Salary" />
+            <Button layoutX="78.0" layoutY="160.0" mnemonicParsing="false" onAction="#toDaySalaryView" prefHeight="43.0" prefWidth="145.0" text="Hour Dalary" />
+         </children>
+      </AnchorPane>
     </children>
 
 </AnchorPane>
