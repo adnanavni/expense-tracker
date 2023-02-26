@@ -29,9 +29,8 @@ public class MainController {
     private AnchorPane content;
 
     private Variables variables = Variables.getInstance();
-    SalarySingle salarySingle = SalarySingle.getInstance();
+    private SalarySingle salarySingle = SalarySingle.getInstance();
     private LocalDate date;
-  //  private Salary salary = new Salary(0.0, date.now(), Currency.getInstance(variables.getCurrentCurrency()).toString());
     private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
 
     @FXML
@@ -49,7 +48,7 @@ public class MainController {
             expenseBtn.setDisable(false);
             selectCurrency.setDisable(false);
             Double totalBudget = 0.00;
-            for (Integer i = 0; i < variables.getBudgets().size(); i++) {
+            for (int i = 0; i < variables.getBudgets().size(); i++) {
                 totalBudget += variables.getBudgets().get(i).getAmount();
             }
             String budgetText = String.format("%.2f", totalBudget);
@@ -80,8 +79,8 @@ public class MainController {
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
 
-      //  IncomeController incomeController = fxmloader.getController();
-        //incomeController.setVariables(salarySingle, variables);
+        IncomeController incomeController = fxmloader.getController();
+        incomeController.setVariables(salarySingle, variables);
     }
 
     public void changeWindowToExpense(ActionEvent event) throws IOException {
@@ -107,7 +106,7 @@ public class MainController {
         variables.convertConstExpense();
 
         Double totalBudget = 0.00;
-        for (Integer i = 0; i < variables.getBudgets().size(); i++) {
+        for (int i = 0; i < variables.getBudgets().size(); i++) {
             totalBudget += variables.getBudgets().get(i).getAmount();
         }
         String budgetText = String.format("%.2f", totalBudget);

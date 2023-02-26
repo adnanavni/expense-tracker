@@ -8,14 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SalarySingle {
-
-
     private double daySalary;
     private double monthSalary;
     private double taxRate;
     private double monthSalaryMinusTaxes;
     private double daySalaryMinusTaxes;
-    private ArrayList<Salary> daySalaries = new ArrayList<Salary>();
+    private ArrayList<Salary> daySalaries = new ArrayList<>();
     private ArrayList<Salary> monthSalaries = new ArrayList<>();
     private Map<String, Integer> months = new HashMap<>() {{
         put("January", 0);
@@ -34,8 +32,7 @@ public class SalarySingle {
     private static SalarySingle INSTANCE = null;
 
     public static SalarySingle getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new SalarySingle();
+        if (INSTANCE == null) INSTANCE = new SalarySingle();
         return INSTANCE;
     }
 
@@ -44,22 +41,23 @@ public class SalarySingle {
 
     public double calculateSalaryWithTaxRate(double taxRate, double salary, String type) {
         this.taxRate = taxRate;
-        double procent = 1 - (taxRate/100);
+        double procent = 1 - (taxRate / 100);
         double wantedSalaryminusTaxes = 0;
-        if (type == "DAY") {
-            this.daySalaryMinusTaxes = (salary*procent);
+        if (type.equals("DAY")) {
+            this.daySalaryMinusTaxes = (salary * procent);
             setDaySalaryMinusTaxes(this.daySalaryMinusTaxes);
             setDaySalary(salary);
             wantedSalaryminusTaxes = this.daySalaryMinusTaxes;
         }
-        if (type == "MONTH") {
-            this.monthSalaryMinusTaxes = (salary*procent);
+        if (type.equals("MONTH")) {
+            this.monthSalaryMinusTaxes = (salary * procent);
             setMonthSalaryMinusTaxes(this.monthSalaryMinusTaxes);
             setMonthSalary(salary);
             wantedSalaryminusTaxes = this.monthSalaryMinusTaxes;
         }
         return wantedSalaryminusTaxes;
     }
+
     public void CalculateDaySalary(double hours, double hourSalary) {
         this.daySalary = (hours * hourSalary);
     }
@@ -67,7 +65,8 @@ public class SalarySingle {
     public ArrayList<Salary> getDaySalaries() {
         return daySalaries;
     }
-    public ArrayList<Salary> getMonthSalaries(){
+
+    public ArrayList<Salary> getMonthSalaries() {
         return monthSalaries;
     }
 
@@ -78,15 +77,19 @@ public class SalarySingle {
     public void setDaySalary(double daySalary) {
         this.daySalary = daySalary;
     }
+
     public double getDaySalary() {
         return this.daySalary;
     }
+
     public double getDaySalaryMinusTaxes() {
         return this.monthSalaryMinusTaxes;
     }
+
     public void setDaySalaryMinusTaxes(double daySalaryMinusTaxes) {
         this.daySalaryMinusTaxes = daySalaryMinusTaxes;
     }
+
     public void setMonthSalaryMinusTaxes(double monthSalaryMinusTaxes) {
         this.monthSalaryMinusTaxes = monthSalaryMinusTaxes;
     }
@@ -94,6 +97,7 @@ public class SalarySingle {
     public void setMonthSalary(double monthSalary) {
         this.monthSalary = monthSalary;
     }
+
     public double geTotalSalaryOfMonth() {
         return this.monthSalary;
     }
@@ -123,9 +127,8 @@ public class SalarySingle {
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
         String s = null;
         double totalSalary = 0;
-        System.out.println(m);
         switch (m) {
-            case ("January") :
+            case ("January"):
                 totalSalary = getSalariesBetweenStartAndFinish("31/12/2022", "01/02/2023", type);
                 break;
             case ("February"):
@@ -155,15 +158,14 @@ public class SalarySingle {
             case ("October"):
                 totalSalary = getSalariesBetweenStartAndFinish("30/9/2023", "01/11/2023", type);
                 break;
-            case ("November") :
-                totalSalary =  getSalariesBetweenStartAndFinish("31/10/2023", "01/12/2023", type);
+            case ("November"):
+                totalSalary = getSalariesBetweenStartAndFinish("31/10/2023", "01/12/2023", type);
                 break;
             case ("December"):
                 totalSalary = getSalariesBetweenStartAndFinish("30/11/2023", "01/01/2024", type);
                 break;
-            default :
+            default:
                 s = "Ei löytynyt kuukautta";
-                System.out.println(s);
                 return 0;
         }
         return totalSalary;
@@ -178,13 +180,14 @@ public class SalarySingle {
         Date parsedEnd = sdf.parse(end);
         double salariesTogether = 0;
 
-        if (type == "MONTH") {
+        if (type.equals("MONTH")) {
             for (Salary eachDate : SalarySingle.getInstance().getMonthSalaries()) {
                 if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
                     salaries.add(eachDate.getSalaryMinusTaxes("MONTH"));
                 }
             }
-        } if (type == "DAY") {
+        }
+        if (type.equals("DAY")) {
             for (Salary eachDate : SalarySingle.getInstance().getDaySalaries()) {
                 if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
                     salaries.add(eachDate.getSalaryMinusTaxes("DAY"));

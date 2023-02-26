@@ -1,5 +1,3 @@
-
-
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
@@ -23,6 +21,10 @@ import java.util.Date;
 import java.util.Optional;
 
     public class DaySalaryController {
+        private Variables variables;
+        private Currency currency;
+        private Salary salary;
+        private double salaryTogether;
         @FXML
         private AnchorPane content;
         @FXML
@@ -44,10 +46,6 @@ import java.util.Optional;
         private DatePicker selectedDate;
         @FXML
         private Button addBtn;
-        @FXML private Variables variables;
-        private Currency currency;
-        private Salary salary;
-        private double salaryTogether;
 
         public void initialize() {
             ThemeManager themeManager = ThemeManager.getInstance();
@@ -55,8 +53,8 @@ import java.util.Optional;
 
         }
 
-        public void backToIncome(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("income-view.fxml"));
+        public void backToMain(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
             content.getChildren().setAll(pane);
         }
 
@@ -86,9 +84,20 @@ import java.util.Optional;
                         salarySingle.deleteDaySalary(selected);
                         salaryHistory.getItems().clear();
                         salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+
                     }
                 }
             });
+        }
+
+        public void toMonthSalaryView(ActionEvent event) throws IOException {
+            FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("income-view.fxml"));
+
+            AnchorPane pane = fxmloader.load();
+            content.getChildren().setAll(pane);
+
+            IncomeController monthSalaryController = fxmloader.getController();
+            monthSalaryController.setVariables(salarySingle, variables);
         }
 
         @FXML
@@ -102,15 +111,19 @@ import java.util.Optional;
             if (selectedDate.getValue() != null) {
                 salaryDate = selectedDate.getValue();
             }
-           // Salary addedDaySalary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString(), "DAY", Double.parseDouble(taxRate.getText()));
+
             this.salary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString(), "DAY", Double.parseDouble(taxRate.getText()));
             Date date = java.sql.Date.valueOf(salaryDate);
             this.salary.setDate(date);
 
-           // salarySingle.createNewDaySalary(addedDaySalary);
             salarySingle.createNewDaySalary(salary);
             salaryHistory.getItems().clear();
             salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+
+            addHourSalary.setText(null);
+            addHours.setText(null);
+            taxRate.setText(null);
+            selectedDate.setValue(null);
         }
         @FXML
         protected void calculateMonths() throws ParseException {

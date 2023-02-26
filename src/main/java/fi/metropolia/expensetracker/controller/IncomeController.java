@@ -14,17 +14,43 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Currency;
+import java.util.Date;
 import java.util.Optional;
 
 
 public class IncomeController {
+    private Currency currency;
+    private Salary salary;
+
+    private Variables variables;
+
     @FXML
     private AnchorPane content;
+    @FXML
+    private TextField addMonthSalary;
+    @FXML
+    private TextField addTaxRate;
+    @FXML
+    private ListView salaryHistory;
+    @FXML
+    private Label salaryComing;
+    private SalarySingle salarySingle;
+    @FXML
+    ComboBox monthsCombo;
+    @FXML
+    private DatePicker selectedDate;
+    @FXML
+    private Button addBtn;
 
-    private Variables variables = Variables.getInstance();
-    SalarySingle salarySingle = SalarySingle.getInstance();
+
+    public void initialize() {
+        ThemeManager themeManager = ThemeManager.getInstance();
+        content.setStyle(themeManager.getStyle());
+
+    }
 
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
@@ -41,14 +67,67 @@ public class IncomeController {
         daySalaryController.setVariables(salarySingle, variables);
     }
 
-    public void toMonthSalaryView(ActionEvent event) throws IOException {
-        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("monthSalary-view.fxml"));
+    public void setVariables(SalarySingle salary, Variables variables) {
+        this.salarySingle = salary;
+        this.variables = variables;
+        currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        AnchorPane pane = fxmloader.load();
-        content.getChildren().setAll(pane);
+        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+        monthsCombo.getItems().addAll(salarySingle.getMonths());
 
-        MonthSalaryController monthSalaryController = fxmloader.getController();
-        monthSalaryController.setVariables(salarySingle, variables);
+        salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
+
+                Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Salary deletion");
+                alert.setHeaderText("Do you want to delete salary of the history");
+                alert.setContentText(selected.toString());
+
+                Optional<ButtonType> option = alert.showAndWait();
+
+                if (option.get() == ButtonType.OK) {
+                    salarySingle.deleteMonthSalary(selected);
+
+                    salaryHistory.getItems().clear();
+                    salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+                }
+            }
+        });
+    }
+
+
+    @FXML
+    protected void onSalaryAddClick() {
+        salarySingle.calculateSalaryWithTaxRate(Double.parseDouble(addTaxRate.getText()), Double.parseDouble(addMonthSalary.getText()), "MONTH");
+        salarySingle.setMonthSalaryMinusTaxes(salarySingle.getDaySalaryMinusTaxes());
+        LocalDate salaryDate = LocalDate.now();
+
+        if (selectedDate.getValue() != null) {
+            salaryDate = selectedDate.getValue();
+        }
+
+        this.salary = new Salary(salarySingle.geTotalSalaryOfMonth(), salaryDate, currency.toString(), "MONTH", Double.parseDouble(addTaxRate.getText()));
+        Date date = java.sql.Date.valueOf(salaryDate);
+        this.salary.setDate(date);
+
+        salarySingle.createNewMonthSalary(salary);
+        salaryHistory.getItems().clear();
+        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+
+        addMonthSalary.setText(null);
+        addTaxRate.setText(null);
+        selectedDate.setValue(null);
+    }
+
+    @FXML
+    protected void calculateMonths() throws ParseException {
+        int selectedIndex = monthsCombo.getSelectionModel().getSelectedIndex();
+        String month = (String) monthsCombo.getItems().get(selectedIndex);
+        salaryComing.setText("Salary amount of " + month + " is " + SalarySingle.getInstance().geTotalSalaryOfMonth(month, "MONTH"));
     }
 
 
