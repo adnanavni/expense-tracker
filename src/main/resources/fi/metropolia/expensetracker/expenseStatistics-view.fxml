@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.ExpenseStatisticsController">
+   <children>
+      <PieChart fx:id="pieStats" layoutX="25.0" layoutY="386.0" visible="false" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToExpense" text="Back" />
+      <Label layoutX="78.0" layoutY="57.0" text="Expense statistics">
+         <font>
+            <Font name="System Bold" size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="198.0" layoutY="127.0" text="Active budget:">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="budgetName" layoutX="197.0" layoutY="162.0" text="BUDGETNAME">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="chartTypeBtn" layoutX="190.0" layoutY="311.0" mnemonicParsing="false" onAction="#onChangeChartClick" text="View as piechart" />
+      <ComboBox fx:id="selectedTimeFrame" layoutX="200.0" layoutY="257.0" prefWidth="150.0" promptText="All time" />
+      <Label layoutX="181.0" layoutY="216.0" text="Showing statistics from:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <BarChart fx:id="barStats" layoutX="25.0" layoutY="383.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+   </children>
+</AnchorPane>

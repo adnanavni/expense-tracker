@@ -1,6 +1,7 @@
 package fi.metropolia.expensetracker.module;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 
 public class Expense {
@@ -24,6 +25,9 @@ public class Expense {
 
     public String toString() {
         return type + ", added on: " + date + ", money spent: " + String.format("%.2f", price) + " " + usedCurrency;
+    }
+    public LocalDate getDate(){
+        return date;
     }
 
     public String getType() {
