@@ -191,6 +191,16 @@ public class ExpenseController {
 
     }
 
+    public void toExpenseStatistics(ActionEvent event) throws IOException {
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("expenseStatistics-view.fxml"));
+
+        AnchorPane pane = fxmloader.load();
+        content.getChildren().setAll(pane);
+
+        ExpenseStatisticsController expenseStatisticsController = fxmloader.getController();
+        expenseStatisticsController.setVariables(variables);
+    }
+
     @FXML
     protected void btnEnable() {
         if (selectTopic.getSelectionModel().getSelectedItem() != null && addExpense.getText() != null) {
