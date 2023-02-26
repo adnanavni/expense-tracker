@@ -110,6 +110,7 @@ public class BudgetController {
 
         selectTopic.setValue(null);
         budgetName.setText(null);
+        budgetName.setVisible(false);
         addBudget.setText(null);
 
         budgetPane.setVisible(true);
