@@ -29,9 +29,8 @@ public class MainController {
     private AnchorPane content;
 
     private Variables variables = Variables.getInstance();
-    SalarySingle salarySingle = SalarySingle.getInstance();
+    private SalarySingle salarySingle = SalarySingle.getInstance();
     private LocalDate date;
-  //  private Salary salary = new Salary(0.0, date.now(), Currency.getInstance(variables.getCurrentCurrency()).toString());
     private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
 
     @FXML
@@ -39,17 +38,13 @@ public class MainController {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
 
-        selectCurrency.getItems().addAll(variables.getCurrencyCodes());
-
         if (variables.getBudgets().size() < 1) {
             budget.setText("No budgets yet");
             expenseBtn.setDisable(true);
-            selectCurrency.setDisable(true);
         } else {
             expenseBtn.setDisable(false);
-            selectCurrency.setDisable(false);
             Double totalBudget = 0.00;
-            for (Integer i = 0; i < variables.getBudgets().size(); i++) {
+            for (int i = 0; i < variables.getBudgets().size(); i++) {
                 totalBudget += variables.getBudgets().get(i).getAmount();
             }
             String budgetText = String.format("%.2f", totalBudget);
@@ -80,8 +75,8 @@ public class MainController {
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
 
-      //  IncomeController incomeController = fxmloader.getController();
-        //incomeController.setVariables(salarySingle, variables);
+        IncomeController incomeController = fxmloader.getController();
+        incomeController.setVariables(salarySingle, variables);
     }
 
     public void changeWindowToExpense(ActionEvent event) throws IOException {
@@ -97,20 +92,9 @@ public class MainController {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("settings-view.fxml"));
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
+
+        SettingsController settingsController = fxmloader.getController();
+        settingsController.setVariables(variables, currency);
     }
 
-    @FXML
-    protected void onChooseCurrencyBtnClick() {
-
-        variables.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
-        currency = Currency.getInstance(variables.getCurrentCurrency());
-        variables.convertConstExpense();
-
-        Double totalBudget = 0.00;
-        for (Integer i = 0; i < variables.getBudgets().size(); i++) {
-            totalBudget += variables.getBudgets().get(i).getAmount();
-        }
-        String budgetText = String.format("%.2f", totalBudget);
-        budget.setText(budgetText + " " + currency.getSymbol());
-    }
 }

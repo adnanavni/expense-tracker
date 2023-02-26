@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
-
-  <children>
+<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
+    <children>
         <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0" />
-
-        <Label alignment="CENTER" styleClass="header" text="Income" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="5.0" />
-      <AnchorPane layoutX="125.0" layoutY="216.0" prefHeight="305.0" prefWidth="301.0">
-         <children>
-            <Button layoutX="78.0" layoutY="65.0" mnemonicParsing="false" onAction="#toMonthSalaryView" text="Month Salary" />
-            <Button layoutX="78.0" layoutY="160.0" mnemonicParsing="false" onAction="#toDaySalaryView" prefHeight="43.0" prefWidth="145.0" text="Hour Dalary" />
-         </children>
-      </AnchorPane>
+        <Label alignment="CENTER" layoutX="107.0" layoutY="30.0" styleClass="header" text="Income" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
+          <AnchorPane prefHeight="295.0" prefWidth="427.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="65.0">
+              <children>
+                  <Label alignment="CENTER" layoutX="45.0" layoutY="136.0" styleClass="smallHeader" text="Select pay day" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="137.0" />
+                  <DatePicker fx:id="selectedDate" prefHeight="26.0" prefWidth="150.0" styleClass="button" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="160.0" />
+                  <TextField fx:id="addMonthSalary" alignment="CENTER" promptText="Monthly Salary" styleClass="button" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="25.0" />
+                  <TextField fx:id="addTaxRate" prefHeight="43.0" prefWidth="400.0" promptText="Tax Rate" styleClass="button" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="92.0" />
+                  <Button fx:id="addBtn" layoutX="135.0" layoutY="212.0" mnemonicParsing="false" onAction="#onSalaryAddClick" prefHeight="43.0" prefWidth="145.0" text="Add" AnchorPane.leftAnchor="135.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="210.0" />
+                  <Label alignment="CENTER" styleClass="smallHeader" text="Add monthly salary" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0" />
+                  <Label alignment="CENTER" styleClass="smallHeader" text="Add tax rate" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="69.0" />
+            <Button layoutX="90.0" layoutY="254.0" mnemonicParsing="false" onAction="#toDaySalaryView" prefHeight="44.0" prefWidth="156.0" text="Hourly salary" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="260.0" />
+              </children>
+          </AnchorPane>
+          <AnchorPane prefHeight="304.0" prefWidth="512.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="380.0">
+              <children>
+                  <Label alignment="CENTER" layoutX="20.0" layoutY="14.0" prefHeight="27.0" prefWidth="129.0" styleClass="smallHeader" text="Salary history" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ListView fx:id="salaryHistory" layoutX="25.0" layoutY="37.0" opacity="0.85" prefHeight="255.0" prefWidth="467.0" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="30.0" />
+                  <ComboBox fx:id="monthsCombo" layoutX="193.0" layoutY="357.0" onAction="#calculateMonths" prefHeight="12.0" prefWidth="165.0" promptText="Month" styleClass="button" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="190.0" AnchorPane.topAnchor="350.0" />
+                  <Label alignment="CENTER" layoutX="182.0" layoutY="326.0" prefHeight="18.0" prefWidth="187.0" styleClass="smallHeader" text="Check salaryamount of the month:" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="320.0" />
+                  <Label fx:id="salaryComing" alignment="CENTER" layoutX="175.0" layoutY="403.0" prefHeight="18.0" prefWidth="201.0" styleClass="smallHeader" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="395.0" />
+              </children>
+          </AnchorPane>
     </children>
 
 </AnchorPane>
