@@ -2,13 +2,16 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.ThemeManager;
+import fi.metropolia.expensetracker.module.Variables;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +20,13 @@ public class SettingsController {
     @FXML
     private AnchorPane content;
 
+    private Variables variables = Variables.getInstance();
+    private Currency currency;
     @FXML
-    ChoiceBox<String> colorChoiceBox = new ChoiceBox<>();
+    private ChoiceBox<String> colorChoiceBox = new ChoiceBox<>();
+
+    @FXML
+    private ComboBox selectCurrency;
 
 
     public void initialize() {
@@ -58,11 +66,25 @@ public class SettingsController {
             content.setStyle(themeManager.getStyle());
 
         });
+
+        selectCurrency.getItems().addAll(variables.getCurrencyCodes());
+    }
+
+    public void setVariables(Variables variables, Currency currency) {
+        this.variables = variables;
+        this.currency = currency;
     }
 
     public void backToMain() throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
+    }
+
+    @FXML
+    protected void onChooseCurrencyBtnClick() {
+        variables.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
+        currency = Currency.getInstance(variables.getCurrentCurrency());
+        variables.convertConstExpense();
     }
 }

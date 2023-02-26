@@ -11,21 +11,9 @@ import static java.util.Map.entry;
 public class Variables {
     private static Variables INSTANCE = null;
 
-    private Map<String, Double> currencies = Map.ofEntries(
-            entry("EUR", 1.00),
-            entry("USD", 1.08),
-            entry("SEK", 11.1091),
-            entry("JPY", 140.64),
-            entry("ISK", 152.58),
-            entry("CAD", 1.43),
-            entry("RUB", 78.21),
-            entry("CHF", 0.99),
-            entry("NOK", 10.84),
-            entry("DKK", 7.45),
-            entry("GBP", 0.89)
-    );
+    private final Map<String, Double> currencies = Map.ofEntries(entry("EUR", 1.00), entry("USD", 1.08), entry("SEK", 11.1091), entry("JPY", 140.64), entry("ISK", 152.58), entry("CAD", 1.43), entry("RUB", 78.21), entry("CHF", 0.99), entry("NOK", 10.84), entry("DKK", 7.45), entry("GBP", 0.89));
 
-    private Map<String, Double> categories = new HashMap<>() {{
+    private final Map<String, Double> categories = new HashMap<>() {{
         put("Groceries", 0.00);
         put("Restaurants", 0.00);
         put("Hobbies", 0.00);
@@ -59,8 +47,7 @@ public class Variables {
     }
 
     public static Variables getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new Variables();
+        if (INSTANCE == null) INSTANCE = new Variables();
         return INSTANCE;
     }
 
@@ -174,7 +161,7 @@ public class Variables {
 
     public Double getTotalExpenses() {
         Double totalExpenses = 0.00;
-        for (Integer i = 0; i < activeBudget.getExpenses().size(); i++) {
+        for (int i = 0; i < activeBudget.getExpenses().size(); i++) {
             totalExpenses += activeBudget.getExpenses().get(i).getPrice();
         }
         return totalExpenses;
@@ -190,7 +177,7 @@ public class Variables {
 
     public Double getBudget() {
         Double allBudgets = 0.00;
-        for (Integer i = 0; i < getBudgets().size(); i++) {
+        for (int i = 0; i < getBudgets().size(); i++) {
             allBudgets += getBudgets().get(i).getAmount();
         }
         return allBudgets;
@@ -212,14 +199,12 @@ public class Variables {
         for (Map.Entry<String, Double> entry : constExpenses.entrySet()) {
             String expense = entry.getKey();
             Double cost = entry.getValue() / currentCourseMultiplier;
-            System.out.println(expense + ": " + cost);
         }
 
         for (Map.Entry<String, Double> entry : constExpenses.entrySet()) {
             String expense = entry.getKey();
             Double cost = entry.getValue() * currentCourseMultiplier;
             setConstExpenses(expense, cost);
-            System.out.println(expense + ": " + cost);
         }
     }
 }
