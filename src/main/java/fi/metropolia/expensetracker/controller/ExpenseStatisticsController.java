@@ -36,6 +36,7 @@ public class ExpenseStatisticsController {
     @FXML
     private Label budgetName;
     private Variables variables;
+    private ObservableList<PieChart.Data> currentPieValues;
     private Currency currency;
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -88,22 +89,22 @@ public class ExpenseStatisticsController {
                         new PieChart.Data("Other", allValues.get("Other")),
                         new PieChart.Data("Constant expenses", allValues.get("Constant expenses")));
 
-        for (PieChart.Data data : pieChartData) {
-            pieStats.getData().add(data);
-        }
+        pieStats.getData().addAll(pieChartData);
+        currentPieValues = pieChartData;
         pieStats.setTitle("Expenses");
 
         selectedTimeFrame.setOnAction((event) -> {
             String selection = selectedTimeFrame.getValue().toString();
             ObservableList<PieChart.Data> newPieChartData;
             HashMap<String, Double> values;
+            Integer matches = 0;
             switch (selection) {
                 case ("All time"):
                     values = calculateValues("All time");
                     newPieChartData =
                             FXCollections.observableArrayList(
                                     new PieChart.Data("Groceries", values.get("Groceries")),
-                                    new PieChart.Data("Restaurant", values.get("Restaurants")),
+                                    new PieChart.Data("Restaurants", values.get("Restaurants")),
                                     new PieChart.Data("Hobbies", values.get("Hobbies")),
                                     new PieChart.Data("Clothes", values.get("Clothes")),
                                     new PieChart.Data("Well-being", values.get("Well-being")),
@@ -111,10 +112,20 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Transport", values.get("Transport")),
                                     new PieChart.Data("Other", values.get("Other")),
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
-                    pieStats.getData().clear();
+                    matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        pieStats.getData().add(data);
+                        for (PieChart.Data data2 :currentPieValues) {
+                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                                matches++;
+                            }
+                        }
                     }
+                    if (matches<9){
+                        pieStats.getData().clear();
+                        pieStats.getData().addAll(newPieChartData);
+                        currentPieValues = newPieChartData;
+                    }
+
                     barStats.getData().clear();
                     series.getData().clear();
                     series.getData().add(new XYChart.Data("Groceries", values.get("Groceries")));
@@ -133,7 +144,7 @@ public class ExpenseStatisticsController {
                     newPieChartData =
                             FXCollections.observableArrayList(
                                     new PieChart.Data("Groceries", values.get("Groceries")),
-                                    new PieChart.Data("Restaurant", values.get("Restaurants")),
+                                    new PieChart.Data("Restaurants", values.get("Restaurants")),
                                     new PieChart.Data("Hobbies", values.get("Hobbies")),
                                     new PieChart.Data("Clothes", values.get("Clothes")),
                                     new PieChart.Data("Well-being", values.get("Well-being")),
@@ -141,9 +152,19 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Transport", values.get("Transport")),
                                     new PieChart.Data("Other", values.get("Other")),
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
-                    pieStats.getData().clear();
+
+                    matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        pieStats.getData().add(data);
+                        for (PieChart.Data data2 :currentPieValues) {
+                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                                matches++;
+                            }
+                        }
+                    }
+                    if (matches<9){
+                        pieStats.getData().clear();
+                        pieStats.getData().addAll(newPieChartData);
+                        currentPieValues = newPieChartData;
                     }
                     barStats.getData().clear();
                     series.getData().clear();
@@ -163,7 +184,7 @@ public class ExpenseStatisticsController {
                     newPieChartData =
                             FXCollections.observableArrayList(
                                     new PieChart.Data("Groceries", values.get("Groceries")),
-                                    new PieChart.Data("Restaurant", values.get("Restaurants")),
+                                    new PieChart.Data("Restaurants", values.get("Restaurants")),
                                     new PieChart.Data("Hobbies", values.get("Hobbies")),
                                     new PieChart.Data("Clothes", values.get("Clothes")),
                                     new PieChart.Data("Well-being", values.get("Well-being")),
@@ -171,9 +192,18 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Transport", values.get("Transport")),
                                     new PieChart.Data("Other", values.get("Other")),
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
-                    pieStats.getData().clear();
+                    matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        pieStats.getData().add(data);
+                        for (PieChart.Data data2 :currentPieValues) {
+                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                                matches++;
+                            }
+                        }
+                    }
+                    if (matches<9){
+                        pieStats.getData().clear();
+                        pieStats.getData().addAll(newPieChartData);
+                        currentPieValues = newPieChartData;
                     }
                     barStats.getData().clear();
                     series.getData().clear();
@@ -193,7 +223,7 @@ public class ExpenseStatisticsController {
                     newPieChartData =
                             FXCollections.observableArrayList(
                                     new PieChart.Data("Groceries", values.get("Groceries")),
-                                    new PieChart.Data("Restaurant", values.get("Restaurants")),
+                                    new PieChart.Data("Restaurants", values.get("Restaurants")),
                                     new PieChart.Data("Hobbies", values.get("Hobbies")),
                                     new PieChart.Data("Clothes", values.get("Clothes")),
                                     new PieChart.Data("Well-being", values.get("Well-being")),
@@ -201,9 +231,18 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Transport", values.get("Transport")),
                                     new PieChart.Data("Other", values.get("Other")),
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
-                    pieStats.getData().clear();
+                    matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        pieStats.getData().add(data);
+                        for (PieChart.Data data2 :currentPieValues) {
+                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                                matches++;
+                            }
+                        }
+                    }
+                    if (matches<9){
+                        pieStats.getData().clear();
+                        pieStats.getData().addAll(newPieChartData);
+                        currentPieValues = newPieChartData;
                     }
                     barStats.getData().clear();
                     series.getData().clear();
@@ -223,7 +262,7 @@ public class ExpenseStatisticsController {
                     newPieChartData =
                             FXCollections.observableArrayList(
                                     new PieChart.Data("Groceries", values.get("Groceries")),
-                                    new PieChart.Data("Restaurant", values.get("Restaurants")),
+                                    new PieChart.Data("Restaurants", values.get("Restaurants")),
                                     new PieChart.Data("Hobbies", values.get("Hobbies")),
                                     new PieChart.Data("Clothes", values.get("Clothes")),
                                     new PieChart.Data("Well-being", values.get("Well-being")),
@@ -231,11 +270,19 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Transport", values.get("Transport")),
                                     new PieChart.Data("Other", values.get("Other")),
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
-                    pieStats.getData().clear();
+                    matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        pieStats.getData().add(data);
+                        for (PieChart.Data data2 :currentPieValues) {
+                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                                matches++;
+                            }
+                        }
                     }
-
+                    if (matches<9){
+                        pieStats.getData().clear();
+                        pieStats.getData().addAll(newPieChartData);
+                        currentPieValues = newPieChartData;
+                    }
                     barStats.getData().clear();
                     series.getData().clear();
                     series.getData().add(new XYChart.Data("Groceries", values.get("Groceries")));
