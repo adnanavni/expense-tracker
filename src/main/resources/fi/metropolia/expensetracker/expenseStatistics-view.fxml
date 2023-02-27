@@ -5,33 +5,33 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.ExpenseStatisticsController">
+<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="fi.metropolia.expensetracker.controller.ExpenseStatisticsController">
    <children>
-      <PieChart fx:id="pieStats" layoutX="25.0" layoutY="386.0" visible="false" />
+      <PieChart fx:id="pieStats" layoutX="25.0" layoutY="386.0" styleClass="button" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="330.0" />
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToExpense" text="Back" />
-      <Label layoutX="78.0" layoutY="57.0" text="Expense statistics">
+      <Label layoutX="78.0" layoutY="57.0" styleClass="header" text="Expense statistics" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="50.0">
          <font>
             <Font name="System Bold" size="48.0" />
          </font>
       </Label>
-      <Label layoutX="198.0" layoutY="127.0" text="Active budget:">
+      <Label alignment="CENTER" layoutX="198.0" layoutY="127.0" styleClass="budgetText" text="Active budget:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="105.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="budgetName" layoutX="197.0" layoutY="162.0" text="BUDGETNAME">
+      <Label fx:id="budgetName" alignment="CENTER" layoutX="197.0" layoutY="162.0" styleClass="activeBudget" text="BUDGETNAME" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="135.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="chartTypeBtn" layoutX="190.0" layoutY="311.0" mnemonicParsing="false" onAction="#onChangeChartClick" text="View as piechart" />
-      <ComboBox fx:id="selectedTimeFrame" layoutX="200.0" layoutY="257.0" prefWidth="150.0" promptText="All time" />
-      <Label layoutX="181.0" layoutY="216.0" text="Showing statistics from:">
+      <Button fx:id="chartTypeBtn" layoutX="190.0" layoutY="311.0" mnemonicParsing="false" onAction="#onChangeChartClick" text="View as piechart" AnchorPane.leftAnchor="185.0" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="280.0" />
+      <ComboBox fx:id="selectedTimeFrame" layoutX="200.0" layoutY="257.0" prefWidth="150.0" promptText="All time" styleClass="button" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="205.0" />
+      <Label alignment="CENTER" layoutX="181.0" layoutY="216.0" styleClass="smallHeader" text="Showing statistics from:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="180.0">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <BarChart fx:id="barStats" layoutX="25.0" layoutY="383.0">
+      <BarChart fx:id="barStats" layoutX="25.0" layoutY="383.0" styleClass="button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="330.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>

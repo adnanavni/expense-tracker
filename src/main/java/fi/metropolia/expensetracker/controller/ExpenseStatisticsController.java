@@ -555,7 +555,6 @@ public class ExpenseStatisticsController {
                 }
             }
         }
-        System.out.println(values);
         return values;
         
     }
