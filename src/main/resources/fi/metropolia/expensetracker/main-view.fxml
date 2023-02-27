@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="550.0" minHeight="800.0" minWidth="550.0" prefHeight="800.0" prefWidth="550.0" styleClass="background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.MainController">
+<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="550.0" minHeight="800.0" minWidth="550.0" prefHeight="800.0" prefWidth="550.0" styleClass="background" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="fi.metropolia.expensetracker.controller.MainController">
     <children>
         <Label alignment="CENTER" layoutX="79.0" layoutY="14.0" prefHeight="60.0" prefWidth="411.0" styleClass="header" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="10.0" />
         <Label alignment="CENTER" layoutX="224.0" layoutY="90.0" styleClass="titleText" text="Total budget:" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="120.0" />

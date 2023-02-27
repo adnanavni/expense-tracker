@@ -68,7 +68,6 @@ public class ExpenseController {
             , currency.getSymbol());
             selectCategory.getItems().add(expenseToAdd);
         }
-        //selectCategory.getItems().addAll(variables.getConstExpenses());
         selectCategory.getItems().add(0, "New");
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
