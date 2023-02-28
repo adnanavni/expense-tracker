@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.RegisterController">
+
+    <Label alignment="CENTER" layoutX="86.0" layoutY="74.0" prefHeight="74.0" prefWidth="426.0" styleClass="header" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="74.0" />
+    <!-- Add Header Label -->
+    <Label layoutX="196.0" layoutY="201.0" text="Registration " />
+    <Label layoutX="198.0" layoutY="229.0" text="Full Name : " />
+    <TextField fx:id="fullNameField" layoutX="200.0" layoutY="260.0" />
+    <Label layoutX="196.0" layoutY="298.0" text="Email ID : " />
+    <TextField fx:id="emailIdField" layoutX="200.0" layoutY="323.0" />
+    <Label layoutX="200.0" layoutY="362.0" text="Password : " />
+    <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="387.0" />
+    <Button fx:id="submitButton" layoutX="214.0" layoutY="440.0" onAction="#register" text="Submit">
+    </Button>
+</AnchorPane>
