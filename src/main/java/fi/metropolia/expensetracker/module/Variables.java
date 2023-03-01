@@ -211,4 +211,7 @@ public class Variables {
         loggedUserId = id;
         System.out.println("User id: " + loggedUserId);
     }
+    public Integer getLoggedUserId(){
+        return loggedUserId;
+    }
 }
