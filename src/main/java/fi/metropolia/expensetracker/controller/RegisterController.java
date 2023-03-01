@@ -18,11 +18,9 @@ import javafx.stage.Window;
 public class RegisterController {
 
     @FXML
-    private TextField fullNameField;
-    @FXML
     private AnchorPane content;
     @FXML
-    private TextField emailIdField;
+    private TextField userName;
 
     @FXML
     private PasswordField passwordField;
@@ -35,18 +33,12 @@ public class RegisterController {
 
         Window owner = submitButton.getScene().getWindow();
 
-        System.out.println(fullNameField.getText());
-        System.out.println(emailIdField.getText());
+        System.out.println(userName.getText());
         System.out.println(passwordField.getText());
-        if (fullNameField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
-                    "Please enter your name");
-            return;
-        }
 
-        if (emailIdField.getText().isEmpty()) {
+        if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
-                    "Please enter your email id");
+                    "Please enter your username");
             return;
         }
         if (passwordField.getText().isEmpty()) {
@@ -55,20 +47,25 @@ public class RegisterController {
             return;
         }
 
-        String fullName = fullNameField.getText();
-        String emailId = emailIdField.getText();
+        String name = userName.getText();
         String password = passwordField.getText();
 
         Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
-        loginSignupDao.insertRecord(fullName, emailId, password);
+        loginSignupDao.insertRecord(name, password);
 
         showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration Successful!",
-                "Welcome " + fullNameField.getText());
+                "Welcome " + userName.getText());
         changeWindowToHome();
     }
 
     private void changeWindowToHome() throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
+        AnchorPane pane = fxmloader.load();
+        content.getChildren().setAll(pane);
+    }
+
+    public void changeWindowToLogin() throws IOException {
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("login_form-view.fxml"));
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
     }
