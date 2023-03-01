@@ -7,13 +7,10 @@ import java.sql.*;
 public class Login_Signup_Dao {
 
     private static final String INSERT_QUERY = "INSERT INTO Registration (username, password) VALUES (?, ?)";
-    //private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ? and password = ?";
     private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ?";
-
-    private PsswdAuth psswdAuth = new PsswdAuth();
     private final Connection conn = MariaDBConnector.getInstance();
 
-    public void insertRecord(String username, String password) throws SQLException {
+    public void insertRecord(String username, String password) {
         try {
 
              PreparedStatement preparedStatement = conn.prepareStatement(INSERT_QUERY);
@@ -33,26 +30,22 @@ public class Login_Signup_Dao {
         PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM Registration WHERE username=?");
         prepPsswordState.setString(1, username);
         ResultSet resultSet = prepPsswordState.executeQuery();
-       // String password = "";
         System.out.println(prepPsswordState);
         if (resultSet.next()) {
             System.out.println(resultSet.getString(1));
             return resultSet.getString(1);
         }
-
-
         resultSet.close();
         prepPsswordState.close();
 
         return null;
     }
-    public boolean validate(String username, String password) throws SQLException {
+    public boolean validate(String username, String password) {
         try {
              PreparedStatement preparedStatement = conn.prepareStatement(SELECT_QUERY);
             preparedStatement.setString(1, username);
             System.out.println(preparedStatement);
             PsswdAuth auth = new PsswdAuth();
-
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next() && auth.authenticate(password.toCharArray(), getPassword(username)) ) {
@@ -74,8 +67,6 @@ public class Login_Signup_Dao {
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setString(1, name);
-
-
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
@@ -109,7 +100,6 @@ public class Login_Signup_Dao {
 
     public String loggedCurrency(Integer id){
         try  {
-            System.out.println("Logged currency id " + id);
             String sql = "SELECT currency FROM Registration WHERE id=?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
@@ -124,7 +114,6 @@ public class Login_Signup_Dao {
             }
             resultSet.close();
             preparedStatement.close();
-
 
         }  catch (SQLException e) {
             printSQLException(e);
