@@ -50,7 +50,7 @@ public class LoginController {
 
         String emailId = emailIdField.getText();
         String password = passwordField.getText();
-
+        int userID;
         Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
         boolean flag = loginSignupDao.validate(emailId, password);
 

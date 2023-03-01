@@ -8,6 +8,7 @@ public class Login_Signup_Dao {
 
     private static final String INSERT_QUERY = "INSERT INTO registration (full_name, email_id, password) VALUES (?, ?, ?)";
     private static final String SELECT_QUERY = "SELECT * FROM registration WHERE email_id = ? and password = ?";
+    private static final String USER_ID_QUERY = "SELECT id FROM registration WHERE email_id = ? and password = ?";
 
     public void insertRecord(String fullName, String emailId, String password) throws SQLException {
 
@@ -28,6 +29,10 @@ public class Login_Signup_Dao {
     public boolean validate(String emailId, String password) throws SQLException {
 
         try (Connection connection   = MariaDBConnector.getInstance()) {
+            PreparedStatement userPrep = connection.prepareStatement(USER_ID_QUERY);
+            userPrep.setString(1, emailId);
+            userPrep.setString(2, password);
+            System.out.println("Current user prepared" + userPrep);
 
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY);
             preparedStatement.setString(1, emailId);

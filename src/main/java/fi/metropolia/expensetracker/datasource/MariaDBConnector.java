@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class MariaDBConnector {
     private static Connection conn = null;
 
-    public MariaDBConnector() {
+    private MariaDBConnector() {
     }
 
     public static Connection getInstance() {
