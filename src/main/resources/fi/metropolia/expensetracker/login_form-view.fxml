@@ -4,12 +4,14 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.LoginController">
-    <Label alignment="CENTER" layoutX="86.0" layoutY="74.0" prefHeight="74.0" prefWidth="401.0" styleClass="header" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="143.0" AnchorPane.topAnchor="74.0" />
-    <Label layoutX="174.0" layoutY="210.0" text="Email ID : " GridPane.columnIndex="0" GridPane.rowIndex="2" />
-    <TextField fx:id="emailIdField" layoutX="171.0" layoutY="238.0" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <Label layoutX="171.0" layoutY="286.0" text="Password : " GridPane.columnIndex="0" GridPane.rowIndex="3" />
-    <PasswordField fx:id="passwordField" layoutX="171.0" layoutY="311.0" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-    <Button fx:id="submitButton" defaultButton="true" layoutX="196.0" layoutY="387.0" onAction="#login" prefHeight="40" prefWidth="100" text="Submit" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.rowSpan="1">
+    <Label alignment="CENTER" layoutX="86.0" layoutY="74.0" prefHeight="74.0" prefWidth="401.0" styleClass="header" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
+    <Label alignment="CENTER" layoutX="174.0" layoutY="210.0" styleClass="smallHeader" text="Username:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="200.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <TextField fx:id="userName" alignment="CENTER" layoutX="171.0" layoutY="238.0" prefHeight="40" styleClass="button" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="225.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <Label alignment="CENTER" layoutX="171.0" layoutY="286.0" styleClass="smallHeader" text="Password : " AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="270.0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <PasswordField fx:id="passwordField" layoutX="171.0" layoutY="311.0" prefHeight="40" styleClass="button" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="295.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Button fx:id="submitButton" defaultButton="true" layoutX="225.0" layoutY="360.0" onAction="#login" prefHeight="40" prefWidth="100" text="Login" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0" AnchorPane.topAnchor="350.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.rowSpan="1">
     </Button>
-   <Button layoutX="443.0" layoutY="74.0" mnemonicParsing="false" onAction="#changeWindowToRegistration" text="SignUp" />
+   <Button layoutX="229.0" layoutY="521.0" mnemonicParsing="false" onAction="#changeWindowToRegistration" text="SignUp" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" />
+   <Label alignment="CENTER" layoutY="483.0" styleClass="smallHeader" text="Don't have an account?" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="480.0" />
+   <Label alignment="CENTER" layoutX="10.0" layoutY="493.0" styleClass="smallHeader" text="Register from here!" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="497.0" />
 </AnchorPane>

@@ -22,7 +22,7 @@ public class LoginController {
     @FXML
     private AnchorPane content;
     @FXML
-    private TextField emailIdField;
+    private TextField userName;
 
     @FXML
     private PasswordField passwordField;
@@ -35,12 +35,12 @@ public class LoginController {
 
         Window owner = submitButton.getScene().getWindow();
 
-        System.out.println(emailIdField.getText());
+        System.out.println(userName.getText());
         System.out.println(passwordField.getText());
 
-        if (emailIdField.getText().isEmpty()) {
+        if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
-                    "Please enter your email id");
+                    "Please enter your username");
             return;
         }
         if (passwordField.getText().isEmpty()) {
@@ -49,19 +49,19 @@ public class LoginController {
             return;
         }
 
-        String emailId = emailIdField.getText();
+        String name = userName.getText();
         String password = passwordField.getText();
         int userID;
         Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
-        boolean flag = loginSignupDao.validate(emailId, password);
+        boolean flag = loginSignupDao.validate(name, password);
 
         if (!flag) {
-            infoBox("Please enter correct Email and Password or Signup", null, "Failed");
+            infoBox("Please enter correct Username and Password or Signup", null, "Failed");
         } else {
             infoBox("Login Successful!", null, "Successful");
             changeWindowToHome();
 
-            Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(emailId, password));
+            Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name, password));
         }
     }
 
