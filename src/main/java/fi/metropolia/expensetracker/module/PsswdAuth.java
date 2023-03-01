@@ -1,17 +1,26 @@
 package fi.metropolia.expensetracker.module;
 
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+        import java.security.NoSuchAlgorithmException;
+        import java.security.SecureRandom;
+        import java.security.spec.InvalidKeySpecException;
+        import java.security.spec.KeySpec;
+        import java.util.Arrays;
+        import java.util.Base64;
+        import java.util.regex.Matcher;
+        import java.util.regex.Pattern;
 
+        import javax.crypto.SecretKeyFactory;
+        import javax.crypto.spec.PBEKeySpec;
+
+/**
+ * Hash passwords for storage, and test passwords against password tokens.
+ *
+ * Instances of this class can be used concurrently by multiple threads.
+ *
+ * @author erickson
+ * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
+ */
 public final class PsswdAuth
 {
 
@@ -109,33 +118,6 @@ public final class PsswdAuth
         catch (InvalidKeySpecException ex) {
             throw new IllegalStateException("Invalid SecretKeyFactory", ex);
         }
-    }
-
-    /**
-     * Hash a password in an immutable {@code String}.
-     *
-     * <p>Passwords should be stored in a {@code char[]} so that it can be filled
-     * with zeros after use instead of lingering on the heap and elsewhere.
-     *
-     * @deprecated Use {@link #hash(char[])} instead
-     */
-    @Deprecated
-    public String hash(String password)
-    {
-        return hash(password.toCharArray());
-    }
-
-    /**
-     * Authenticate with a password in an immutable {@code String} and a stored
-     * password token.
-     *
-     * @deprecated Use {@link #authenticate(char[],String)} instead.
-     * @see #hash(String)
-     */
-    @Deprecated
-    public boolean authenticate(String password, String token)
-    {
-        return authenticate(password.toCharArray(), token);
     }
 
 }

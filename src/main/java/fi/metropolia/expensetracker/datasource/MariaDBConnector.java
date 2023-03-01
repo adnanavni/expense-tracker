@@ -20,7 +20,6 @@ public class MariaDBConnector {
                 var1.printStackTrace();
                 System.exit(-1);
             }
-
             return conn;
         } else {
             return conn;
