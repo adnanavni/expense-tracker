@@ -28,6 +28,9 @@ public class MainController {
     @FXML
     private AnchorPane content;
 
+    @FXML
+    private Button logOutButton;
+
     private Variables variables = Variables.getInstance();
     private SalarySingle salarySingle = SalarySingle.getInstance();
     private LocalDate date;
@@ -95,6 +98,14 @@ public class MainController {
 
         SettingsController settingsController = fxmloader.getController();
         settingsController.setVariables(variables, currency);
+    }
+
+    public void changeWindowToLogin() throws IOException {
+        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("login_form-view.fxml"));
+        AnchorPane pane = fxmloader.load();
+        content.getChildren().setAll(pane);
+
+        LoginController loginController = fxmloader.getController();
     }
 
 }
