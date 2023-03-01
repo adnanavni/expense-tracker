@@ -61,7 +61,7 @@ public class LoginController {
             infoBox("Login Successful!", null, "Successful");
             changeWindowToHome();
 
-            Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(emailId, password));
+            Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name, password));
         }
     }
 
