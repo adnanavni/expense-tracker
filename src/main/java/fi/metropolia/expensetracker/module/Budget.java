@@ -15,8 +15,6 @@ public class Budget {
         this.amount = amount;
         this.name = name;
         this.currency = currency;
-        id = currentId;
-        currentId++;
     }
 
     public void addExpenseToBudget(Expense expense) {
