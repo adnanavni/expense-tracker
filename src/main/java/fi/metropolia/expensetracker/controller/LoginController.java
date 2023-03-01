@@ -1,13 +1,10 @@
 package fi.metropolia.expensetracker.controller;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Login_Signup_Dao;
-import fi.metropolia.expensetracker.module.PsswdAuth;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,12 +29,10 @@ public class LoginController {
 
     @FXML
     private Button submitButton;
-    private String token;
-    PsswdAuth auth;
 
     @FXML
-    public void login(ActionEvent event) throws IOException, SQLException {
-        auth = new PsswdAuth();
+    public void login(ActionEvent event) throws SQLException, IOException {
+
         Window owner = submitButton.getScene().getWindow();
 
         System.out.println(userName.getText());
@@ -58,17 +53,16 @@ public class LoginController {
         String password = passwordField.getText();
 
         Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
-      //  token = auth.hash(passwordField.getText().toCharArray());
+        boolean flag = loginSignupDao.validate(name, password);
 
-        boolean isUser = loginSignupDao.validate(name, password);
-        if (!isUser) {
-            infoBox("Please enter correct Username and Password or Signup", null, "Failed");
-        } if(isUser){
+        if (!flag) {
+            infoBox("Please enter correct username and password or create a new account!", null, "Failed");
+        } else {
             infoBox("Login Successful!", null, "Successful");
+            changeWindowToHome();
+
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
-
-            changeWindowToHome();
         }
     }
 
