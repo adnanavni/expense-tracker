@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Login_Signup_Dao;
+import fi.metropolia.expensetracker.module.PsswdAuth;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,10 +30,12 @@ public class LoginController {
 
     @FXML
     private Button submitButton;
+    private String token;
+    PsswdAuth auth;
 
     @FXML
     public void login(ActionEvent event) throws SQLException, IOException {
-
+        auth = new PsswdAuth();
         Window owner = submitButton.getScene().getWindow();
 
         System.out.println(userName.getText());
@@ -51,9 +54,14 @@ public class LoginController {
 
         String name = userName.getText();
         String password = passwordField.getText();
-        int userID;
+
         Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+
+      //  token = auth.hash(passwordField.getText());
+        //System.out.println("token" + token);
+        //System.out.println("auth" + auth.authenticate(password, token));
         boolean flag = loginSignupDao.validate(name, password);
+        //boolean flag = auth.authenticate(password, token);
 
         if (!flag) {
             infoBox("Please enter correct Username and Password or Signup", null, "Failed");

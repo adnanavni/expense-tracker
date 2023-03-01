@@ -17,7 +17,7 @@ public class Login_Signup_Dao {
 
              PreparedStatement preparedStatement = conn.prepareStatement(INSERT_QUERY);
              preparedStatement.setString(1, fullName);
-             preparedStatement.setString(2, password);
+             preparedStatement.setString(3, password);
 
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
@@ -32,7 +32,7 @@ public class Login_Signup_Dao {
 
              PreparedStatement preparedStatement = conn.prepareStatement(SELECT_QUERY);
             preparedStatement.setString(1, fullName);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(3, password);
 
             System.out.println(preparedStatement);
 
@@ -48,14 +48,14 @@ public class Login_Signup_Dao {
         return false;
     }
 
-    public Integer loggedID(String emailId, String password){
+    public Integer loggedID(String userName, String password){
         try  {
 
-            String sql = "SELECT id FROM registration WHERE email_id = ? and password = ?";
+            String sql = "SELECT id FROM registration WHERE full_name = ? and password = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
-            preparedStatement.setString(1, emailId);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(3, password);
 
             System.out.println(preparedStatement);
 

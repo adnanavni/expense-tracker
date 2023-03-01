@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Login_Signup_Dao;
+import fi.metropolia.expensetracker.module.PsswdAuth;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,13 +29,19 @@ public class RegisterController {
     @FXML
     private Button submitButton;
 
+    private String token;
+    private String passwd;
+
+    PsswdAuth auth;
+
     @FXML
     public void register(ActionEvent event) throws SQLException, IOException {
-
+        auth = new PsswdAuth();
         Window owner = submitButton.getScene().getWindow();
 
         System.out.println(userName.getText());
         System.out.println(passwordField.getText());
+        passwd = passwordField.getText();
 
         if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
@@ -55,6 +62,9 @@ public class RegisterController {
 
         showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration Successful!",
                 "Welcome " + userName.getText());
+        //token = auth.hash(passwordField.getText());
+        //System.out.println("token" + token);
+        // System.out.println("auth" + auth.authenticate(password, token));
         changeWindowToHome();
     }
 
