@@ -10,7 +10,7 @@ import static java.util.Map.entry;
 
 public class Variables {
     private static Variables INSTANCE = null;
-
+    private Integer loggedUserId;
     private final Map<String, Double> currencies = Map.ofEntries(entry("EUR", 1.00), entry("USD", 1.08), entry("SEK", 11.1091), entry("JPY", 140.64), entry("ISK", 152.58), entry("CAD", 1.43), entry("RUB", 78.21), entry("CHF", 0.99), entry("NOK", 10.84), entry("DKK", 7.45), entry("GBP", 0.89));
 
     private final Map<String, Double> categories = new HashMap<>() {{
@@ -206,5 +206,9 @@ public class Variables {
             Double cost = entry.getValue() * currentCourseMultiplier;
             setConstExpenses(expense, cost);
         }
+    }
+    public void setLoggedUserId(Integer id){
+        loggedUserId = id;
+        System.out.println("User id: " + loggedUserId);
     }
 }
