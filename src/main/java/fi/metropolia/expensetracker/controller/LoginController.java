@@ -62,6 +62,7 @@ public class LoginController {
             changeWindowToHome();
 
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name, password));
+            Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
         }
     }
 

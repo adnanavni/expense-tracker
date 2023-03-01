@@ -48,13 +48,13 @@ public class Login_Signup_Dao {
         return false;
     }
 
-    public Integer loggedID(String emailId, String password){
+    public Integer loggedID(String name, String password){
         try  {
 
-            String sql = "SELECT id FROM registration WHERE email_id = ? and password = ?";
+            String sql = "SELECT id FROM registration WHERE full_name = ? and password = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
-            preparedStatement.setString(1, emailId);
+            preparedStatement.setString(1, name);
             preparedStatement.setString(2, password);
 
             System.out.println(preparedStatement);
@@ -73,6 +73,45 @@ public class Login_Signup_Dao {
         }
 
         return null;
+    }
+    public String loggedCurrency(Integer id){
+        try  {
+
+            String sql = "SELECT currency FROM registration WHERE id=?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);
+
+            System.out.println(preparedStatement);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+
+        }  catch (SQLException e) {
+            printSQLException(e);
+        }
+
+        return null;
+    }
+
+    public boolean changeUserCurrency(Integer id, String currency){
+        try {
+            String sql = "UPDATE registration SET currency = ? WHERE id= ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, currency);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return false;
     }
 
     public static void printSQLException(SQLException ex) {
