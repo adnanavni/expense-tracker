@@ -46,13 +46,13 @@ import java.util.Optional;
         private DatePicker selectedDate;
         @FXML
         private Button addBtn;
+        @FXML
+        private CheckBox mandatoryTaxes;
 
         public void initialize() {
             ThemeManager themeManager = ThemeManager.getInstance();
             content.setStyle(themeManager.getStyle());
-
         }
-
         public void backToMain(ActionEvent event) throws IOException {
             AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
             content.getChildren().setAll(pane);
@@ -65,6 +65,7 @@ import java.util.Optional;
 
             salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
             monthsComb.getItems().addAll(salarySingle.getMonths());
+            mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
 
             salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -103,7 +104,7 @@ import java.util.Optional;
         @FXML
         protected void onSalaryAddClick() {
             salarySingle.CalculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
-            salarySingle.calculateSalaryWithTaxRate(Double.parseDouble(taxRate.getText()), salarySingle.getDaySalary(), "DAY");
+            salarySingle.calculateSalaryWithTaxRate(Double.parseDouble(taxRate.getText()), salarySingle.getDaySalary(), "DAY", mandatoryTaxes.isSelected());
             salarySingle.setMonthSalaryMinusTaxes(salarySingle.getDaySalaryMinusTaxes());
 
             LocalDate salaryDate = LocalDate.now();
@@ -115,6 +116,7 @@ import java.util.Optional;
             this.salary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString(), "DAY", Double.parseDouble(taxRate.getText()));
             Date date = java.sql.Date.valueOf(salaryDate);
             this.salary.setDate(date);
+            this.salary.setMandTax(mandatoryTaxes.isSelected());
 
             salarySingle.createNewDaySalary(salary);
             salaryHistory.getItems().clear();
