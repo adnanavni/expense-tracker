@@ -63,7 +63,7 @@ public class LoginController {
             infoBox("Login Successful!", null, "Successful");
             changeWindowToHome();
 
-            Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name, password));
+            Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
             Budget[] budgets = loginSignupDao.getBudgets(Variables.getInstance().getLoggedUserId());
             if(budgets.length > 0){

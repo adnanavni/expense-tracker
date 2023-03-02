@@ -14,40 +14,52 @@ import java.util.Date;
 public class Login_Signup_Dao {
 
     private static final String INSERT_QUERY = "INSERT INTO Registration (username, password) VALUES (?, ?)";
-    private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ? and password = ?";
-
+    private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ?";
     private final Connection conn = MariaDBConnector.getInstance();
 
-    public void insertRecord(String fullName, String password) throws SQLException {
-
+    public void insertRecord(String username, String password) {
         try {
 
              PreparedStatement preparedStatement = conn.prepareStatement(INSERT_QUERY);
-             preparedStatement.setString(1, fullName);
+             preparedStatement.setString(1, username);
              preparedStatement.setString(2, password);
 
-            System.out.println(preparedStatement);
+            System.out.println("Insert record prepare " + preparedStatement);
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             printSQLException(e);
         }
     }
 
-    public boolean validate(String fullName, String password) throws SQLException {
+    public String getPassword (String username) throws SQLException {
 
+        PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM Registration WHERE username=?");
+        prepPsswordState.setString(1, username);
+        ResultSet resultSet = prepPsswordState.executeQuery();
+        System.out.println(prepPsswordState);
+        if (resultSet.next()) {
+            System.out.println(resultSet.getString(1));
+            return resultSet.getString(1);
+        }
+        resultSet.close();
+        prepPsswordState.close();
+
+        return null;
+    }
+    public boolean validate(String username, String password) {
         try {
-
              PreparedStatement preparedStatement = conn.prepareStatement(SELECT_QUERY);
-            preparedStatement.setString(1, fullName);
-            preparedStatement.setString(2, password);
-
+            preparedStatement.setString(1, username);
             System.out.println(preparedStatement);
+            PsswdAuth auth = new PsswdAuth();
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            if (resultSet.next() && auth.authenticate(password.toCharArray(), getPassword(username)) ) {
                 return true;
             }
-
+            resultSet.close();
+            preparedStatement.close();
 
         }  catch (SQLException e) {
             printSQLException(e);
@@ -55,25 +67,19 @@ public class Login_Signup_Dao {
         return false;
     }
 
-    public Integer loggedID(String name, String password){
-        try  {
+    public Integer loggedID(String name){
 
-            String sql = "SELECT id FROM Registration WHERE username = ? and password = ?";
+        try  {
+            String sql = "SELECT id FROM Registration WHERE username = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setString(1, name);
-            preparedStatement.setString(2, password);
-
-            System.out.println(preparedStatement);
-
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
-
             }
             resultSet.close();
             preparedStatement.close();
-
 
         }  catch (SQLException e) {
             printSQLException(e);
@@ -82,9 +88,26 @@ public class Login_Signup_Dao {
         return null;
     }
 
+    public boolean userExists(String username) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM Registration WHERE username = ?");
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+
+        int count = 0;
+        if (rs.next()) {
+            count = rs.getInt(1);
+        }
+        if (count > 0) {
+            // The username already exists
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public String loggedCurrency(Integer id){
         try  {
-
             String sql = "SELECT currency FROM Registration WHERE id=?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
@@ -99,7 +122,6 @@ public class Login_Signup_Dao {
             }
             resultSet.close();
             preparedStatement.close();
-
 
         }  catch (SQLException e) {
             printSQLException(e);
