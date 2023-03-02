@@ -15,6 +15,7 @@ public class Salary {
     private Integer id;
     private LocalDate date;
     private String usedCurrency;
+    private boolean mandTax;
 
     public Salary(double salary, LocalDate date, String usedCurrency, String type, double taxRate ) {
         this.salary = salary;
@@ -37,7 +38,7 @@ public class Salary {
     }
 
     public double getSalaryMinusTaxes (String type) {
-       return SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type);
+       return SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type, mandTax);
     }
     public void setDate(Date date) {
         this.date2 = date;
@@ -50,10 +51,14 @@ public class Salary {
         return id;
     }
 
+    public void setMandTax(boolean mandTax) {
+        this.mandTax = mandTax;
+    }
+
     @Override
     public String toString() {
         return "Salary amount of the date " + date +
                 " is " + salary + usedCurrency + " and minus " + taxRate+
-                "% tax rate it is: " + SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type);
+                "% tax rate it is: " + SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type, mandTax);
     }
 }
