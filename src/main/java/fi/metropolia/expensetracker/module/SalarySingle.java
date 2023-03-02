@@ -139,40 +139,40 @@ public class SalarySingle {
         double totalSalary = 0;
         switch (m) {
             case ("January"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/12"+beforeYear, "01/02"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/12/"+beforeYear, "01/02/"+year, type);
                 break;
             case ("February"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/01"+year, "01/03"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/01/"+year, "01/03/"+year, type);
                 break;
             case ("March"):
-                totalSalary = getSalariesBetweenStartAndFinish("28/02"+year, "01/04"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("28/02/"+year, "01/04/"+year, type);
                 break;
             case ("April"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/03"+year, "01/05"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/03/"+year, "01/05/"+year, type);
                 break;
             case ("May"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/04"+year, "01/06"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/04/"+year, "01/06/"+year, type);
                 break;
             case ("June"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/05"+year, "01/07"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/05/"+year, "01/07/"+year, type);
                 break;
             case ("July"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/06"+year, "01/08"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/06/"+year, "01/08/"+year, type);
                 break;
             case ("August"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/07"+year, "01/09"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/07/"+year, "01/09/"+year, type);
                 break;
             case ("September"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/08"+year, "01/10"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/08/"+year, "01/10/"+year, type);
                 break;
             case ("October"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/9"+year, "01/11/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/9/"+year, "01/11/"+year, type);
                 break;
             case ("November"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/10"+year, "01/12"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/10/"+year, "01/12/"+year, type);
                 break;
             case ("December"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/11"+year, "01/01"+nextYear, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/11/"+year, "01/01/"+nextYear, type);
                 break;
             default:
                 s = "Ei löytynyt kuukautta";
