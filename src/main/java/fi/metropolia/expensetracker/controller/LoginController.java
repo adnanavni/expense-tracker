@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Budget;
-import fi.metropolia.expensetracker.module.Expense;
-import fi.metropolia.expensetracker.module.Login_Signup_Dao;
-import fi.metropolia.expensetracker.module.Variables;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

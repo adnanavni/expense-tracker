@@ -40,18 +40,24 @@ public class SalarySingle {
     private SalarySingle() {
     }
 
-    public double calculateSalaryWithTaxRate(double taxRate, double salary, String type) {
+    public double calculateSalaryWithTaxRate(double taxRate, double salary, String type, boolean mandatoryTax) {
         this.taxRate = taxRate;
-        double procent = 1 - (taxRate / 100);
+        if(mandatoryTax) {
+            double insurance = 7.15;
+            double pension = 1.40;
+
+            taxRate = taxRate+insurance+pension;
+        }
+        double percent = 1 - (taxRate / 100);
         double wantedSalaryminusTaxes = 0;
         if (type.equals("DAY")) {
-            this.daySalaryMinusTaxes = (salary * procent);
+            this.daySalaryMinusTaxes = (salary * percent);
             setDaySalaryMinusTaxes(this.daySalaryMinusTaxes);
             setDaySalary(salary);
             wantedSalaryminusTaxes = this.daySalaryMinusTaxes;
         }
         if (type.equals("MONTH")) {
-            this.monthSalaryMinusTaxes = (salary * procent);
+            this.monthSalaryMinusTaxes = (salary * percent);
             setMonthSalaryMinusTaxes(this.monthSalaryMinusTaxes);
             setMonthSalary(salary);
             wantedSalaryminusTaxes = this.monthSalaryMinusTaxes;
@@ -124,6 +130,7 @@ public class SalarySingle {
         return new ArrayList<>(months.keySet());
     }
 
+    //Change format so no  need to hardcode years
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
         int year = LocalDate.now().getYear();
         int beforeYear = (year-1);
@@ -173,6 +180,7 @@ public class SalarySingle {
         }
         return totalSalary;
     }
+
 
     public double getSalariesBetweenStartAndFinish(String start, String end, String type) throws ParseException {
 

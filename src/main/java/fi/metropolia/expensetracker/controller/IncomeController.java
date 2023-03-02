@@ -44,7 +44,8 @@ public class IncomeController {
     private DatePicker selectedDate;
     @FXML
     private Button addBtn;
-
+    @FXML
+    private CheckBox mandatoryTaxes;
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -74,6 +75,7 @@ public class IncomeController {
 
         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
         monthsCombo.getItems().addAll(salarySingle.getMonths());
+        mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
 
         salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -102,7 +104,7 @@ public class IncomeController {
 
     @FXML
     protected void onSalaryAddClick() {
-        salarySingle.calculateSalaryWithTaxRate(Double.parseDouble(addTaxRate.getText()), Double.parseDouble(addMonthSalary.getText()), "MONTH");
+        salarySingle.calculateSalaryWithTaxRate(Double.parseDouble(addTaxRate.getText()), Double.parseDouble(addMonthSalary.getText()), "MONTH", mandatoryTaxes.isSelected());
         salarySingle.setMonthSalaryMinusTaxes(salarySingle.getDaySalaryMinusTaxes());
         LocalDate salaryDate = LocalDate.now();
 
@@ -113,6 +115,7 @@ public class IncomeController {
         this.salary = new Salary(salarySingle.geTotalSalaryOfMonth(), salaryDate, currency.toString(), "MONTH", Double.parseDouble(addTaxRate.getText()));
         Date date = java.sql.Date.valueOf(salaryDate);
         this.salary.setDate(date);
+        this.salary.setMandTax(mandatoryTaxes.isSelected());
 
         salarySingle.createNewMonthSalary(salary);
         salaryHistory.getItems().clear();
