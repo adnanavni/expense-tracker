@@ -149,6 +149,7 @@ public class Variables {
     public ArrayList<Budget> getBudgets() {
         return budgets;
     }
+
     public void resetBudgets() {
         budgets = new ArrayList<>();
     }

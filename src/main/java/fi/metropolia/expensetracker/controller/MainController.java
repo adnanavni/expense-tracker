@@ -113,6 +113,8 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         LoginController loginController = fxmloader.getController();
+
+        Variables.getInstance().resetBudgets();
     }
 
 }

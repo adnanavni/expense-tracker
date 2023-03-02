@@ -124,7 +124,6 @@ public class SalarySingle {
         return new ArrayList<>(months.keySet());
     }
 
-    //Change format so no  need to hardcode years
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
         int year = LocalDate.now().getYear();
         int beforeYear = (year-1);
@@ -175,7 +174,6 @@ public class SalarySingle {
         return totalSalary;
     }
 
-
     public double getSalariesBetweenStartAndFinish(String start, String end, String type) throws ParseException {
 
         ArrayList<Double> salaries = new ArrayList<>();
@@ -203,12 +201,5 @@ public class SalarySingle {
         }
         return salariesTogether;
     }
-
-      /*
-    public static DateFormat getShortDateInstanceWithoutYears(Locale locale) {
-        SimpleDateFormat sdf = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, locale);
-        sdf.applyPattern(sdf.toPattern().replaceAll("[^\\p{Alpha}]*y+[^\\p{Alpha}]*", ""));
-        return sdf;
-    }*/
 
 }

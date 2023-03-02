@@ -80,7 +80,6 @@ public class LoginController {
                 }
                 Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
             }
-
         }
     }
 
