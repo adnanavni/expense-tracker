@@ -58,7 +58,7 @@ public class LoginController {
         boolean flag = loginSignupDao.validate(name, password);
 
         if (!flag) {
-            infoBox("Please enter correct Username and Password or Signup", null, "Failed");
+            infoBox("Please enter correct username and password or create a new account!", null, "Failed");
         } else {
             infoBox("Login Successful!", null, "Successful");
             changeWindowToHome();
