@@ -1,7 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Login_Signup_Dao;
+import fi.metropolia.expensetracker.module.Dao;
 import fi.metropolia.expensetracker.module.ThemeManager;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.fxml.FXML;
@@ -87,7 +87,7 @@ public class SettingsController {
         variables.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
         currency = Currency.getInstance(variables.getCurrentCurrency());
         variables.convertConstExpense();
-        Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+        Dao loginSignupDao = new Dao();
         loginSignupDao.changeUserCurrency(variables.getLoggedUserId(), selectCurrency.getSelectionModel().getSelectedItem().toString());
     }
 }

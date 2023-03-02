@@ -2,7 +2,6 @@ package fi.metropolia.expensetracker.module;
 
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +89,7 @@ public class Variables {
     }
 
     public void setCurrentCourseMultiplier(String course) {
-        Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+        Dao loginSignupDao = new Dao();
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {
                 budget.setAmount(budget.getAmount() / currentCourseMultiplier);
@@ -123,6 +122,23 @@ public class Variables {
         budgets.add(newBudget);
     }
 
+
+    public void modifyBudget(String newName, double amount) {
+        int index = budgets.indexOf(activeBudget);
+        if (index != -1) {
+            Budget budget = new Budget(amount, newName);
+            budgets.set(index, budget);
+            setActiveBudget(budget.getName());
+        }
+    }
+
+    public void deleteBudget() {
+        int index = budgets.indexOf(activeBudget);
+        if (index != -1) {
+            budgets.remove(index);
+        }
+    }
+
     public ArrayList<String> getBudgetNames() {
         ArrayList<String> names = new ArrayList<>();
         names.add("New");
@@ -149,6 +165,7 @@ public class Variables {
     public ArrayList<Budget> getBudgets() {
         return budgets;
     }
+
     public void resetBudgets() {
         budgets = new ArrayList<>();
     }
@@ -218,11 +235,13 @@ public class Variables {
             setConstExpenses(expense, cost);
         }
     }
-    public void setLoggedUserId(Integer id){
+
+    public void setLoggedUserId(Integer id) {
         loggedUserId = id;
         System.out.println("User id: " + loggedUserId);
     }
-    public Integer getLoggedUserId(){
+
+    public Integer getLoggedUserId() {
         return loggedUserId;
     }
 }

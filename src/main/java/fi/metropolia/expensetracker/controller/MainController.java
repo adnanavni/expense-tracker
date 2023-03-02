@@ -12,9 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
-import java.util.Currency;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.Currency;
 
 public class MainController {
 
@@ -112,7 +111,7 @@ public class MainController {
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
 
-        LoginController loginController = fxmloader.getController();
+
     }
 
 }

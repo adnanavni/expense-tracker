@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
             styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
@@ -37,29 +40,32 @@
                 <AnchorPane fx:id="newBudget" prefHeight="200.0" prefWidth="200.0" visible="false"
                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                     <children>
-                        <TextField fx:id="addBudget" promptText="Amount:" styleClass="button"
-                                   AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0"
-                                   AnchorPane.topAnchor="55.0"/>
                         <TextField fx:id="budgetName" promptText="Name:" styleClass="button"
                                    AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0"
                                    AnchorPane.topAnchor="5.0"/>
+                        <TextField fx:id="addBudget" promptText="Amount:" styleClass="button"
+                                   AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0"
+                                   AnchorPane.topAnchor="55.0"/>
                         <Button fx:id="addBtn" alignment="CENTER" mnemonicParsing="false" onAction="#addToBudget"
-                                text="Add" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0"
+                                text="Add" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0"
                                 AnchorPane.topAnchor="105.0"/>
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="editBudget" prefHeight="200.0" prefWidth="200.0" visible="false"
                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                     <children>
-                        <TextField fx:id="addBudget1" promptText="Amount:" styleClass="button"
-                                   AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0"
+                        <TextField fx:id="modifyAmount" promptText="New Amount:" styleClass="button"
+                                   AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0"
                                    AnchorPane.topAnchor="55.0"/>
-                        <TextField fx:id="budgetName1" promptText="Name:" styleClass="button"
+                        <TextField fx:id="modifyName" promptText="New name:" styleClass="button"
                                    AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0"
                                    AnchorPane.topAnchor="5.0"/>
-                        <Button fx:id="modifyBtn" alignment="CENTER" mnemonicParsing="false" text="Modify"
-                                AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0"
+                        <Button fx:id="modifyBtn" alignment="CENTER" mnemonicParsing="false" onAction="#modifyBtnClick"
+                                text="Modify" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0"
                                 AnchorPane.topAnchor="105.0"/>
+                        <Button mnemonicParsing="false" onAction="#deleteBtnClick" text="Delete"
+                                AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0"
+                                AnchorPane.topAnchor="170.0"/>
                     </children>
                 </AnchorPane>
             </children>
