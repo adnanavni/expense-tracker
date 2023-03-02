@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class MariaDBConnector {
     private static Connection conn = null;
 
-    public MariaDBConnector() {
+    private MariaDBConnector() {
     }
 
     public static Connection getInstance() {
@@ -20,7 +20,6 @@ public class MariaDBConnector {
                 var1.printStackTrace();
                 System.exit(-1);
             }
-
             return conn;
         } else {
             return conn;
