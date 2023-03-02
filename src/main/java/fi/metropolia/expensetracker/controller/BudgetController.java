@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Date;
 import java.util.Objects;
 
 public class BudgetController {
@@ -96,12 +97,18 @@ public class BudgetController {
                     }
                 }
                 if (willAdd) {
-                    Budget newBudget = new Budget(Double.parseDouble(addBudget.getText()), budgetName.getText(), variables.getCurrentCurrency());
-                    variables.createNewBudget(newBudget);
-                    variables.setActiveBudget(newBudget);
+                    Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+                    loginSignupDao.saveBudget(variables.getLoggedUserId(), budgetName.getText(), Double.parseDouble(addBudget.getText()));
+                    variables.resetBudgets();
+                    Budget[] budgets = loginSignupDao.getBudgets(variables.getLoggedUserId());
+                    for (Budget budget : budgets) {
+                        variables.createNewBudget(budget);
+                    }
+                    variables.setActiveBudget(budgetName.getText());
                     activeBudget.setText(variables.getActiveBudget().getName());
                     String budgetText = String.format("%.2f", variables.getBudget());
                     budget.setText("Total: " + budgetText + " " + currency.getSymbol());
+
                 }
             }
         }
@@ -125,11 +132,17 @@ public class BudgetController {
             budgetPane.setVisible(true);
             for (Budget budget : variables.getBudgets()) {
                 if (budget.getName() == selectTopic.getValue()) {
-                    variables.setActiveBudget(budget);
+                    variables.setActiveBudget(budget.getName());
                     String budgetText = String.format("%.2f", variables.getBudget());
                     this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
                     activeBudget.setText(variables.getActiveBudget().getName());
-                    specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
+                    Double budgetExpenses = 0.00;
+                    if (variables.getActiveBudget().getExpenses().size() > 0){
+                        for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                            budgetExpenses += expense.getPrice();
+                        }
+                    }
+                    specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount()-budgetExpenses) + " " + currency.getSymbol());
                 }
             }
         }
@@ -145,13 +158,26 @@ public class BudgetController {
             alert.setContentText("This can be found in expenses menu");
             alert.showAndWait();
         } else {
-            variables.calculate("subtractFromBudget", variables.getConstExpense(selectedConstExpense.getType()));
+
+            Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+            loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
+            variables.getActiveBudget().resetExpenses();
+            Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
+            for (Expense expense : expenses) {
+                variables.getActiveBudget().addExpenseToBudget(expense);
+            }
+
             String budgetText = String.format("%.2f", variables.getBudget());
             this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
-            specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
-            Expense newExpense = new Expense(selectedConstExpense.getAmount(), selectedConstExpense.getType(), LocalDate.now(),
-                    currency.getSymbol());
-            variables.getActiveBudget().addExpenseToBudget(newExpense);
+            Double budgetExpenses = 0.00;
+            if (variables.getActiveBudget().getExpenses().size() > 0){
+                for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                    budgetExpenses += expense.getPrice();
+                }
+            }
+
+            specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount()-budgetExpenses) + " " + currency.getSymbol());
+
         }
     }
 }

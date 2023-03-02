@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class ExpenseController {
@@ -58,7 +59,14 @@ public class ExpenseController {
         currency = Currency.getInstance(variables.getCurrentCurrency());
         Budget activeBudget = variables.getActiveBudget();
         activeBudgetTxt.setText(activeBudget.getName());
-        String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
+
+        Double budgetExpenses = 0.00;
+        if(variables.getActiveBudget().getExpenses().size() > 0){
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                budgetExpenses += expense.getPrice();
+            }
+        }
+        String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
         this.expense.setText(budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getTopics());
 
@@ -75,6 +83,7 @@ public class ExpenseController {
             @Override
             public void handle(MouseEvent event) {
                 int selectedIndex = expenseHistory.getSelectionModel().getSelectedIndex();
+                Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
                 if (selectedIndex >= 0) {
                     Expense selected = (Expense) expenseHistory.getItems().get(selectedIndex);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -87,11 +96,17 @@ public class ExpenseController {
                     if (option.get() == ButtonType.OK) {
                         expenseHistory.getItems().remove(selected);
                         variables.getActiveBudget().removeExpenseFromBudget(selected);
+                        loginSignupDao.deleteExpense(selected.getId());
                         expenseHistory.getItems().clear();
                         expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
-                        variables.calculate("subtractExpense", selected.getPrice());
 
-                        String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
+                        Double budgetExpenses = 0.00;
+                        if(variables.getActiveBudget().getExpenses().size() > 0){
+                            for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                                budgetExpenses += expense.getPrice();
+                            }
+                        }
+                        String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount() - budgetExpenses));
                         expense.setText(budgetText + " " + currency.getSymbol());
                     }
                 } else {
@@ -109,22 +124,33 @@ public class ExpenseController {
     @FXML
     protected void onExpenseAddClick() {
         if (selectTopic.getSelectionModel().getSelectedItem() != null) {
-            variables.calculate("subtractWithExpenses", Double.parseDouble(addExpense.getText()));
-            String budgetText = String.format("%.2f", variables.getActiveBudget().getAmount());
-            expense.setText(budgetText + " " + currency.getSymbol());
+
 
             LocalDate expenseDate = LocalDate.now();
             if (selectedDate.getValue() != null) {
                 expenseDate = selectedDate.getValue();
             }
-
-            Expense addedExpense = new Expense(Double.parseDouble(addExpense.getText()),
-                    selectTopic.getSelectionModel().getSelectedItem().toString(), expenseDate, currency.getSymbol());
-            variables.getActiveBudget().addExpenseToBudget(addedExpense);
+            ZoneId defaultZoneId = ZoneId.systemDefault();
+            Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
+            Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+            loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
+                    , Double.parseDouble(addExpense.getText()), finalDate);
+            variables.getActiveBudget().resetExpenses();
+            Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
+            for (Expense expense : expenses) {
+                variables.getActiveBudget().addExpenseToBudget(expense);
+            }
             expenseHistory.getItems().clear();
             expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
         }
-
+        Double budgetExpenses = 0.00;
+        if(variables.getActiveBudget().getExpenses().size() > 0){
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                budgetExpenses += expense.getPrice();
+            }
+        }
+        String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
+        expense.setText(budgetText + " " + currency.getSymbol());
         addExpense.setText(null);
         selectTopic.setValue(null);
         selectedDate.setValue(null);

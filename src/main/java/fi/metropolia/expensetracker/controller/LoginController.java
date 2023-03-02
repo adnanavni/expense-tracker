@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import fi.metropolia.expensetracker.MainApplication;
+import fi.metropolia.expensetracker.module.Budget;
+import fi.metropolia.expensetracker.module.Expense;
 import fi.metropolia.expensetracker.module.Login_Signup_Dao;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
@@ -63,6 +65,22 @@ public class LoginController {
 
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name, password));
             Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
+            Budget[] budgets = loginSignupDao.getBudgets(Variables.getInstance().getLoggedUserId());
+            if(budgets.length > 0){
+                for (Budget budget : budgets) {
+                    Variables.getInstance().createNewBudget(budget);
+                }
+
+                for (Budget budget : Variables.getInstance().getBudgets()) {
+                    Expense[] budgetExpenses = loginSignupDao.getExpenses(budget.getId());
+                        for (Expense expense : budgetExpenses) {
+                            budget.addExpenseToBudget(expense);
+                        }
+
+                }
+                Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
+            }
+
         }
     }
 

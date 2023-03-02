@@ -90,7 +90,7 @@ public class Variables {
     }
 
     public void setCurrentCourseMultiplier(String course) {
-
+        Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {
                 budget.setAmount(budget.getAmount() / currentCourseMultiplier);
@@ -104,15 +104,15 @@ public class Variables {
 
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {
-                budget.setCurrency(currentCurrency);
                 budget.setAmount(budget.getAmount() * currentCourseMultiplier);
+                loginSignupDao.changeBudgetMoney(budget.getId(), budget.getAmount());
                 if (budget.getExpenses().size() > 0) {
 
                     for (Expense expense : budget.getExpenses()) {
                         double newPrice = expense.getPrice() / multiplierBefore;
                         newPrice = newPrice * currentCourseMultiplier;
                         expense.setPrice(newPrice);
-                        expense.setUsedCurrency(Currency.getInstance(currentCurrency).getSymbol());
+                        loginSignupDao.changeExpenseMoney(expense.getId(), expense.getPrice());
                     }
                 }
             }
@@ -149,6 +149,9 @@ public class Variables {
     public ArrayList<Budget> getBudgets() {
         return budgets;
     }
+    public void resetBudgets() {
+        budgets = new ArrayList<>();
+    }
 
     public Double getSpecificBudget(String name) {
         HashMap<String, Double> budgetsMap = new HashMap<>();
@@ -176,19 +179,27 @@ public class Variables {
     }
 
     public Double getBudget() {
-        Double allBudgets = 0.00;
-        for (int i = 0; i < getBudgets().size(); i++) {
-            allBudgets += getBudgets().get(i).getAmount();
+        totalBudget = 0.00;
+        for (Budget budget : getBudgets()) {
+            Double budgetExpenses = 0.00;
+            for (Expense expense : budget.getExpenses()) {
+                budgetExpenses += expense.getPrice();
+            }
+            totalBudget += (budget.getAmount() - budgetExpenses);
         }
-        return allBudgets;
+        return totalBudget;
     }
 
     public ArrayList<String> getTopics() {
         return new ArrayList<>(categories.keySet());
     }
 
-    public void setActiveBudget(Budget budget) {
-        activeBudget = budget;
+    public void setActiveBudget(String name) {
+        for (Budget budget : budgets) {
+            if (budget.getName().equals(name)) {
+                activeBudget = budget;
+            }
+        }
     }
 
     public Budget getActiveBudget() {

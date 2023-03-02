@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.Currency;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class MainController {
 
@@ -44,9 +45,15 @@ public class MainController {
         } else {
             expenseBtn.setDisable(false);
             Double totalBudget = 0.00;
-            for (int i = 0; i < variables.getBudgets().size(); i++) {
-                totalBudget += variables.getBudgets().get(i).getAmount();
+
+            for (Budget budget : variables.getBudgets()) {
+                Double budgetExpenses = 0.00;
+                for (Expense expense : budget.getExpenses()) {
+                    budgetExpenses += expense.getPrice();
+                }
+                totalBudget += (budget.getAmount() - budgetExpenses);
             }
+
             String budgetText = String.format("%.2f", totalBudget);
             budget.setText(budgetText + " " + currency.getSymbol());
         }

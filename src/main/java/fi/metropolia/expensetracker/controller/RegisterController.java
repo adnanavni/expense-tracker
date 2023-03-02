@@ -33,7 +33,7 @@ public class RegisterController {
 
         Window owner = submitButton.getScene().getWindow();
 
-        System.out.println(userName.getText());
+
         System.out.println(passwordField.getText());
 
         if (userName.getText().isEmpty()) {
