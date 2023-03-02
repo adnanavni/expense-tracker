@@ -14,9 +14,7 @@ public class MariaDBConnector {
         if (conn == null) {
             try {
                 conn = DriverManager.getConnection("jdbc:mysql://10.114.32.29/expensetracker?user=tracker&password=tracker");
-                System.out.println("Connection succesfull.");
             } catch (SQLException var1) {
-                System.out.println("Connection failed.");
                 var1.printStackTrace();
                 System.exit(-1);
             }

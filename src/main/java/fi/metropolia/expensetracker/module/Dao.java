@@ -22,7 +22,6 @@ public class Dao {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
 
-            System.out.println("Insert record prepare " + preparedStatement);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -35,9 +34,7 @@ public class Dao {
         PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM Registration WHERE username=?");
         prepPsswordState.setString(1, username);
         ResultSet resultSet = prepPsswordState.executeQuery();
-        System.out.println(prepPsswordState);
         if (resultSet.next()) {
-            System.out.println(resultSet.getString(1));
             return resultSet.getString(1);
         }
         resultSet.close();
@@ -50,7 +47,6 @@ public class Dao {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(SELECT_QUERY);
             preparedStatement.setString(1, username);
-            System.out.println(preparedStatement);
             PsswdAuth auth = new PsswdAuth();
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -112,7 +108,6 @@ public class Dao {
 
             preparedStatement.setInt(1, id);
 
-            System.out.println(preparedStatement);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -137,8 +132,6 @@ public class Dao {
 
             preparedStatement.setInt(1, id);
 
-            System.out.println(preparedStatement);
-
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new Budget(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getString(2));
@@ -161,8 +154,6 @@ public class Dao {
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setInt(1, id);
-
-            System.out.println(preparedStatement);
 
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -211,7 +202,6 @@ public class Dao {
             preparedStatement.setDouble(2, money);
             preparedStatement.setInt(3, id);
 
-            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             printSQLException(e);
@@ -231,7 +221,6 @@ public class Dao {
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             preparedStatement.setDate(4, sqlDate);
 
-            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             printSQLException(e);

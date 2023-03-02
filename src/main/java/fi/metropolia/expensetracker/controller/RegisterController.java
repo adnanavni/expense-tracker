@@ -44,9 +44,6 @@ public class RegisterController {
         Window owner = submitButton.getScene().getWindow();
         loginSignupDao = new Dao();
 
-
-        System.out.println(passwordField.getText());
-
         if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                     "Please enter your username");
@@ -63,11 +60,8 @@ public class RegisterController {
         }
         if (!loginSignupDao.userExists(userName.getText())) {
             String name = userName.getText();
-            // String password = passwordField.getText();
             passwd = passwordField.getText();
             hashedPassword = auth.hash(passwordField.getText().toCharArray());
-            //   token = auth.hash(passwordField.getText());
-            System.out.println("REGISTERCONTROLLER token" + hashedPassword);
 
             Dao loginSignupDao = new Dao();
             loginSignupDao.insertRecord(name, hashedPassword);
@@ -78,8 +72,6 @@ public class RegisterController {
 
             changeWindowToHome();
         }
-
-
     }
 
     private void changeWindowToHome() throws IOException {

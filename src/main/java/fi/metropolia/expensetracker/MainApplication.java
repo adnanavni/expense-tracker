@@ -11,7 +11,6 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        System.out.println(getClass());
         Parent root = FXMLLoader.load(getClass().getResource("login_form-view.fxml"));
 
         stage.setTitle("Expense Tracker");

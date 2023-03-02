@@ -37,9 +37,6 @@ public class LoginController {
 
         Window owner = submitButton.getScene().getWindow();
 
-        System.out.println(userName.getText());
-        System.out.println(passwordField.getText());
-
         if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                     "Please enter your username");
