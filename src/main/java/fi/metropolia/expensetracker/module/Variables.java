@@ -238,10 +238,21 @@ public class Variables {
 
     public void setLoggedUserId(Integer id) {
         loggedUserId = id;
-        System.out.println("User id: " + loggedUserId);
     }
 
     public Integer getLoggedUserId() {
         return loggedUserId;
+    }
+
+    public void resetAll() {
+        loggedUserId = null;
+        currentCourseMultiplier = 1.00;
+        currentCurrency = "EUR";
+        activeBudget = null;
+        budgets.clear();
+        budgetObject = null;
+        totalBudget = 0.00;
+        expense = 0.00;
+        income = 0.00;
     }
 }

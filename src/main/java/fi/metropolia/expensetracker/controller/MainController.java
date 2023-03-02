@@ -111,7 +111,7 @@ public class MainController {
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
 
-
+        variables.resetAll();
     }
 
 }
