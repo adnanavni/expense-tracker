@@ -1,10 +1,10 @@
 package fi.metropolia.expensetracker.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Budget;
-import fi.metropolia.expensetracker.module.Dao;
-import fi.metropolia.expensetracker.module.Expense;
-import fi.metropolia.expensetracker.module.Variables;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +15,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Window;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 public class LoginController {
 

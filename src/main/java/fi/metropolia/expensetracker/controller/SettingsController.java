@@ -40,7 +40,10 @@ public class SettingsController {
         colorMap.put("#333333", "Dark Theme");
         colorMap.put("#E35B5B", "Light red");
         colorMap.put("#44ED4A", "Green");
-        colorMap.put("#3287E9", "Light Blue");
+        colorMap.put("#3287E9", "Blue");
+        colorMap.put("#edc558", "Yellow");
+        colorMap.put("#9b63a4", "Purple");
+        colorMap.put("#8B0000", "Gambina");
 
         colorChoiceBox.getItems().addAll(colorMap.keySet());
 
