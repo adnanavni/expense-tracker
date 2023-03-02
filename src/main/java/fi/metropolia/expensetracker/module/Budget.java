@@ -7,14 +7,15 @@ public class Budget {
     private double amount;
     private String name;
     private ArrayList<Expense> expenses = new ArrayList<Expense>();
-    private static Integer currentId = 1;
-    private Integer id;
-    private String currency;
 
-    public Budget(Double amount, String name, String currency) {
+    private Integer id;
+
+
+    public Budget(Integer id, Double amount, String name) {
+        this.id = id;
         this.amount = amount;
         this.name = name;
-        this.currency = currency;
+
     }
 
     public void addExpenseToBudget(Expense expense) {
@@ -29,6 +30,10 @@ public class Budget {
         return expenses;
     }
 
+    public void resetExpenses(){
+        expenses = new ArrayList<>();
+    }
+
     public String getName() {
         return name;
     }
@@ -41,17 +46,13 @@ public class Budget {
         this.amount -= amount;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+
 
     public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
+
 
     public Double getAmount() {
         return amount;

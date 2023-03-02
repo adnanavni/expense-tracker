@@ -374,7 +374,7 @@ public class ExpenseStatisticsController {
             }
         } else if (timeFrame.equals("This year") && variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense: variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(Date.from(expense.getDate().atStartOfDay(defaultZoneId).toInstant()));
+                cal2.setTime(expense.getDate());
                 if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
                     switch (expense.getType()) {
                         case ("Groceries"):
@@ -417,7 +417,7 @@ public class ExpenseStatisticsController {
             }
         } else if (timeFrame.equals("This month") && variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense: variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(Date.from(expense.getDate().atStartOfDay(defaultZoneId).toInstant()));
+                cal2.setTime(expense.getDate());
                 if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
                     if(cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
                         switch (expense.getType()) {
@@ -462,7 +462,7 @@ public class ExpenseStatisticsController {
             }
         } else if (timeFrame.equals("This week") && variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense: variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(Date.from(expense.getDate().atStartOfDay(defaultZoneId).toInstant()));
+                cal2.setTime(expense.getDate());
                 if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
                     if(cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
                         if(cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
@@ -509,7 +509,7 @@ public class ExpenseStatisticsController {
             }
         } else if (timeFrame.equals("Today") && variables.getActiveBudget().getExpenses().size() > 0){
             for (Expense expense: variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(Date.from(expense.getDate().atStartOfDay(defaultZoneId).toInstant()));
+                cal2.setTime(expense.getDate());
                 if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
                     if(cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
                         if(cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)){

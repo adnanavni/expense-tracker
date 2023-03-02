@@ -44,7 +44,7 @@ public class RegisterController {
         Window owner = submitButton.getScene().getWindow();
         loginSignupDao = new Login_Signup_Dao();
 
-        System.out.println(userName.getText());
+
         System.out.println(passwordField.getText());
 
         if (userName.getText().isEmpty()) {
