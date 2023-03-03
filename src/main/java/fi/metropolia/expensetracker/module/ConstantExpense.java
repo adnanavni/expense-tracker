@@ -1,19 +1,19 @@
 package fi.metropolia.expensetracker.module;
 
+import java.util.Currency;
+
 public class ConstantExpense {
     private String type;
     private Double amount;
-    private String usedCurrency;
+    private Integer id;
 
-    public ConstantExpense(String type, Double amount, String usedCurrency){
+    public ConstantExpense(Integer id, String type, Double amount){
         this.type = type;
         this.amount = amount;
-        this.usedCurrency = usedCurrency;
+        this.id = id;
     }
 
-    public void setUsedCurrency(String usedCurrency) {
-        this.usedCurrency = usedCurrency;
-    }
+
 
     public void setAmount(Double amount) {
         this.amount = amount;
@@ -29,12 +29,13 @@ public class ConstantExpense {
     public Double getAmount(){
         return amount;
     }
-
-    public String getUsedCurrency() {
-        return usedCurrency;
+    public Integer getId(){
+        return id;
     }
 
+
     public String toString(){
-        return type + " " + String.format("%.2f", amount) + " " + usedCurrency;
+        Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
+        return type + " " + String.format("%.2f", amount) + " " + currency.getSymbol();
     }
 }

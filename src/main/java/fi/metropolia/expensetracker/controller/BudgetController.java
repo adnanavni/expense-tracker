@@ -5,10 +5,7 @@ import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -68,10 +65,9 @@ public class BudgetController {
 
         budget.setText("Budget");
         selectTopic.getItems().addAll(variables.getBudgetNames());
-        ArrayList<String> constExpenseNames = variables.getConstExpenses();
-        for (Integer i = 0; i < constExpenseNames.size(); i++) {
-            ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i)), currency.getSymbol());
-            expenseCombo.getItems().add(expenseToAdd);
+
+        for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+            expenseCombo.getItems().add(constantExpense);
         }
 
         if (variables.getActiveBudget() != null) {
@@ -151,13 +147,8 @@ public class BudgetController {
     @FXML
     protected void removeBtn() {
         ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
-        if (variables.getConstExpense(selectedConstExpense.getType()) == 0.00) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(selectedConstExpense.getType() + " not found");
-            alert.setHeaderText("Set the amount for " + selectedConstExpense.getType());
-            alert.setContentText("This can be found in expenses menu");
-            alert.showAndWait();
-        } else {
+
+
             Dao loginSignupDao = new Dao();
             loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
             variables.getActiveBudget().resetExpenses();
@@ -168,13 +159,15 @@ public class BudgetController {
             String budgetText = String.format("%.2f", variables.getBudget());
             this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
             Double budgetExpenses = 0.00;
-            if (variables.getActiveBudget().getExpenses().size() > 0) {
+            if (variables.getActiveBudget().getExpenses().size() > 0){
                 for (Expense expense : variables.getActiveBudget().getExpenses()) {
                     budgetExpenses += expense.getPrice();
                 }
             }
-            specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount() - budgetExpenses) + " " + currency.getSymbol());
-        }
+
+            specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount()-budgetExpenses) + " " + currency.getSymbol());
+
+
     }
 
     @FXML

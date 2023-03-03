@@ -32,6 +32,8 @@ public class Variables {
         put("Internet", 0.00);
     }};
 
+    private ArrayList<ConstantExpense> constantExpenses = new ArrayList<>();
+
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
     private Budget activeBudget;
@@ -96,6 +98,11 @@ public class Variables {
             }
 
         }
+        if(constantExpenses.size() > 0){
+            for (ConstantExpense constantExpense : constantExpenses) {
+                constantExpense.setAmount(constantExpense.getAmount() / currentCourseMultiplier);
+            }
+        }
         Double multiplierBefore = currentCourseMultiplier;
 
         currentCourseMultiplier = currencies.get(course);
@@ -116,6 +123,13 @@ public class Variables {
                 }
             }
         }
+        if(constantExpenses.size() > 0){
+            for (ConstantExpense constantExpense : constantExpenses) {
+                constantExpense.setAmount(constantExpense.getAmount() * currentCourseMultiplier);
+                loginSignupDao.changeConstantExpenseValue(constantExpense.getId(), constantExpense.getAmount());
+            }
+        }
+
     }
 
     public void createNewBudget(Budget newBudget) {
@@ -235,13 +249,30 @@ public class Variables {
             setConstExpenses(expense, cost);
         }
     }
-
-    public void setLoggedUserId(Integer id) {
+    public void setLoggedUserId(Integer id){
         loggedUserId = id;
     }
 
     public Integer getLoggedUserId() {
         return loggedUserId;
+    }
+
+    public void addConstantExpense(ConstantExpense constantExpense){
+        constantExpenses.add(constantExpense);
+    }
+    public Boolean constantExpenseNameExists(String name){
+        for (ConstantExpense constantExpense : constantExpenses) {
+            if(constantExpense.getType().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public void removeConstantExpense(ConstantExpense constantExpense){
+        constantExpenses.remove(constantExpense);
+    }
+    public ArrayList<ConstantExpense> getConstantExpenseArray() {
+        return constantExpenses;
     }
 
     public void resetAll() {
