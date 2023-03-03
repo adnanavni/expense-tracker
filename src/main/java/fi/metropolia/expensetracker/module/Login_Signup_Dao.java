@@ -88,6 +88,27 @@ public class Login_Signup_Dao {
         return null;
     }
 
+    public String loggedThemeColor(Integer id){
+
+        try  {
+            String sql = "SELECT ThemeColor FROM Registration WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+        }  catch (SQLException e) {
+            printSQLException(e);
+        }
+
+        return null;
+    }
+
     public boolean userExists(String username) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM Registration WHERE username = ?");
         stmt.setString(1, username);
@@ -154,6 +175,62 @@ public class Login_Signup_Dao {
 
         return null;
     }
+
+    public ConstantExpense getConstantExpense(Integer id){
+        try  {
+
+            String sql = "SELECT * FROM Constantexpenses WHERE ConstantexpenseId = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);
+
+            System.out.println(preparedStatement);
+
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+
+                return new ConstantExpense(resultSet.getInt(1), resultSet.getString(2), resultSet.getDouble(3));
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+
+        }  catch (SQLException e) {
+            printSQLException(e);
+        }
+
+        return null;
+    }
+
+    public ConstantExpense getConstantExpenseByName(String name, Integer id){
+        try  {
+
+            String sql = "SELECT * FROM Constantexpenses WHERE Title = ? AND registration_id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, id);
+
+            System.out.println(preparedStatement);
+
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+
+                return new ConstantExpense(resultSet.getInt(1), resultSet.getString(2), resultSet.getDouble(3));
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+
+        }  catch (SQLException e) {
+            printSQLException(e);
+        }
+
+        return null;
+    }
+
     public Expense getExpense(Integer id){
         try  {
 
@@ -200,6 +277,23 @@ public class Login_Signup_Dao {
         }
         else {
             return false;
+        }
+    }
+
+    public void saveConstantExpense(Integer id, String name, Double money)  {
+
+        try {
+
+            String sql = "INSERT INTO Constantexpenses VALUES (NULL, ?, ?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setDouble(2, money);
+            preparedStatement.setInt(3, id);
+
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            printSQLException(e);
         }
     }
 
@@ -268,6 +362,33 @@ public class Login_Signup_Dao {
 
     }
 
+    public ConstantExpense[] getConstantExpenses(Integer id) {
+
+        String sql = "SELECT * FROM Constantexpenses WHERE registration_id = ?";
+        ConstantExpense[] result;
+        ArrayList<ConstantExpense> constantExpenses = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ConstantExpense constantExpense = new ConstantExpense(rs.getInt(1), rs.getString(2) ,rs.getDouble(3));
+                constantExpenses.add(constantExpense);
+            }
+
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+
+        result = new ConstantExpense[constantExpenses.size()];
+        for (int i = 0; i < constantExpenses.size(); i++) {
+            result[i] = constantExpenses.get(i);
+        }
+        return result;
+
+    }
+
     public Expense[] getExpenses(Integer id){
         String sql = "SELECT * FROM Expenses WHERE BudgetId = ?";
         Expense[] result;
@@ -302,6 +423,34 @@ public class Login_Signup_Dao {
             String sql = "UPDATE Registration SET currency = ? WHERE id= ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, currency);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return false;
+    }
+
+    public boolean changeUserThemeColor(Integer id, String color){
+        try {
+            String sql = "UPDATE Registration SET ThemeColor = ? WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, color);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return false;
+    }
+
+    public boolean changeConstantExpenseValue(Integer id, Double money){
+        try {
+            String sql = "UPDATE Constantexpenses SET Amount = ? WHERE ConstantexpenseId = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setDouble(1, money);
             ps.setInt(2, id);
             ps.executeUpdate();
             return true;

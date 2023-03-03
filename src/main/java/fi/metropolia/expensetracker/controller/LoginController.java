@@ -2,12 +2,10 @@ package fi.metropolia.expensetracker.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Budget;
-import fi.metropolia.expensetracker.module.Expense;
-import fi.metropolia.expensetracker.module.Login_Signup_Dao;
-import fi.metropolia.expensetracker.module.Variables;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,10 +59,10 @@ public class LoginController {
             infoBox("Please enter correct username and password or create a new account!", null, "Failed");
         } else {
             infoBox("Login Successful!", null, "Successful");
-            changeWindowToHome();
-
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
+            ThemeManager.getInstance().setCurrentColor(loginSignupDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
+
             Budget[] budgets = loginSignupDao.getBudgets(Variables.getInstance().getLoggedUserId());
             if(budgets.length > 0){
                 for (Budget budget : budgets) {
@@ -80,7 +78,24 @@ public class LoginController {
                 }
                 Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
             }
+            ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+            if(constantExpenses.length == 0){
+                ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
+                for (String defaultConstExpenseName : defaultConstExpenseNames) {
+                    loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+                }
+                ConstantExpense[] defaultConstExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+                for (ConstantExpense constantExpense : defaultConstExpenses) {
+                    Variables.getInstance().addConstantExpense(constantExpense);
+                }
+            }
+            else {
+                for (ConstantExpense constantExpense : constantExpenses) {
+                    Variables.getInstance().addConstantExpense(constantExpense);
+                }
+            }
 
+            changeWindowToHome();
         }
     }
 

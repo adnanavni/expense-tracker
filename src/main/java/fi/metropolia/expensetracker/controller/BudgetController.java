@@ -61,11 +61,9 @@ public class BudgetController {
 
         budget.setText("Budget");
         selectTopic.getItems().addAll(variables.getBudgetNames());
-        ArrayList<String> constExpenseNames = variables.getConstExpenses();
-        for(Integer i = 0; i < constExpenseNames.size(); i++){
-            ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
-                    , currency.getSymbol());
-            expenseCombo.getItems().add(expenseToAdd);
+
+        for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+            expenseCombo.getItems().add(constantExpense);
         }
 
         if (variables.getActiveBudget() != null) {
@@ -151,13 +149,7 @@ public class BudgetController {
     @FXML
     protected void removeBtn() {
         ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
-        if (variables.getConstExpense(selectedConstExpense.getType()) == 0.00) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(selectedConstExpense.getType() + " not found");
-            alert.setHeaderText("Set the amount for " + selectedConstExpense.getType());
-            alert.setContentText("This can be found in expenses menu");
-            alert.showAndWait();
-        } else {
+
 
             Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
             loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
@@ -178,6 +170,6 @@ public class BudgetController {
 
             specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount()-budgetExpenses) + " " + currency.getSymbol());
 
-        }
+
     }
 }

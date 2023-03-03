@@ -64,6 +64,8 @@ public class SettingsController {
         colorChoiceBox.setOnAction(event -> {
             String selectedHexCode = colorChoiceBox.getValue();
             themeManager.setCurrentColor(selectedHexCode);
+            Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+            loginSignupDao.changeUserThemeColor(variables.getLoggedUserId(), selectedHexCode);
             content.setStyle(themeManager.getStyle());
 
         });
@@ -86,7 +88,7 @@ public class SettingsController {
     protected void onChooseCurrencyBtnClick() {
         variables.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
         currency = Currency.getInstance(variables.getCurrentCurrency());
-        variables.convertConstExpense();
+
         Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
         loginSignupDao.changeUserCurrency(variables.getLoggedUserId(), selectCurrency.getSelectionModel().getSelectedItem().toString());
     }
