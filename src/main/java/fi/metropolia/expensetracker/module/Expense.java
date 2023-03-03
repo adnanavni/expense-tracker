@@ -22,7 +22,8 @@ public class Expense {
     }
 
     public String toString() {
-        return type + ", added on: " + date + ", money spent: " + String.format("%.2f", price) + " " + Currency.getInstance(Variables.getInstance().getCurrentCurrency());
+        Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
+        return type + ", added on: " + date + ", money spent: " + String.format("%.2f", price) + " " + currency.getSymbol();
     }
     public Date getDate(){
         return date;
