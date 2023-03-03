@@ -138,12 +138,8 @@ public class Variables {
 
 
     public void modifyBudget(String newName, double amount) {
-        int index = budgets.indexOf(activeBudget);
-        if (index != -1) {
-            Budget budget = new Budget(amount, newName);
-            budgets.set(index, budget);
-            setActiveBudget(budget.getName());
-        }
+        activeBudget.setAmount(amount);
+        activeBudget.setName(newName);
     }
 
     public void deleteBudget() {
@@ -285,5 +281,6 @@ public class Variables {
         totalBudget = 0.00;
         expense = 0.00;
         income = 0.00;
+        constantExpenses = new ArrayList<>();
     }
 }
