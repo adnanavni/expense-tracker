@@ -34,9 +34,6 @@ public class LoginController {
 
         Window owner = submitButton.getScene().getWindow();
 
-        System.out.println(userName.getText());
-        System.out.println(passwordField.getText());
-
         if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                     "Please enter your username");
@@ -51,7 +48,7 @@ public class LoginController {
         String name = userName.getText();
         String password = passwordField.getText();
 
-        Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+        Dao loginSignupDao = new Dao();
         boolean flag = loginSignupDao.validate(name, password);
 
         if (!flag) {
@@ -63,16 +60,16 @@ public class LoginController {
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
             Budget[] budgets = loginSignupDao.getBudgets(Variables.getInstance().getLoggedUserId());
-            if(budgets.length > 0){
+            if (budgets.length > 0) {
                 for (Budget budget : budgets) {
                     Variables.getInstance().createNewBudget(budget);
                 }
 
                 for (Budget budget : Variables.getInstance().getBudgets()) {
                     Expense[] budgetExpenses = loginSignupDao.getExpenses(budget.getId());
-                        for (Expense expense : budgetExpenses) {
-                            budget.addExpenseToBudget(expense);
-                        }
+                    for (Expense expense : budgetExpenses) {
+                        budget.addExpenseToBudget(expense);
+                    }
 
                 }
                 Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());

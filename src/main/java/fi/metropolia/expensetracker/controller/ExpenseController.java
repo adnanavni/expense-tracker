@@ -13,7 +13,10 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Date;
+import java.util.Optional;
 
 public class ExpenseController {
     @FXML
@@ -61,7 +64,7 @@ public class ExpenseController {
         activeBudgetTxt.setText(activeBudget.getName());
 
         Double budgetExpenses = 0.00;
-        if(variables.getActiveBudget().getExpenses().size() > 0){
+        if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 budgetExpenses += expense.getPrice();
             }
@@ -71,9 +74,9 @@ public class ExpenseController {
         selectTopic.getItems().addAll(variables.getTopics());
 
         ArrayList<String> constExpenseNames = variables.getConstExpenses();
-        for(Integer i = 0; i < constExpenseNames.size(); i++){
+        for (Integer i = 0; i < constExpenseNames.size(); i++) {
             ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
-            , currency.getSymbol());
+                    , currency.getSymbol());
             selectCategory.getItems().add(expenseToAdd);
         }
         selectCategory.getItems().add(0, "New");
@@ -83,7 +86,7 @@ public class ExpenseController {
             @Override
             public void handle(MouseEvent event) {
                 int selectedIndex = expenseHistory.getSelectionModel().getSelectedIndex();
-                Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+                Dao loginSignupDao = new Dao();
                 if (selectedIndex >= 0) {
                     Expense selected = (Expense) expenseHistory.getItems().get(selectedIndex);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -101,7 +104,7 @@ public class ExpenseController {
                         expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
 
                         Double budgetExpenses = 0.00;
-                        if(variables.getActiveBudget().getExpenses().size() > 0){
+                        if (variables.getActiveBudget().getExpenses().size() > 0) {
                             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                                 budgetExpenses += expense.getPrice();
                             }
@@ -132,7 +135,7 @@ public class ExpenseController {
             }
             ZoneId defaultZoneId = ZoneId.systemDefault();
             Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
-            Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+            Dao loginSignupDao = new Dao();
             loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
                     , Double.parseDouble(addExpense.getText()), finalDate);
             variables.getActiveBudget().resetExpenses();
@@ -144,7 +147,7 @@ public class ExpenseController {
             expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
         }
         Double budgetExpenses = 0.00;
-        if(variables.getActiveBudget().getExpenses().size() > 0){
+        if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 budgetExpenses += expense.getPrice();
             }
@@ -168,7 +171,7 @@ public class ExpenseController {
     @FXML
     protected void setConstExpense() {
         if (selectCategory.getValue() == "New") {
-            if(constExpense.getText() == null){
+            if (constExpense.getText() == null) {
                 variables.setConstExpenses(constExpenseName.getText(), 0.00);
                 selectCategory.setValue(null);
                 constExpense.setText(null);
@@ -176,13 +179,12 @@ public class ExpenseController {
                 selectCategory.getItems().clear();
                 selectCategory.getItems().add(0, "New");
                 ArrayList<String> constExpenseNames = variables.getConstExpenses();
-                for(Integer i = 0; i < constExpenseNames.size(); i++){
+                for (Integer i = 0; i < constExpenseNames.size(); i++) {
                     ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
                             , currency.getSymbol());
                     selectCategory.getItems().add(expenseToAdd);
                 }
-            }
-            else {
+            } else {
                 variables.setConstExpenses(constExpenseName.getText(), Double.parseDouble(constExpense.getText()));
                 selectCategory.setValue(null);
                 constExpense.setText(null);
@@ -197,8 +199,7 @@ public class ExpenseController {
                 }
             }
 
-        }
-        else {
+        } else {
             ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
             variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
             selectCategory.setValue(null);

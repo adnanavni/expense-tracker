@@ -1,12 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.sql.SQLException;
-
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Login_Signup_Dao;
+import fi.metropolia.expensetracker.module.Dao;
 import fi.metropolia.expensetracker.module.PsswdAuth;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.event.ActionEvent;
@@ -18,6 +13,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Window;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.sql.SQLException;
 
 public class RegisterController {
 
@@ -36,16 +36,13 @@ public class RegisterController {
     private String passwd;
 
     private PsswdAuth auth;
-    private Login_Signup_Dao loginSignupDao;
+    private Dao loginSignupDao;
 
     @FXML
     public void register(ActionEvent event) throws SQLException, IOException, InvalidKeySpecException, NoSuchAlgorithmException {
         auth = new PsswdAuth();
         Window owner = submitButton.getScene().getWindow();
-        loginSignupDao = new Login_Signup_Dao();
-
-
-        System.out.println(passwordField.getText());
+        loginSignupDao = new Dao();
 
         if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
@@ -57,19 +54,16 @@ public class RegisterController {
                     "Please enter a password");
             return;
         }
-        if (loginSignupDao.userExists(userName.getText())){
+        if (loginSignupDao.userExists(userName.getText())) {
             showAlert(Alert.AlertType.ERROR, owner, "User already exists",
                     "Please enter a new username");
         }
         if (!loginSignupDao.userExists(userName.getText())) {
             String name = userName.getText();
-            // String password = passwordField.getText();
             passwd = passwordField.getText();
             hashedPassword = auth.hash(passwordField.getText().toCharArray());
-            //   token = auth.hash(passwordField.getText());
-            System.out.println("REGISTERCONTROLLER token" + hashedPassword);
 
-            Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+            Dao loginSignupDao = new Dao();
             loginSignupDao.insertRecord(name, hashedPassword);
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
 
@@ -78,10 +72,6 @@ public class RegisterController {
 
             changeWindowToHome();
         }
-
-
-
-
     }
 
     private void changeWindowToHome() throws IOException {

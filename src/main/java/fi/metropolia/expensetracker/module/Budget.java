@@ -18,6 +18,16 @@ public class Budget {
 
     }
 
+    public Budget(Double amount, String name) {
+        this.amount = amount;
+        this.name = name;
+
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void addExpenseToBudget(Expense expense) {
         expenses.add(expense);
     }
@@ -30,7 +40,7 @@ public class Budget {
         return expenses;
     }
 
-    public void resetExpenses(){
+    public void resetExpenses() {
         expenses = new ArrayList<>();
     }
 
@@ -46,13 +56,9 @@ public class Budget {
         this.amount -= amount;
     }
 
-
-
     public void setAmount(Double amount) {
         this.amount = amount;
     }
-
-
 
     public Double getAmount() {
         return amount;
@@ -61,4 +67,5 @@ public class Budget {
     public Integer getId() {
         return id;
     }
+
 }
