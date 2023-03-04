@@ -4,47 +4,82 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="content" prefHeight="800.0" prefWidth="550.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.ExpenseController">
+<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
+            styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="fi.metropolia.expensetracker.controller.ExpenseController">
     <children>
-   <AnchorPane prefHeight="420.0" prefWidth="515.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="400.0">
-      <children>
-         <ListView fx:id="expenseHistory" layoutX="-1.0" layoutY="84.0" opacity="0.85" prefHeight="345.0" prefWidth="530.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
-         <Label alignment="CENTER" layoutX="106.0" layoutY="26.0" styleClass="titleText" text="Expense history" textAlignment="CENTER" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane prefHeight="420.0" prefWidth="515.0" styleClass="secondBackground" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="400.0">
+            <children>
+                <ListView fx:id="expenseHistory" layoutX="-1.0" layoutY="84.0" opacity="0.85" prefHeight="345.0"
+                          prefWidth="530.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="50.0"
+                          AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0"/>
+                <Label alignment="CENTER" layoutX="106.0" layoutY="26.0" styleClass="titleText" text="Expense history"
+                       textAlignment="CENTER" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="108.0"
+                       AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font name="System Bold" size="36.0"/>
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <Button mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back"
+                textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="600.0"
+                AnchorPane.topAnchor="15.0"/>
+        <Label fx:id="expense" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" styleClass="header"
+               text="Expenses" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0"
+               AnchorPane.topAnchor="10.0"/>
+        <Label alignment="CENTER" styleClass="budgetText" text="Active budget:" AnchorPane.leftAnchor="107.0"
+               AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="70.0">
             <font>
-               <Font name="System Bold" size="36.0" />
+                <Font name="System Bold" size="18.0"/>
             </font>
-         </Label>
-      </children>
-   </AnchorPane>
-     <Button mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="15.0" />
-   <Label fx:id="expense" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" styleClass="header" text="Expenses" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
-   <Label alignment="CENTER" styleClass="budgetText" text="Active budget:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="70.0">
-      <font>
-         <Font name="System Bold" size="18.0" />
-      </font>
-   </Label>
-   <Label fx:id="activeBudgetTxt" alignment="CENTER" styleClass="activeBudget" text="BUDGETNAME" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="100.0">
-      <font>
-         <Font size="18.0" />
-      </font>
-   </Label>
-   <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="450.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="130.0">
-      <children>
-         <Label alignment="CENTER" styleClass="smallHeader" text="Add single expense" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0" />
-         <TextField fx:id="addExpense" layoutX="100.0" layoutY="7.0" onAction="#btnEnable" promptText="Amount:" styleClass="button" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="40.0" />
-         <Button fx:id="addBtn" alignment="CENTER" disable="true" layoutX="137.0" layoutY="147.0" mnemonicParsing="false" onAction="#onExpenseAddClick" text="Add" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="185.0" />
-         <ComboBox fx:id="selectTopic" layoutX="80.0" layoutY="59.0" onAction="#btnEnable" prefWidth="150.0" promptText="Category" styleClass="button" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="87.0" />
-         <DatePicker fx:id="selectedDate" layoutX="74.0" layoutY="109.0" styleClass="button" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="135.0" />
-      </children>
-   </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0">
-         <children>
-            <Label alignment="CENTER" styleClass="smallHeader" text="Add constant expense" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="10.0" />
-            <ComboBox fx:id="selectCategory" layoutX="80.0" layoutY="59.0" onAction="#selectConst" prefWidth="150.0" promptText="Expense" styleClass="button" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="40.0" />
-            <TextField fx:id="constExpenseName" layoutX="100.0" layoutY="7.0" promptText="Name:" styleClass="button" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="88.0" />
-            <TextField fx:id="constExpense" layoutX="100.0" layoutY="7.0" promptText="Amount:" styleClass="button" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="135.0" />
-            <Button fx:id="setBtn" alignment="CENTER" layoutX="137.0" layoutY="147.0" mnemonicParsing="false" onAction="#setConstExpense" text="Set" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="185.0" />
-         </children></AnchorPane>
-      <Button layoutX="206.0" layoutY="369.0" mnemonicParsing="false" onAction="#toExpenseStatistics" text="View statistics" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="365.0" />
+        </Label>
+        <Label fx:id="activeBudgetTxt" alignment="CENTER" styleClass="activeBudget" text="BUDGETNAME"
+               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Label>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="450.0" AnchorPane.leftAnchor="10.0"
+                    AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="130.0">
+            <children>
+                <Label alignment="CENTER" styleClass="smallHeader" text="Add single expense"
+                       AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0"/>
+                <TextField fx:id="addExpense" layoutX="100.0" layoutY="7.0" onAction="#btnEnable" promptText="Amount:"
+                           styleClass="button" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="55.0"
+                           AnchorPane.topAnchor="40.0"/>
+                <Button fx:id="addBtn" alignment="CENTER" disable="true" layoutX="137.0" layoutY="147.0"
+                        mnemonicParsing="false" onAction="#onExpenseAddClick" text="Add" AnchorPane.leftAnchor="80.0"
+                        AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="185.0"/>
+                <ComboBox fx:id="selectTopic" layoutX="80.0" layoutY="59.0" onAction="#btnEnable" prefWidth="150.0"
+                          promptText="Category" styleClass="button" AnchorPane.leftAnchor="30.0"
+                          AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="87.0"/>
+                <DatePicker fx:id="selectedDate" layoutX="74.0" layoutY="109.0" styleClass="button"
+                            AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="135.0"/>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="379.0" layoutY="136.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="400.0"
+                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
+            <children>
+                <Label alignment="CENTER" styleClass="smallHeader" text="Add constant expense"
+                       AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="10.0"/>
+                <ComboBox fx:id="selectCategory" layoutX="80.0" layoutY="59.0" onAction="#selectConst" prefWidth="150.0"
+                          promptText="Expense" styleClass="button" AnchorPane.leftAnchor="30.0"
+                          AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0"/>
+                <TextField fx:id="constExpenseName" layoutX="100.0" layoutY="7.0" promptText="Name:" styleClass="button"
+                           visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0"
+                           AnchorPane.topAnchor="88.0"/>
+                <TextField fx:id="constExpense" layoutX="100.0" layoutY="7.0" promptText="Amount:" styleClass="button"
+                           AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="135.0"/>
+                <Button fx:id="setBtn" alignment="CENTER" layoutX="137.0" layoutY="147.0" mnemonicParsing="false"
+                        onAction="#setConstExpense" text="Set" AnchorPane.leftAnchor="100.0"
+                        AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="185.0"/>
+            </children>
+        </AnchorPane>
+        <Button layoutX="206.0" layoutY="369.0" mnemonicParsing="false" onAction="#toExpenseStatistics"
+                text="View statistics" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="270.0"
+                AnchorPane.topAnchor="350.0"/>
     </children>
 </AnchorPane>

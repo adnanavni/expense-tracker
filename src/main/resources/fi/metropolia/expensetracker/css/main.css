@@ -14,6 +14,10 @@
     -fx-background-color: #85bb65;
 }
 
+.secondBackground{
+    -fx-background-color: #DFDFDF;
+}
+
 .header {
     -fx-font-family: 'Helvetica', Arial, sans-serif;
     -fx-font-size: 50px;

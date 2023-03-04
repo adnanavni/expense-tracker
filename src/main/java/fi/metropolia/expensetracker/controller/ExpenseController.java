@@ -13,7 +13,10 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Date;
+import java.util.Optional;
 
 public class ExpenseController {
     @FXML
@@ -61,7 +64,7 @@ public class ExpenseController {
         activeBudgetTxt.setText(activeBudget.getName());
 
         Double budgetExpenses = 0.00;
-        if(variables.getActiveBudget().getExpenses().size() > 0){
+        if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 budgetExpenses += expense.getPrice();
             }
@@ -70,11 +73,8 @@ public class ExpenseController {
         this.expense.setText(budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getTopics());
 
-        ArrayList<String> constExpenseNames = variables.getConstExpenses();
-        for(Integer i = 0; i < constExpenseNames.size(); i++){
-            ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
-            , currency.getSymbol());
-            selectCategory.getItems().add(expenseToAdd);
+        for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+            selectCategory.getItems().add(constantExpense);
         }
         selectCategory.getItems().add(0, "New");
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
@@ -83,7 +83,7 @@ public class ExpenseController {
             @Override
             public void handle(MouseEvent event) {
                 int selectedIndex = expenseHistory.getSelectionModel().getSelectedIndex();
-                Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+                Dao loginSignupDao = new Dao();
                 if (selectedIndex >= 0) {
                     Expense selected = (Expense) expenseHistory.getItems().get(selectedIndex);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -101,7 +101,7 @@ public class ExpenseController {
                         expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
 
                         Double budgetExpenses = 0.00;
-                        if(variables.getActiveBudget().getExpenses().size() > 0){
+                        if (variables.getActiveBudget().getExpenses().size() > 0) {
                             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                                 budgetExpenses += expense.getPrice();
                             }
@@ -132,7 +132,7 @@ public class ExpenseController {
             }
             ZoneId defaultZoneId = ZoneId.systemDefault();
             Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
-            Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+            Dao loginSignupDao = new Dao();
             loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
                     , Double.parseDouble(addExpense.getText()), finalDate);
             variables.getActiveBudget().resetExpenses();
@@ -144,7 +144,7 @@ public class ExpenseController {
             expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
         }
         Double budgetExpenses = 0.00;
-        if(variables.getActiveBudget().getExpenses().size() > 0){
+        if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 budgetExpenses += expense.getPrice();
             }
@@ -167,50 +167,81 @@ public class ExpenseController {
 
     @FXML
     protected void setConstExpense() {
-        if (selectCategory.getValue() == "New") {
+        System.out.println(selectCategory.getValue());
+        if (selectCategory.getValue().equals("New")) {
             if(constExpense.getText() == null){
-                variables.setConstExpenses(constExpenseName.getText(), 0.00);
-                selectCategory.setValue(null);
-                constExpense.setText(null);
-                constExpenseName.setText(null);
-                selectCategory.getItems().clear();
-                selectCategory.getItems().add(0, "New");
-                ArrayList<String> constExpenseNames = variables.getConstExpenses();
-                for(Integer i = 0; i < constExpenseNames.size(); i++){
-                    ConstantExpense expenseToAdd = new ConstantExpense(constExpenseNames.get(i), variables.getConstExpense(constExpenseNames.get(i))
-                            , currency.getSymbol());
-                    selectCategory.getItems().add(expenseToAdd);
+                if(variables.constantExpenseNameExists(constExpenseName.getText())){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Name already exists!");
+                    alert.setHeaderText("You already have a Constant expense with that name!");
+                    alert.setContentText("Give a name that doesn't already exist.");
+                    alert.showAndWait();
+                    selectCategory.setValue(null);
+                    constExpense.setText(null);
+                    constExpenseName.setText(null);
                 }
+                else {
+                    Dao loginSignupDao = new Dao();
+                    loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(), 0.00);
+                    ConstantExpense newConstantExpense = loginSignupDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
+                    variables.addConstantExpense(newConstantExpense);
+                    selectCategory.setValue(null);
+                    constExpense.setText(null);
+                    constExpenseName.setText(null);
+                    selectCategory.getItems().clear();
+                    selectCategory.getItems().add(0, "New");
+                    for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+                        selectCategory.getItems().add(constantExpense);
+                    }
+                }
+
             }
             else {
-                variables.setConstExpenses(constExpenseName.getText(), Double.parseDouble(constExpense.getText()));
-                selectCategory.setValue(null);
-                constExpense.setText(null);
-                constExpenseName.setText(null);
-                selectCategory.getItems().clear();
-                selectCategory.getItems().add(0, "New");
-                ArrayList<String> constExpenseNames = variables.getConstExpenses();
-                for (String expenseName : constExpenseNames) {
-                    ConstantExpense expenseToAdd = new ConstantExpense(expenseName, variables.getConstExpense(expenseName)
-                            , currency.getSymbol());
-                    selectCategory.getItems().add(expenseToAdd);
+
+                if(variables.constantExpenseNameExists(constExpenseName.getText())){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Name already exists!");
+                    alert.setHeaderText("You already have a Constant expense with that name!");
+                    alert.setContentText("Give a name that doesn't already exist.");
+                    alert.showAndWait();
+                    selectCategory.setValue(null);
+                    constExpense.setText(null);
+                    constExpenseName.setText(null);
+                }
+                else {
+                    Dao loginSignupDao = new Dao();
+                    loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(),
+                            Double.parseDouble(constExpense.getText()));
+                    ConstantExpense newConstantExpense = loginSignupDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
+                    variables.addConstantExpense(newConstantExpense);
+                    selectCategory.setValue(null);
+                    constExpense.setText(null);
+                    constExpenseName.setText(null);
+                    selectCategory.getItems().clear();
+                    selectCategory.getItems().add(0, "New");
+                    for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+                        selectCategory.getItems().add(constantExpense);
+                    }
                 }
             }
 
         }
         else {
+            System.out.println("NOT NEW, MODIFYING EXISTING...");
             ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
+            variables.removeConstantExpense(selectedConstExpense);
+            Dao loginSignupDao = new Dao();
+            loginSignupDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
+            ConstantExpense modifiedConstExp = loginSignupDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
+            variables.addConstantExpense(modifiedConstExp);
             variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
             selectCategory.setValue(null);
             constExpense.setText(null);
             constExpenseName.setText(null);
             selectCategory.getItems().clear();
             selectCategory.getItems().add(0, "New");
-            ArrayList<String> constExpenseNames = variables.getConstExpenses();
-            for (String expenseName : constExpenseNames) {
-                ConstantExpense expenseToAdd = new ConstantExpense(expenseName, variables.getConstExpense(expenseName)
-                        , currency.getSymbol());
-                selectCategory.getItems().add(expenseToAdd);
+            for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+                selectCategory.getItems().add(constantExpense);
             }
         }
 

@@ -2,7 +2,6 @@ package fi.metropolia.expensetracker.module;
 
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +31,8 @@ public class Variables {
         put("Cell phone", 0.00);
         put("Internet", 0.00);
     }};
+
+    private ArrayList<ConstantExpense> constantExpenses = new ArrayList<>();
 
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
@@ -90,12 +91,17 @@ public class Variables {
     }
 
     public void setCurrentCourseMultiplier(String course) {
-        Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+        Dao loginSignupDao = new Dao();
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {
                 budget.setAmount(budget.getAmount() / currentCourseMultiplier);
             }
 
+        }
+        if(constantExpenses.size() > 0){
+            for (ConstantExpense constantExpense : constantExpenses) {
+                constantExpense.setAmount(constantExpense.getAmount() / currentCourseMultiplier);
+            }
         }
         Double multiplierBefore = currentCourseMultiplier;
 
@@ -117,10 +123,30 @@ public class Variables {
                 }
             }
         }
+        if(constantExpenses.size() > 0){
+            for (ConstantExpense constantExpense : constantExpenses) {
+                constantExpense.setAmount(constantExpense.getAmount() * currentCourseMultiplier);
+                loginSignupDao.changeConstantExpenseValue(constantExpense.getId(), constantExpense.getAmount());
+            }
+        }
+
     }
 
     public void createNewBudget(Budget newBudget) {
         budgets.add(newBudget);
+    }
+
+
+    public void modifyBudget(String newName, double amount) {
+        activeBudget.setAmount(amount);
+        activeBudget.setName(newName);
+    }
+
+    public void deleteBudget() {
+        int index = budgets.indexOf(activeBudget);
+        if (index != -1) {
+            budgets.remove(index);
+        }
     }
 
     public ArrayList<String> getBudgetNames() {
@@ -221,9 +247,40 @@ public class Variables {
     }
     public void setLoggedUserId(Integer id){
         loggedUserId = id;
-        System.out.println("User id: " + loggedUserId);
     }
-    public Integer getLoggedUserId(){
+
+    public Integer getLoggedUserId() {
         return loggedUserId;
+    }
+
+    public void addConstantExpense(ConstantExpense constantExpense){
+        constantExpenses.add(constantExpense);
+    }
+    public Boolean constantExpenseNameExists(String name){
+        for (ConstantExpense constantExpense : constantExpenses) {
+            if(constantExpense.getType().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public void removeConstantExpense(ConstantExpense constantExpense){
+        constantExpenses.remove(constantExpense);
+    }
+    public ArrayList<ConstantExpense> getConstantExpenseArray() {
+        return constantExpenses;
+    }
+
+    public void resetAll() {
+        loggedUserId = null;
+        currentCourseMultiplier = 1.00;
+        currentCurrency = "EUR";
+        activeBudget = null;
+        budgets.clear();
+        budgetObject = null;
+        totalBudget = 0.00;
+        expense = 0.00;
+        income = 0.00;
+        constantExpenses = new ArrayList<>();
     }
 }

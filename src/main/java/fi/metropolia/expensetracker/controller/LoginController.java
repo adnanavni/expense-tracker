@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
@@ -34,9 +35,6 @@ public class LoginController {
 
         Window owner = submitButton.getScene().getWindow();
 
-        System.out.println(userName.getText());
-        System.out.println(passwordField.getText());
-
         if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                     "Please enter your username");
@@ -51,32 +49,50 @@ public class LoginController {
         String name = userName.getText();
         String password = passwordField.getText();
 
-        Login_Signup_Dao loginSignupDao = new Login_Signup_Dao();
+        Dao loginSignupDao = new Dao();
         boolean flag = loginSignupDao.validate(name, password);
 
         if (!flag) {
             infoBox("Please enter correct username and password or create a new account!", null, "Failed");
         } else {
             infoBox("Login Successful!", null, "Successful");
-            changeWindowToHome();
-
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
+            ThemeManager.getInstance().setCurrentColor(loginSignupDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
+
             Budget[] budgets = loginSignupDao.getBudgets(Variables.getInstance().getLoggedUserId());
-            if(budgets.length > 0){
+            if (budgets.length > 0) {
                 for (Budget budget : budgets) {
                     Variables.getInstance().createNewBudget(budget);
                 }
 
                 for (Budget budget : Variables.getInstance().getBudgets()) {
                     Expense[] budgetExpenses = loginSignupDao.getExpenses(budget.getId());
-                        for (Expense expense : budgetExpenses) {
-                            budget.addExpenseToBudget(expense);
-                        }
+                    for (Expense expense : budgetExpenses) {
+                        budget.addExpenseToBudget(expense);
+                    }
 
                 }
                 Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
             }
+            ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+            if(constantExpenses.length == 0){
+                ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
+                for (String defaultConstExpenseName : defaultConstExpenseNames) {
+                    loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+                }
+                ConstantExpense[] defaultConstExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+                for (ConstantExpense constantExpense : defaultConstExpenses) {
+                    Variables.getInstance().addConstantExpense(constantExpense);
+                }
+            }
+            else {
+                for (ConstantExpense constantExpense : constantExpenses) {
+                    Variables.getInstance().addConstantExpense(constantExpense);
+                }
+            }
+
+            changeWindowToHome();
         }
     }
 
