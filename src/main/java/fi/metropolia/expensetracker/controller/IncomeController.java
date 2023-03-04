@@ -132,7 +132,7 @@ public class IncomeController {
         Date date = java.sql.Date.valueOf(salaryDate);
 
         incomeDao.saveSalary(variables.getLoggedUserId(), "MONTH", salarySingle.getMonthSalary(), salarySingle.getMonthSalaryMinusTaxes(), date, taxRate, currency.toString());
-        this.salary = new Salary(salarySingle.getMonthSalary(), salaryDate, currency.toString(), "MONTH", Double.parseDouble(addTaxRate.getText()));
+
 
         salaryHistory.getItems().clear();
         salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "MONTH"));

@@ -92,6 +92,7 @@ public class Variables {
 
     public void setCurrentCourseMultiplier(String course) {
         Dao loginSignupDao = new Dao();
+        IncomeDao incomeDao = new IncomeDao();
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {
                 budget.setAmount(budget.getAmount() / currentCourseMultiplier);
@@ -103,10 +104,30 @@ public class Variables {
                 constantExpense.setAmount(constantExpense.getAmount() / currentCourseMultiplier);
             }
         }
+
+
+
+        ArrayList<Salary> incomes = incomeDao.getAllSalaries(loggedUserId);
+
+        if(incomes.size() > 0){
+            for (Salary salary : incomes) {
+                salary.setSalary(salary.getSalary() / currentCourseMultiplier);
+            }
+        }
+
+
         Double multiplierBefore = currentCourseMultiplier;
 
         currentCourseMultiplier = currencies.get(course);
         currentCurrency = course;
+
+        if(incomes.size() > 0){
+            for (Salary salary : incomes) {
+                salary.setSalary(salary.getSalary() * currentCourseMultiplier);
+                salary.setUsedCurrency(currentCurrency);
+                incomeDao.changeIncomeValues(salary.getId(), salary.getSalary(), salary.getSalaryMinusTaxes(salary.getType()), currentCurrency);
+            }
+        }
 
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {

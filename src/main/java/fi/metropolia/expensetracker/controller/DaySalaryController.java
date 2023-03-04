@@ -135,7 +135,7 @@ import java.util.Optional;
             Date date = java.sql.Date.valueOf(salaryDate);
 
             incomeDao.saveSalary(variables.getLoggedUserId(),"DAY", salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), date, taxRate, currency.toString());
-            this.salary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString(), "DAY", Double.parseDouble(addTaxRate.getText()));
+
 
             salaryHistory.getItems().clear();
             salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
