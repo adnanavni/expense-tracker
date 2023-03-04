@@ -1,5 +1,6 @@
 package fi.metropolia.expensetracker.module;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -14,8 +15,8 @@ public class SalarySingle {
     private double taxRate;
     private double monthSalaryMinusTaxes;
     private double daySalaryMinusTaxes;
-    private ArrayList<Salary> daySalaries = new ArrayList<>();
-    private ArrayList<Salary> monthSalaries = new ArrayList<>();
+
+    private double salaryMinusTaxes;
     private Map<String, Integer> months = new HashMap<>() {{
         put("January", 0);
         put("February", 1);
@@ -40,45 +41,41 @@ public class SalarySingle {
     private SalarySingle() {
     }
 
-    public double calculateSalaryWithTaxRate(double taxRate, double salary, String type, boolean mandatoryTax) {
-        this.taxRate = taxRate;
-        if(mandatoryTax) {
-            double insurance = 7.15;
-            double pension = 1.40;
+    public double calculateSalaryWithTaxRate(double taxRate, double salary, String type) {
 
-            taxRate = taxRate+insurance+pension;
-        }
-        double percent = 1 - (taxRate / 100);
+        this.taxRate = taxRate;
+        setTaxrate(this.taxRate);
+        double percent = 1 - (this.taxRate / 100);
         double wantedSalaryminusTaxes = 0;
         if (type.equals("DAY")) {
             this.daySalaryMinusTaxes = (salary * percent);
             setDaySalaryMinusTaxes(this.daySalaryMinusTaxes);
+            setSalaryMinusTaxes((salary*percent));
+
             setDaySalary(salary);
             wantedSalaryminusTaxes = this.daySalaryMinusTaxes;
         }
         if (type.equals("MONTH")) {
             this.monthSalaryMinusTaxes = (salary * percent);
             setMonthSalaryMinusTaxes(this.monthSalaryMinusTaxes);
+            setSalaryMinusTaxes((salary*percent));
             setMonthSalary(salary);
             wantedSalaryminusTaxes = this.monthSalaryMinusTaxes;
         }
         return wantedSalaryminusTaxes;
     }
 
+    public void setSalaryMinusTaxes(double salary) {
+        this.salaryMinusTaxes = salary;
+
+    }
+
     public void CalculateDaySalary(double hours, double hourSalary) {
         this.daySalary = (hours * hourSalary);
     }
 
-    public ArrayList<Salary> getDaySalaries() {
-        return daySalaries;
-    }
-
-    public ArrayList<Salary> getMonthSalaries() {
-        return monthSalaries;
-    }
-
-    public double getTaxRate() {
-        return this.taxRate;
+    public void setTaxrate(double taxrate) {
+        this.taxRate = taxRate;
     }
 
     public void setDaySalary(double daySalary) {
@@ -86,11 +83,13 @@ public class SalarySingle {
     }
 
     public double getDaySalary() {
-        return this.daySalary;
+
+    return this.daySalary;
     }
 
     public double getDaySalaryMinusTaxes() {
-        return this.monthSalaryMinusTaxes;
+
+        return this.daySalaryMinusTaxes;
     }
 
     public void setDaySalaryMinusTaxes(double daySalaryMinusTaxes) {
@@ -100,42 +99,26 @@ public class SalarySingle {
     public void setMonthSalaryMinusTaxes(double monthSalaryMinusTaxes) {
         this.monthSalaryMinusTaxes = monthSalaryMinusTaxes;
     }
+    public double getMonthSalaryMinusTaxes() {
+        return this.monthSalaryMinusTaxes;
+    }
 
     public void setMonthSalary(double monthSalary) {
         this.monthSalary = monthSalary;
     }
 
-    public double geTotalSalaryOfMonth() {
+    public double getMonthSalary() {
         return this.monthSalary;
-    }
-
-
-    public void createNewMonthSalary(Salary salary) {
-        monthSalaries.add(salary);
-    }
-
-    public void createNewDaySalary(Salary salary) {
-        daySalaries.add(salary);
-    }
-
-    public void deleteMonthSalary(Salary salary) {
-        monthSalaries.remove(salary);
-    }
-
-    public void deleteDaySalary(Salary salary) {
-        daySalaries.remove(salary);
     }
 
     public ArrayList<String> getMonths() {
         return new ArrayList<>(months.keySet());
     }
 
-    //Change format so no  need to hardcode years
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
         int year = LocalDate.now().getYear();
         int beforeYear = (year-1);
         int nextYear = (year+1);
-        String s = null;
         double totalSalary = 0;
         switch (m) {
             case ("January"):
@@ -175,35 +158,24 @@ public class SalarySingle {
                 totalSalary = getSalariesBetweenStartAndFinish("30/11/"+year, "01/01/"+nextYear, type);
                 break;
             default:
-                s = "Ei löytynyt kuukautta";
                 return 0;
         }
         return totalSalary;
     }
-
-
     public double getSalariesBetweenStartAndFinish(String start, String end, String type) throws ParseException {
-
+        IncomeDao incomeDao = new IncomeDao();
         ArrayList<Double> salaries = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date parsedStart = sdf.parse(start);
         Date parsedEnd = sdf.parse(end);
         double salariesTogether = 0;
 
-        if (type.equals("MONTH")) {
-            for (Salary eachDate : SalarySingle.getInstance().getMonthSalaries()) {
+            for (Salary eachDate : incomeDao.getSalaries(Variables.getInstance().getLoggedUserId(), type)) {
                 if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
-                    salaries.add(eachDate.getSalaryMinusTaxes("MONTH"));
+                    salaries.add(eachDate.getSalaryMinusTaxes(type));
                 }
             }
-        }
-        if (type.equals("DAY")) {
-            for (Salary eachDate : SalarySingle.getInstance().getDaySalaries()) {
-                if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
-                    salaries.add(eachDate.getSalaryMinusTaxes("DAY"));
-                }
-            }
-        }
+
         for (double eachSalary : salaries) {
             salariesTogether += eachSalary;
         }
