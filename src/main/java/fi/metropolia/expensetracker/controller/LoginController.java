@@ -57,7 +57,7 @@ public class LoginController {
         } else {
             infoBox("Login Successful!", null, "Successful");
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
-            Variables.getInstance().setCurrentCourseMultiplier(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
+            Variables.getInstance().setLoggedCurrency(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
             ThemeManager.getInstance().setCurrentColor(loginSignupDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
 
             Budget[] budgets = loginSignupDao.getBudgets(Variables.getInstance().getLoggedUserId());

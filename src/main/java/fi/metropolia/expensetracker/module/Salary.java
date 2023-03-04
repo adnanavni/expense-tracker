@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.module;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Currency;
 import java.util.Date;
 
 public class Salary {
@@ -19,15 +20,13 @@ public class Salary {
     private int incomeID;
 
 
-    public Salary(double salary, LocalDate date, String usedCurrency, String type, double taxRate ) throws SQLException {
+    public Salary(int id, double salary, LocalDate date, String usedCurrency, String type, double taxRate ) throws SQLException {
         this.salary = salary;
         this.date = date;
         this.usedCurrency = usedCurrency;
         this.taxRate = taxRate;
         this.type = type;
-
-        id = currentId;
-        currentId++;
+        this.id = id;
 
         incomeID = incomeDao.getIncomeId(Variables.getInstance().getLoggedUserId(), type, salary, java.sql.Date.valueOf(date), taxRate, usedCurrency);
 
@@ -40,8 +39,15 @@ public class Salary {
     public double getSalary() {
         return this.salary;
     }
+    public void setSalary(Double salary){
+        this.salary = salary;
+    }
     public double getSalaryMinusTaxes (String type) {
        return SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type);
+    }
+
+    public String getType(){
+        return type;
     }
 
     public Date getDate(){
@@ -52,6 +58,9 @@ public class Salary {
     }
     public String getUsedCurrency() {
         return usedCurrency;
+    }
+    public void setUsedCurrency(String currency) {
+        this.usedCurrency = currency;
     }
 
     public Integer getId() {
@@ -64,8 +73,9 @@ public class Salary {
 
     @Override
     public String toString() {
+        Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
         return "Salary amount of the date " + date +
-                " is " +  String.format("%.2f",salary) + usedCurrency + " and minus " +  String.format("%.2f",incomeDao.getTaxrate(incomeID)) +
-                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(incomeID))  + usedCurrency;
+                " is " +  String.format("%.2f",salary) + " " + currency.getSymbol() + " and minus " +  String.format("%.2f",incomeDao.getTaxrate(incomeID)) +
+                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(incomeID)) + " " + currency.getSymbol();
     }
 }
