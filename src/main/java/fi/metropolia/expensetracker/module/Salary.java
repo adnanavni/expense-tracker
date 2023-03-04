@@ -1,8 +1,8 @@
 package fi.metropolia.expensetracker.module;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
-
 
 public class Salary {
 
@@ -15,9 +15,11 @@ public class Salary {
     private Integer id;
     private LocalDate date;
     private String usedCurrency;
-    private boolean mandTax;
+    private IncomeDao incomeDao = new IncomeDao();
+    private int incomeID;
 
-    public Salary(double salary, LocalDate date, String usedCurrency, String type, double taxRate ) {
+
+    public Salary(double salary, LocalDate date, String usedCurrency, String type, double taxRate ) throws SQLException {
         this.salary = salary;
         this.date = date;
         this.usedCurrency = usedCurrency;
@@ -26,39 +28,44 @@ public class Salary {
 
         id = currentId;
         currentId++;
+
+        incomeID = incomeDao.getIncomeId(Variables.getInstance().getLoggedUserId(), type, salary, java.sql.Date.valueOf(date), taxRate, usedCurrency);
+
     }
 
-    public double getDaySalary() {
-        return SalarySingle.getInstance().getDaySalary();
+    public LocalDate getLocalDate() {
+        return this.date;
     }
 
-    public double getMonthSalary() {
-        //return SalarySingle.getInstance().getMonthSalary();
-        return salary;
+    public double getSalary() {
+        return this.salary;
     }
-
     public double getSalaryMinusTaxes (String type) {
-       return SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type, mandTax);
-    }
-    public void setDate(Date date) {
-        this.date2 = date;
+       return SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type);
     }
 
     public Date getDate(){
-        return this.date2;
+        return this.date2 = (java.sql.Date.valueOf(date));
     }
+    public double getTaxRate() {
+        return taxRate;
+    }
+    public String getUsedCurrency() {
+        return usedCurrency;
+    }
+
     public Integer getId() {
         return id;
     }
 
-    public void setMandTax(boolean mandTax) {
-        this.mandTax = mandTax;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Salary amount of the date " + date +
-                " is " + salary + usedCurrency + " and minus " + taxRate+
-                "% tax rate it is: " + SalarySingle.getInstance().calculateSalaryWithTaxRate(taxRate, salary, type, mandTax);
+                " is " +  String.format("%.2f",salary) + usedCurrency + " and minus " +  String.format("%.2f",incomeDao.getTaxrate(incomeID)) +
+                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(incomeID))  + usedCurrency;
     }
 }
