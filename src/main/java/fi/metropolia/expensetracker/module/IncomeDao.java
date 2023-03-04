@@ -1,3 +1,4 @@
+
 package fi.metropolia.expensetracker.module;
 
 import fi.metropolia.expensetracker.datasource.MariaDBConnector;
@@ -9,7 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static fi.metropolia.expensetracker.module.Login_Signup_Dao.printSQLException;
+import static fi.metropolia.expensetracker.module.Dao.printSQLException;
+
+//import static fi.metropolia.expensetracker.module.Login_Signup_Dao.printSQLException;
 
 public class IncomeDao {
 

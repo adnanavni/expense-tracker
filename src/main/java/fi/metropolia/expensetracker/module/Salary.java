@@ -65,7 +65,7 @@ public class Salary {
     @Override
     public String toString() {
         return "Salary amount of the date " + date +
-                " is " + salary + usedCurrency + " and minus " + incomeDao.getTaxrate(incomeID) +
-                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(incomeID));
+                " is " +  String.format("%.2f",salary) + usedCurrency + " and minus " +  String.format("%.2f",incomeDao.getTaxrate(incomeID)) +
+                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(incomeID))  + usedCurrency;
     }
 }
