@@ -1,10 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Salary;
-import fi.metropolia.expensetracker.module.SalarySingle;
-import fi.metropolia.expensetracker.module.ThemeManager;
-import fi.metropolia.expensetracker.module.Variables;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +11,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Currency;
@@ -32,7 +31,7 @@ import java.util.Optional;
         @FXML
         private TextField addHours;
         @FXML
-        private TextField taxRate;
+        private TextField addTaxRate;
         @FXML
         private ListView salaryHistory;
         @FXML
@@ -49,9 +48,12 @@ import java.util.Optional;
         @FXML
         private CheckBox mandatoryTaxes;
 
+        private IncomeDao incomeDao = new IncomeDao();
+
         public void initialize() {
             ThemeManager themeManager = ThemeManager.getInstance();
             content.setStyle(themeManager.getStyle());
+
         }
         public void backToMain(ActionEvent event) throws IOException {
             AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
@@ -63,15 +65,15 @@ import java.util.Optional;
             this.variables = variables;
             currency = Currency.getInstance(variables.getCurrentCurrency());
 
-            salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+            salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
             monthsComb.getItems().addAll(salarySingle.getMonths());
             mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
 
             salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
+                     int incomeID = 0;
                     int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
-
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -79,13 +81,19 @@ import java.util.Optional;
                     alert.setHeaderText("Add salary to calculation");
                     alert.setContentText(selected.toString());
 
+                    try {
+                        incomeID = incomeDao.getIncomeId(variables.getLoggedUserId(), "DAY", selected.getSalary(), java.sql.Date.valueOf(selected.getLocalDate()), selected.getTaxRate(), selected.getUsedCurrency());
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+
                     Optional<ButtonType> option = alert.showAndWait();
 
                     if (option.get() == ButtonType.OK) {
-                        salarySingle.deleteDaySalary(selected);
-                        salaryHistory.getItems().clear();
-                        salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+                        incomeDao.deleteSalary(incomeID, "DAY");
 
+                        salaryHistory.getItems().clear();
+                        salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
                     }
                 }
             });
@@ -102,30 +110,41 @@ import java.util.Optional;
         }
 
         @FXML
-        protected void onSalaryAddClick() {
+        protected void onSalaryAddClick() throws SQLException {
+            IncomeDao incomeDao = new IncomeDao();
+            double taxRate;
+
             salarySingle.CalculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
-            salarySingle.calculateSalaryWithTaxRate(Double.parseDouble(taxRate.getText()), salarySingle.getDaySalary(), "DAY", mandatoryTaxes.isSelected());
-            salarySingle.setMonthSalaryMinusTaxes(salarySingle.getDaySalaryMinusTaxes());
+
+            if (mandatoryTaxes.isSelected()) {
+                double insurance = 7.15;
+                double pension = 1.40;
+                taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance + pension);
+                salarySingle.calculateSalaryWithTaxRate(taxRate, salarySingle.getDaySalary(), "DAY");
+
+            } else {
+                taxRate = Double.parseDouble(addTaxRate.getText());
+                salarySingle.calculateSalaryWithTaxRate(taxRate, salarySingle.getDaySalary(), "DAY");
+            }
 
             LocalDate salaryDate = LocalDate.now();
 
             if (selectedDate.getValue() != null) {
                 salaryDate = selectedDate.getValue();
             }
-
-            this.salary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString(), "DAY", Double.parseDouble(taxRate.getText()));
             Date date = java.sql.Date.valueOf(salaryDate);
-            this.salary.setDate(date);
-            this.salary.setMandTax(mandatoryTaxes.isSelected());
 
-            salarySingle.createNewDaySalary(salary);
+            incomeDao.saveSalary(variables.getLoggedUserId(),"DAY", salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), date, taxRate, currency.toString());
+            this.salary = new Salary(salarySingle.getDaySalary(), salaryDate, currency.toString(), "DAY", Double.parseDouble(addTaxRate.getText()));
+
             salaryHistory.getItems().clear();
-            salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+            salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
 
             addHourSalary.setText(null);
             addHours.setText(null);
-            taxRate.setText(null);
+            addTaxRate.setText(null);
             selectedDate.setValue(null);
+            mandatoryTaxes.setSelected(false);
         }
         @FXML
         protected void calculateMonths() throws ParseException {

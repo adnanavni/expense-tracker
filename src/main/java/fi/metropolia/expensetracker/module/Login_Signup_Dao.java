@@ -1,13 +1,7 @@
 package fi.metropolia.expensetracker.module;
 
 import fi.metropolia.expensetracker.datasource.MariaDBConnector;
-
-import java.sql.Timestamp;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
