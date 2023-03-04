@@ -29,7 +29,7 @@ public class IncomeDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
 
-                return new Salary(resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                return new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
                         resultSet.getString(2), resultSet.getDouble(7));
             }
             resultSet.close();
@@ -173,7 +173,7 @@ public class IncomeDao {
 
             while (resultSet.next()) {
                 Salary salary =
-                new Salary(resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                new Salary(resultSet.getInt(1),resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
                         resultSet.getString(2), resultSet.getDouble(7));
                 salaries.add(salary);
             }
@@ -184,5 +184,47 @@ public class IncomeDao {
             printSQLException(e);
         }
         return salaries;
+    }
+
+    public ArrayList<Salary> getAllSalaries(Integer userID) {
+
+        String sql = "SELECT * FROM Incomes WHERE userID = ?";
+
+        ArrayList<Salary> salaries = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userID);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                Salary salary =
+                        new Salary(resultSet.getInt(1),resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                                resultSet.getString(2), resultSet.getDouble(7));
+                salaries.add(salary);
+            }
+            resultSet.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return salaries;
+    }
+
+    public boolean changeIncomeValues(Integer id, Double amount, Double amount_tax, String currency){
+        try {
+            String sql = "UPDATE Incomes SET Amount = ?, Amount_Minus_Taxes = ?, Currency = ? WHERE IncomeID = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setDouble(1, amount);
+            ps.setDouble(2, amount_tax);
+            ps.setString(3, currency);
+            ps.setDouble(4, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return false;
     }
 }
