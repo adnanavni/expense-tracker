@@ -81,28 +81,35 @@ public class IncomeController {
             public void handle(MouseEvent mouseEvent) {
                 IncomeDao incomeDao = new IncomeDao();
                 int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
-                int incomeID = 0;
+                if(selectedIndex >= 0){
+                    int incomeID = 0;
 
-                Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
+                    Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
-                try {
-                    incomeID = incomeDao.getIncomeId(variables.getLoggedUserId(), "MONTH", selected.getSalary(), java.sql.Date.valueOf(selected.getLocalDate()), selected.getTaxRate(), selected.getUsedCurrency());
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
+                    incomeID = selected.getId();
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Salary deletion");
+                    alert.setHeaderText("Do you want to delete salary of the history");
+                    alert.setContentText(selected.toString());
+
+                    Optional<ButtonType> option = alert.showAndWait();
+
+                    if (option.get() == ButtonType.OK) {
+                        incomeDao.deleteSalary( incomeID, "MONTH");
+                        salaryHistory.getItems().clear();
+                        salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "MONTH"));
+                    }
+                }
+                else {
+                    // Nothing selected.
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("No selection!");
+                    alert.setHeaderText("No selected income!");
+                    alert.setContentText("Click an existing income.");
+                    alert.showAndWait();
                 }
 
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Salary deletion");
-                alert.setHeaderText("Do you want to delete salary of the history");
-                alert.setContentText(selected.toString());
-
-                Optional<ButtonType> option = alert.showAndWait();
-
-                if (option.get() == ButtonType.OK) {
-                    incomeDao.deleteSalary( incomeID, "MONTH");
-                    salaryHistory.getItems().clear();
-                    salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "MONTH"));
-                }
             }
         });
     }

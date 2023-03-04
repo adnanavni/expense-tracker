@@ -89,7 +89,10 @@ public class Variables {
         newAmount += amount;
         categories.put(category, newAmount);
     }
-
+    public void setLoggedCurrency(String course){
+        currentCourseMultiplier = currencies.get(course);
+        currentCurrency = course;
+    }
     public void setCurrentCourseMultiplier(String course) {
         Dao loginSignupDao = new Dao();
         IncomeDao incomeDao = new IncomeDao();
@@ -110,8 +113,11 @@ public class Variables {
         ArrayList<Salary> incomes = incomeDao.getAllSalaries(loggedUserId);
 
         if(incomes.size() > 0){
+            System.out.println(currentCurrency);
             for (Salary salary : incomes) {
+                System.out.println("ennen jakoa " + salary.getSalary());
                 salary.setSalary(salary.getSalary() / currentCourseMultiplier);
+                System.out.println("jaon jälkeen " + salary.getSalary());
             }
         }
 
@@ -122,9 +128,12 @@ public class Variables {
         currentCurrency = course;
 
         if(incomes.size() > 0){
+            System.out.println(currentCurrency);
             for (Salary salary : incomes) {
+                System.out.println("ennen kertomista " + salary.getSalary());
                 salary.setSalary(salary.getSalary() * currentCourseMultiplier);
                 salary.setUsedCurrency(currentCurrency);
+                System.out.println("kertomisen jälkeen " + salary.getSalary());
                 incomeDao.changeIncomeValues(salary.getId(), salary.getSalary(), salary.getSalaryMinusTaxes(salary.getType()), currentCurrency);
             }
         }

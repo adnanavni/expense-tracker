@@ -74,27 +74,34 @@ import java.util.Optional;
                 public void handle(MouseEvent mouseEvent) {
                      int incomeID = 0;
                     int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
-                    Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
+                    if(selectedIndex >= 0){
+                        Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Salary calculation");
-                    alert.setHeaderText("Add salary to calculation");
-                    alert.setContentText(selected.toString());
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Salary calculation");
+                        alert.setHeaderText("Add salary to calculation");
+                        alert.setContentText(selected.toString());
 
-                    try {
-                        incomeID = incomeDao.getIncomeId(variables.getLoggedUserId(), "DAY", selected.getSalary(), java.sql.Date.valueOf(selected.getLocalDate()), selected.getTaxRate(), selected.getUsedCurrency());
-                    } catch (SQLException e) {
-                        System.out.println(e.getMessage());
+                        incomeID = selected.getId();
+
+                        Optional<ButtonType> option = alert.showAndWait();
+
+                        if (option.get() == ButtonType.OK) {
+                            incomeDao.deleteSalary(incomeID, "DAY");
+
+                            salaryHistory.getItems().clear();
+                            salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
+                        }
+                    }
+                    else {
+                        // Nothing selected.
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("No selection!");
+                        alert.setHeaderText("No selected income!");
+                        alert.setContentText("Click an existing income.");
+                        alert.showAndWait();
                     }
 
-                    Optional<ButtonType> option = alert.showAndWait();
-
-                    if (option.get() == ButtonType.OK) {
-                        incomeDao.deleteSalary(incomeID, "DAY");
-
-                        salaryHistory.getItems().clear();
-                        salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
-                    }
                 }
             });
         }
