@@ -1,6 +1,7 @@
 package fi.metropolia.expensetracker.module;
 
 import fi.metropolia.expensetracker.module.Dao.Dao;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -8,8 +9,11 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DaoTest {
-    Dao dao = new Dao();
-
+    static Dao dao = new Dao();
+    @AfterAll
+    static void removeTestUsers() throws SQLException {
+        dao.deleteUser("testExpense");
+    }
     @Test
     void userExists() throws SQLException {
         dao.insertRecord("testExpense", "testExpense");
