@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.GridPane?>
-
-<AnchorPane fx:id="content" minHeight="800.0" minWidth="700.0" styleClass="background" stylesheets="@css/main.css"
-            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="content" minHeight="800.0" minWidth="700.0" styleClass="background"
+            stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
             fx:controller="fi.metropolia.expensetracker.controller.LoginController">
     <Label alignment="CENTER" layoutX="86.0" layoutY="74.0" prefHeight="74.0" prefWidth="401.0" styleClass="header"
            text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

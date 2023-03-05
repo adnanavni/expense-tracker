@@ -8,17 +8,12 @@ public class ThemeManager {
     private ThemeManager() {
 
     }
-
     public static ThemeManager getInstance() {
         return instance;
     }
 
     public void setCurrentColor(String color) {
         currentColor = color;
-    }
-
-    public String getCurrentColor() {
-        return currentColor;
     }
 
     public String getStyle() {

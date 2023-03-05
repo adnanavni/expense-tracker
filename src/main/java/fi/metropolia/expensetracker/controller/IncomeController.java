@@ -20,11 +20,11 @@ import java.util.Optional;
 
 
 public class IncomeController {
+    @FXML
+    ComboBox monthsCombo;
     private Currency currency;
     private Salary salary;
-
     private Variables variables;
-
     @FXML
     private AnchorPane content;
     @FXML
@@ -36,8 +36,6 @@ public class IncomeController {
     @FXML
     private Label salaryComing;
     private SalarySingle salarySingle;
-    @FXML
-    ComboBox monthsCombo;
     @FXML
     private DatePicker selectedDate;
     @FXML
@@ -81,7 +79,7 @@ public class IncomeController {
             public void handle(MouseEvent mouseEvent) {
                 IncomeDao incomeDao = new IncomeDao();
                 int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
-                if(selectedIndex >= 0){
+                if (selectedIndex >= 0) {
                     int incomeID = 0;
 
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
@@ -96,12 +94,11 @@ public class IncomeController {
                     Optional<ButtonType> option = alert.showAndWait();
 
                     if (option.get() == ButtonType.OK) {
-                        incomeDao.deleteSalary( incomeID, "MONTH");
+                        incomeDao.deleteSalary(incomeID, "MONTH");
                         salaryHistory.getItems().clear();
                         salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "MONTH"));
                     }
-                }
-                else {
+                } else {
                     // Nothing selected.
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection!");
@@ -109,11 +106,9 @@ public class IncomeController {
                     alert.setContentText("Click an existing income.");
                     alert.showAndWait();
                 }
-
             }
         });
     }
-
 
     @FXML
     protected void onSalaryAddClick() throws SQLException {
@@ -148,7 +143,6 @@ public class IncomeController {
         addTaxRate.setText(null);
         selectedDate.setValue(null);
         mandatoryTaxes.setSelected(false);
-
     }
 
     @FXML
@@ -158,6 +152,4 @@ public class IncomeController {
         String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(month, "MONTH"));
         salaryComing.setText("Salary amount of " + month + " is " + salaryAmount + " " + currency.getSymbol());
     }
-
-
 }

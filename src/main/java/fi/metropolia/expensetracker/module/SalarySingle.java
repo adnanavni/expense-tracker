@@ -1,6 +1,5 @@
 package fi.metropolia.expensetracker.module;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -10,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SalarySingle {
+    private static SalarySingle INSTANCE = null;
     private double daySalary;
     private double monthSalary;
     private double taxRate;
     private double monthSalaryMinusTaxes;
     private double daySalaryMinusTaxes;
-
     private double salaryMinusTaxes;
     private Map<String, Integer> months = new HashMap<>() {{
         put("January", 0);
@@ -31,14 +30,13 @@ public class SalarySingle {
         put("November", 10);
         put("December", 11);
     }};
-    private static SalarySingle INSTANCE = null;
+
+    private SalarySingle() {
+    }
 
     public static SalarySingle getInstance() {
         if (INSTANCE == null) INSTANCE = new SalarySingle();
         return INSTANCE;
-    }
-
-    private SalarySingle() {
     }
 
     public double calculateSalaryWithTaxRate(double taxRate, double salary, String type) {
@@ -50,7 +48,7 @@ public class SalarySingle {
         if (type.equals("DAY")) {
             this.daySalaryMinusTaxes = (salary * percent);
             setDaySalaryMinusTaxes(this.daySalaryMinusTaxes);
-            setSalaryMinusTaxes((salary*percent));
+            setSalaryMinusTaxes((salary * percent));
 
             setDaySalary(salary);
             wantedSalaryminusTaxes = this.daySalaryMinusTaxes;
@@ -58,7 +56,7 @@ public class SalarySingle {
         if (type.equals("MONTH")) {
             this.monthSalaryMinusTaxes = (salary * percent);
             setMonthSalaryMinusTaxes(this.monthSalaryMinusTaxes);
-            setSalaryMinusTaxes((salary*percent));
+            setSalaryMinusTaxes((salary * percent));
             setMonthSalary(salary);
             wantedSalaryminusTaxes = this.monthSalaryMinusTaxes;
         }
@@ -78,13 +76,13 @@ public class SalarySingle {
         this.taxRate = taxRate;
     }
 
-    public void setDaySalary(double daySalary) {
-        this.daySalary = daySalary;
-    }
-
     public double getDaySalary() {
 
-    return this.daySalary;
+        return this.daySalary;
+    }
+
+    public void setDaySalary(double daySalary) {
+        this.daySalary = daySalary;
     }
 
     public double getDaySalaryMinusTaxes() {
@@ -96,19 +94,20 @@ public class SalarySingle {
         this.daySalaryMinusTaxes = daySalaryMinusTaxes;
     }
 
-    public void setMonthSalaryMinusTaxes(double monthSalaryMinusTaxes) {
-        this.monthSalaryMinusTaxes = monthSalaryMinusTaxes;
-    }
     public double getMonthSalaryMinusTaxes() {
         return this.monthSalaryMinusTaxes;
     }
 
-    public void setMonthSalary(double monthSalary) {
-        this.monthSalary = monthSalary;
+    public void setMonthSalaryMinusTaxes(double monthSalaryMinusTaxes) {
+        this.monthSalaryMinusTaxes = monthSalaryMinusTaxes;
     }
 
     public double getMonthSalary() {
         return this.monthSalary;
+    }
+
+    public void setMonthSalary(double monthSalary) {
+        this.monthSalary = monthSalary;
     }
 
     public ArrayList<String> getMonths() {
@@ -117,51 +116,52 @@ public class SalarySingle {
 
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
         int year = LocalDate.now().getYear();
-        int beforeYear = (year-1);
-        int nextYear = (year+1);
+        int beforeYear = (year - 1);
+        int nextYear = (year + 1);
         double totalSalary = 0;
         switch (m) {
             case ("January"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/12/"+beforeYear, "01/02/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/12/" + beforeYear, "01/02/" + year, type);
                 break;
             case ("February"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/01/"+year, "01/03/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/01/" + year, "01/03/" + year, type);
                 break;
             case ("March"):
-                totalSalary = getSalariesBetweenStartAndFinish("28/02/"+year, "01/04/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("28/02/" + year, "01/04/" + year, type);
                 break;
             case ("April"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/03/"+year, "01/05/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/03/" + year, "01/05/" + year, type);
                 break;
             case ("May"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/04/"+year, "01/06/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/04/" + year, "01/06/" + year, type);
                 break;
             case ("June"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/05/"+year, "01/07/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/05/" + year, "01/07/" + year, type);
                 break;
             case ("July"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/06/"+year, "01/08/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/06/" + year, "01/08/" + year, type);
                 break;
             case ("August"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/07/"+year, "01/09/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/07/" + year, "01/09/" + year, type);
                 break;
             case ("September"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/08/"+year, "01/10/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/08/" + year, "01/10/" + year, type);
                 break;
             case ("October"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/9/"+year, "01/11/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/9/" + year, "01/11/" + year, type);
                 break;
             case ("November"):
-                totalSalary = getSalariesBetweenStartAndFinish("31/10/"+year, "01/12/"+year, type);
+                totalSalary = getSalariesBetweenStartAndFinish("31/10/" + year, "01/12/" + year, type);
                 break;
             case ("December"):
-                totalSalary = getSalariesBetweenStartAndFinish("30/11/"+year, "01/01/"+nextYear, type);
+                totalSalary = getSalariesBetweenStartAndFinish("30/11/" + year, "01/01/" + nextYear, type);
                 break;
             default:
                 return 0;
         }
         return totalSalary;
     }
+
     public double getSalariesBetweenStartAndFinish(String start, String end, String type) throws ParseException {
         IncomeDao incomeDao = new IncomeDao();
         ArrayList<Double> salaries = new ArrayList<>();
@@ -170,12 +170,11 @@ public class SalarySingle {
         Date parsedEnd = sdf.parse(end);
         double salariesTogether = 0;
 
-            for (Salary eachDate : incomeDao.getSalaries(Variables.getInstance().getLoggedUserId(), type)) {
-                if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
-                    salaries.add(eachDate.getSalaryMinusTaxes(type));
-                }
+        for (Salary eachDate : incomeDao.getSalaries(Variables.getInstance().getLoggedUserId(), type)) {
+            if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
+                salaries.add(eachDate.getSalaryMinusTaxes(type));
             }
-
+        }
         for (double eachSalary : salaries) {
             salariesTogether += eachSalary;
         }

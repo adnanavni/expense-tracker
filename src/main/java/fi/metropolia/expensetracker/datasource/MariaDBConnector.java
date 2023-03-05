@@ -12,6 +12,7 @@ public class MariaDBConnector {
     private static Connection conn = null;
 
     private MariaDBConnector() {
+
     }
 
     public static Connection getInstance() {
@@ -29,7 +30,6 @@ public class MariaDBConnector {
         String database = props.getProperty("DB_name");
         String name = props.getProperty("DB_username");
         String password = props.getProperty("DB_password");
-
 
         if (conn == null) {
             try {
