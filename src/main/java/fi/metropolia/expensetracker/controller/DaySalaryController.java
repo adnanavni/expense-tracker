@@ -155,7 +155,8 @@ import java.util.Optional;
         protected void calculateMonths() throws ParseException {
             int selectedIndex = monthsComb.getSelectionModel().getSelectedIndex();
             String month = (String) monthsComb.getItems().get(selectedIndex);
-            salaryComing.setText("Salary amount of " + month + " is " +  String.format("%.2f",SalarySingle.getInstance().geTotalSalaryOfMonth(month, "DAY")));
+            String salaryAmount = String.format("%.2f",SalarySingle.getInstance().geTotalSalaryOfMonth(month, "DAY"));
+            salaryComing.setText("Salary amount of " + month + " is " + salaryAmount + " " + currency.getSymbol());
         }
     }
 
