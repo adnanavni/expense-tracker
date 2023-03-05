@@ -315,4 +315,32 @@ public class Variables {
         income = 0.00;
         constantExpenses = new ArrayList<>();
     }
+
+    public void resetAndSetDefaults() {
+        currentCourseMultiplier = 1.00;
+        currentCurrency = "EUR";
+        activeBudget = null;
+        budgets.clear();
+        budgetObject = null;
+        totalBudget = 0.00;
+        expense = 0.00;
+        income = 0.00;
+        constantExpenses = new ArrayList<>();
+        ThemeManager.getInstance().setCurrentColor("#85bb65");
+
+        Dao loginSignupDao = new Dao();
+
+        ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+
+        if(constantExpenses.length == 0){
+            ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
+            for (String defaultConstExpenseName : defaultConstExpenseNames) {
+                loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+            }
+            ConstantExpense[] defaultConstExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+            for (ConstantExpense constantExpense : defaultConstExpenses) {
+                Variables.getInstance().addConstantExpense(constantExpense);
+            }
+        }
+    }
 }
