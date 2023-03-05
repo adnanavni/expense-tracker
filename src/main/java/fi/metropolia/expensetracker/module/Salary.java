@@ -16,7 +16,6 @@ public class Salary {
     private LocalDate date;
     private String usedCurrency;
     private IncomeDao incomeDao = new IncomeDao();
-    private int incomeID;
 
     public Salary(int id, double salary, LocalDate date, String usedCurrency, String type, double taxRate) throws SQLException {
         this.salary = salary;
@@ -25,8 +24,6 @@ public class Salary {
         this.taxRate = taxRate;
         this.type = type;
         this.id = id;
-
-        incomeID = incomeDao.getIncomeId(Variables.getInstance().getLoggedUserId(), type, salary, java.sql.Date.valueOf(date), taxRate, usedCurrency);
     }
     public Salary() {}
 
@@ -70,8 +67,8 @@ public class Salary {
     public String toString() {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
         return "Salary amount of the date " + date +
-                " is " + String.format("%.2f", salary) + " " + currency.getSymbol() + " and minus " + String.format("%.2f", incomeDao.getTaxrate(incomeID)) +
-                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(incomeID)) + " " + currency.getSymbol();
+                " is " + String.format("%.2f", salary) + " " + currency.getSymbol() + " and minus " + String.format("%.2f", incomeDao.getTaxrate(id)) +
+                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(id)) + " " + currency.getSymbol();
     }
 
 }
