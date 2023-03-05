@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Currency;
@@ -120,7 +119,7 @@ import java.util.Optional;
             IncomeDao incomeDao = new IncomeDao();
             double taxRate;
 
-            salarySingle.CalculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
+            salarySingle.calculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
 
             if (mandatoryTaxes.isSelected()) {
                 double insurance = 7.15;

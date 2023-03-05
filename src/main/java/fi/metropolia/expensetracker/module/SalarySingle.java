@@ -1,6 +1,5 @@
 package fi.metropolia.expensetracker.module;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -62,6 +61,8 @@ public class SalarySingle {
             setMonthSalary(salary);
             wantedSalaryminusTaxes = this.monthSalaryMinusTaxes;
         }
+
+
         return wantedSalaryminusTaxes;
     }
 
@@ -70,7 +71,7 @@ public class SalarySingle {
 
     }
 
-    public void CalculateDaySalary(double hours, double hourSalary) {
+    public void calculateDaySalary(double hours, double hourSalary) {
         this.daySalary = (hours * hourSalary);
     }
 
