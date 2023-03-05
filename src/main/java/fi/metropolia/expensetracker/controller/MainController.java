@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.util.Currency;
 
 public class MainController {
-
     @FXML
     private Label budget;
     @FXML
@@ -27,7 +26,6 @@ public class MainController {
     private ImageView settingsIcon;
     @FXML
     private AnchorPane content;
-
     @FXML
     private Button logOutButton;
 
@@ -76,7 +74,6 @@ public class MainController {
 
         BudgetController budgetController = fxmloader.getController();
         budgetController.setVariables(variables);
-
     }
 
     public void changeWindowToIncome(ActionEvent event) throws IOException {
@@ -113,5 +110,4 @@ public class MainController {
 
         variables.resetAll();
     }
-
 }

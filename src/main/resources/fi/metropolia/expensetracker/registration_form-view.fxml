@@ -2,9 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane fx:id="content" minHeight="800.0" minWidth="700.0" styleClass="background" stylesheets="@css/main.css"
-            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="content" minHeight="800.0" minWidth="700.0" styleClass="background"
+            stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
             fx:controller="fi.metropolia.expensetracker.controller.RegisterController">
 
     <Label alignment="CENTER" layoutX="86.0" layoutY="74.0" prefHeight="74.0" prefWidth="426.0" styleClass="header"

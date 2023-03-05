@@ -2,10 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
-            styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0"
+            minWidth="700.0" styleClass="background" stylesheets="@css/main.css"
+            xmlns="http://javafx.com/javafx"
             fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
     <children>
         <Button layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="39.0"

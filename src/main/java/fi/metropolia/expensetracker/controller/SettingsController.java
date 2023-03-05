@@ -17,20 +17,14 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SettingsController {
-
     @FXML
     private AnchorPane content;
-
-    private Variables variables = Variables.getInstance();
-    private Currency currency;
     @FXML
     private ChoiceBox<String> colorChoiceBox = new ChoiceBox<>();
-
     @FXML
     private ComboBox selectCurrency;
-
-    @FXML
-    private Button deleteDataBtn;
+    private Variables variables = Variables.getInstance();
+    private Currency currency;
 
 
     public void initialize() {

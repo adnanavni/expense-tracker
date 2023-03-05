@@ -13,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
@@ -41,7 +40,6 @@ public class ExpenseController {
     private TextField constExpenseName;
     @FXML
     private TextField constExpense;
-
 
     private Variables variables;
     private Currency currency;
@@ -110,7 +108,6 @@ public class ExpenseController {
                         expense.setText(budgetText + " " + currency.getSymbol());
                     }
                 } else {
-                    // Nothing selected.
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("No selection!");
                     alert.setHeaderText("No selected expense!");
@@ -169,8 +166,8 @@ public class ExpenseController {
     protected void setConstExpense() {
         System.out.println(selectCategory.getValue());
         if (selectCategory.getValue().equals("New")) {
-            if(constExpense.getText() == null){
-                if(variables.constantExpenseNameExists(constExpenseName.getText())){
+            if (constExpense.getText() == null) {
+                if (variables.constantExpenseNameExists(constExpenseName.getText())) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Name already exists!");
                     alert.setHeaderText("You already have a Constant expense with that name!");
@@ -179,8 +176,7 @@ public class ExpenseController {
                     selectCategory.setValue(null);
                     constExpense.setText(null);
                     constExpenseName.setText(null);
-                }
-                else {
+                } else {
                     Dao loginSignupDao = new Dao();
                     loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(), 0.00);
                     ConstantExpense newConstantExpense = loginSignupDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
@@ -195,10 +191,9 @@ public class ExpenseController {
                     }
                 }
 
-            }
-            else {
+            } else {
 
-                if(variables.constantExpenseNameExists(constExpenseName.getText())){
+                if (variables.constantExpenseNameExists(constExpenseName.getText())) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Name already exists!");
                     alert.setHeaderText("You already have a Constant expense with that name!");
@@ -207,8 +202,7 @@ public class ExpenseController {
                     selectCategory.setValue(null);
                     constExpense.setText(null);
                     constExpenseName.setText(null);
-                }
-                else {
+                } else {
                     Dao loginSignupDao = new Dao();
                     loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(),
                             Double.parseDouble(constExpense.getText()));
@@ -225,8 +219,7 @@ public class ExpenseController {
                 }
             }
 
-        }
-        else {
+        } else {
             System.out.println("NOT NEW, MODIFYING EXISTING...");
             ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
             variables.removeConstantExpense(selectedConstExpense);

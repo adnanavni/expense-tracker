@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
-            styleClass="background" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0"
+            minWidth="700.0" styleClass="background" xmlns="http://javafx.com/javafx"
             fx:controller="fi.metropolia.expensetracker.controller.MainController">
     <children>
         <Label alignment="CENTER" layoutX="79.0" layoutY="14.0" prefHeight="60.0" prefWidth="411.0" styleClass="header"

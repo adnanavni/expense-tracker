@@ -15,6 +15,22 @@ public class Dao {
     private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ?";
     private final Connection conn = MariaDBConnector.getInstance();
 
+    public static void printSQLException(SQLException ex) {
+        for (Throwable e : ex) {
+            if (e instanceof SQLException) {
+                e.printStackTrace(System.err);
+                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
+                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
+                System.err.println("Message: " + e.getMessage());
+                Throwable t = ex.getCause();
+                while (t != null) {
+                    System.out.println("Cause: " + t);
+                    t = t.getCause();
+                }
+            }
+        }
+    }
+
     public void insertRecord(String username, String password) {
         try {
 
@@ -120,7 +136,6 @@ public class Dao {
             return false;
         }
     }
-
 
     public String loggedCurrency(Integer id) {
         try {
@@ -396,7 +411,6 @@ public class Dao {
         return result;
     }
 
-
     public boolean changeUserCurrency(Integer id, String currency) {
 
         try {
@@ -512,31 +526,26 @@ public class Dao {
         String updateUserInfoSql = "UPDATE Registration SET ThemeColor = '#85bb65', currency = 'EUR' WHERE id = ?";
 
         try {
-            // Delete Incomes
             try (PreparedStatement stmt = conn.prepareStatement(deleteIncomes)) {
                 stmt.setInt(1, userId);
                 stmt.executeUpdate();
             }
 
-            // Delete Constantexpenses
             try (PreparedStatement stmt = conn.prepareStatement(deleteConstantExpenses)) {
                 stmt.setInt(1, userId);
                 stmt.executeUpdate();
             }
 
-            // Delete Budgets and Expenses
             try (PreparedStatement stmt = conn.prepareStatement(deleteBudgets)) {
                 stmt.setInt(1, userId);
                 stmt.executeUpdate();
             }
 
-            // Delete Expenses
             try (PreparedStatement stmt = conn.prepareStatement(deleteExpenses)) {
                 stmt.setInt(1, userId);
                 stmt.executeUpdate();
             }
 
-            // Set theme color and currency to default
             try (PreparedStatement stmt = conn.prepareStatement(updateUserInfoSql)) {
                 stmt.setInt(1, userId);
                 stmt.executeUpdate();
@@ -544,22 +553,6 @@ public class Dao {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }
-    }
-
-    public static void printSQLException(SQLException ex) {
-        for (Throwable e : ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
-            }
         }
     }
 }
