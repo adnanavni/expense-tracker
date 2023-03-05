@@ -20,6 +20,7 @@ class DaoTest {
         assertTrue(dao.userExists("testExpense"), "User not found" );
         dao.deleteUser("testExpense");
     }
+
     @Test
     void removeUser() throws SQLException {
         dao.insertRecord("testExpense", "testExpense");
