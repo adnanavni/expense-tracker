@@ -137,6 +137,24 @@ public class Dao {
         }
     }
 
+    public boolean deleteUser(String username) throws SQLException {
+
+        if (userExists(username)) {
+            try {
+                String sql = "DELETE FROM Registration WHERE username = ?";
+                PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                preparedStatement.setString(1, username);
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (SQLException e) {
+                printSQLException(e);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public String loggedCurrency(Integer id) {
         try {
             String sql = "SELECT currency FROM Registration WHERE id=?";

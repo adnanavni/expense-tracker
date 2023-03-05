@@ -172,7 +172,7 @@ public class SalarySingle {
         Date parsedEnd = sdf.parse(end);
         double salariesTogether = 0;
 
-        for (Salary eachDate : incomeDao.getSalaries(Variables.getInstance().getLoggedUserId(), type)) {
+        for (Salary eachDate : incomeDao.getSalariesWithType(Variables.getInstance().getLoggedUserId(), type)) {
             if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
                 salaries.add(eachDate.getSalaryMinusTaxes(type));
             }
