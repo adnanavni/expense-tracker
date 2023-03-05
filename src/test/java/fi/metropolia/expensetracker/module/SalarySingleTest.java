@@ -6,12 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SalarySingleTest {
-
-    @Test
-    void geTotalSalaryOfMonth() {
-
-    }
-
     @Test
     @DisplayName("Day salary calculation")
     void calculateDaySalary() {
