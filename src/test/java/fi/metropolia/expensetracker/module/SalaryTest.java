@@ -1,10 +1,7 @@
 package fi.metropolia.expensetracker.module;
 
-import com.sun.javafx.binding.StringFormatter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.text.DecimalFormat;
 
 import static org.junit.jupiter.api.Assertions.*;
 class SalaryTest {
