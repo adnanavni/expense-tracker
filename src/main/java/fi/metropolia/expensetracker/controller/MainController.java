@@ -21,17 +21,12 @@ public class MainController {
     @FXML
     private Button expenseBtn;
     @FXML
-    private ComboBox selectCurrency;
-    @FXML
     private ImageView settingsIcon;
     @FXML
     private AnchorPane content;
-    @FXML
-    private Button logOutButton;
 
     private Variables variables = Variables.getInstance();
     private SalarySingle salarySingle = SalarySingle.getInstance();
-    private LocalDate date;
     private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
 
     @FXML

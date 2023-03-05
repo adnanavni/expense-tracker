@@ -44,13 +44,6 @@ public class Budget {
         this.name = name;
     }
 
-    public void increaseAmount(Double amount) {
-        this.amount += amount;
-    }
-
-    public void decreaseAmount(Double amount) {
-        this.amount -= amount;
-    }
 
     public Double getAmount() {
         return amount;

@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
+import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,8 +22,6 @@ import java.util.Optional;
 public class DaySalaryController {
     private Variables variables;
     private Currency currency;
-    private Salary salary;
-    private double salaryTogether;
     @FXML
     private AnchorPane content;
     @FXML

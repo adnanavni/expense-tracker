@@ -1,7 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Dao;
+import fi.metropolia.expensetracker.module.Dao.Dao;
 import fi.metropolia.expensetracker.module.ThemeManager;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.fxml.FXML;

@@ -1,5 +1,7 @@
 package fi.metropolia.expensetracker.module;
 
+import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -72,7 +74,7 @@ public class SalarySingle {
         this.daySalary = (hours * hourSalary);
     }
 
-    public void setTaxrate(double taxrate) {
+    public void setTaxrate(double taxRate) {
         this.taxRate = taxRate;
     }
 
