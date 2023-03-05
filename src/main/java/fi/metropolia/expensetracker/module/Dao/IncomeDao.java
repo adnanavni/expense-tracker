@@ -1,13 +1,15 @@
-package fi.metropolia.expensetracker.module;
+package fi.metropolia.expensetracker.module.Dao;
 
 import fi.metropolia.expensetracker.datasource.MariaDBConnector;
+import fi.metropolia.expensetracker.module.Salary;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import static fi.metropolia.expensetracker.module.Dao.printSQLException;
+import static fi.metropolia.expensetracker.module.Dao.Dao.printSQLException;
 
 public class IncomeDao {
     private final Connection conn = MariaDBConnector.getInstance();

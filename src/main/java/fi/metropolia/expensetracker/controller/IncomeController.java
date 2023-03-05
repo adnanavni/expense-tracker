@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
+import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,7 +24,6 @@ public class IncomeController {
     @FXML
     ComboBox monthsCombo;
     private Currency currency;
-    private Salary salary;
     private Variables variables;
     @FXML
     private AnchorPane content;
@@ -38,8 +38,6 @@ public class IncomeController {
     private SalarySingle salarySingle;
     @FXML
     private DatePicker selectedDate;
-    @FXML
-    private Button addBtn;
     @FXML
     private CheckBox mandatoryTaxes;
 

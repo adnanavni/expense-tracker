@@ -1,6 +1,9 @@
 package fi.metropolia.expensetracker.module;
 
 
+import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +39,7 @@ public class Variables {
     private String currentCurrency = "EUR";
     private Budget activeBudget;
     private ArrayList<Budget> budgets = new ArrayList<>();
-    private Budget budgetObject;
     private Double totalBudget = 0.00;
-    private Double expense = 0.00;
-    private Double income = 0.00;
 
     private Variables() {
     }
@@ -230,10 +230,7 @@ public class Variables {
         currentCurrency = "EUR";
         activeBudget = null;
         budgets.clear();
-        budgetObject = null;
         totalBudget = 0.00;
-        expense = 0.00;
-        income = 0.00;
         constantExpenses = new ArrayList<>();
     }
 
@@ -242,10 +239,7 @@ public class Variables {
         currentCurrency = "EUR";
         activeBudget = null;
         budgets.clear();
-        budgetObject = null;
         totalBudget = 0.00;
-        expense = 0.00;
-        income = 0.00;
         constantExpenses = new ArrayList<>();
         ThemeManager.getInstance().setCurrentColor("#85bb65");
 

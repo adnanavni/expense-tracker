@@ -1,6 +1,10 @@
-package fi.metropolia.expensetracker.module;
+package fi.metropolia.expensetracker.module.Dao;
 
 import fi.metropolia.expensetracker.datasource.MariaDBConnector;
+import fi.metropolia.expensetracker.module.Budget;
+import fi.metropolia.expensetracker.module.ConstantExpense;
+import fi.metropolia.expensetracker.module.Expense;
+import fi.metropolia.expensetracker.module.PsswdAuth;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -189,30 +193,6 @@ public class Dao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new Budget(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getString(2));
-            }
-            resultSet.close();
-            preparedStatement.close();
-
-
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-
-        return null;
-    }
-
-    public ConstantExpense getConstantExpense(Integer id) {
-        try {
-
-            String sql = "SELECT * FROM Constantexpenses WHERE ConstantexpenseId = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-
-            preparedStatement.setInt(1, id);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-
-                return new ConstantExpense(resultSet.getInt(1), resultSet.getString(2), resultSet.getDouble(3));
             }
             resultSet.close();
             preparedStatement.close();
