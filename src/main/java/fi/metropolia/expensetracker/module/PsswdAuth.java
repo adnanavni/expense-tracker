@@ -63,6 +63,18 @@ public final class PsswdAuth {
         return 1 << cost;
     }
 
+    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations) {
+        KeySpec spec = new PBEKeySpec(password, salt, iterations, SIZE);
+        try {
+            SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
+            return f.generateSecret(spec).getEncoded();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("Missing algorithm: " + ALGORITHM, ex);
+        } catch (InvalidKeySpecException ex) {
+            throw new IllegalStateException("Invalid SecretKeyFactory", ex);
+        }
+    }
+
     /**
      * Hash a password for storage.
      *
@@ -96,18 +108,6 @@ public final class PsswdAuth {
         for (int idx = 0; idx < check.length; ++idx)
             zero |= hash[salt.length + idx] ^ check[idx];
         return zero == 0;
-    }
-
-    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations) {
-        KeySpec spec = new PBEKeySpec(password, salt, iterations, SIZE);
-        try {
-            SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
-            return f.generateSecret(spec).getEncoded();
-        } catch (NoSuchAlgorithmException ex) {
-            throw new IllegalStateException("Missing algorithm: " + ALGORITHM, ex);
-        } catch (InvalidKeySpecException ex) {
-            throw new IllegalStateException("Invalid SecretKeyFactory", ex);
-        }
     }
 
 }

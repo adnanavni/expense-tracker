@@ -5,11 +5,13 @@ import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Objects;
@@ -149,23 +151,23 @@ public class BudgetController {
         ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
 
 
-            Dao loginSignupDao = new Dao();
-            loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
-            variables.getActiveBudget().resetExpenses();
-            Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
-            for (Expense expense : expenses) {
-                variables.getActiveBudget().addExpenseToBudget(expense);
+        Dao loginSignupDao = new Dao();
+        loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
+        variables.getActiveBudget().resetExpenses();
+        Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
+        for (Expense expense : expenses) {
+            variables.getActiveBudget().addExpenseToBudget(expense);
+        }
+        String budgetText = String.format("%.2f", variables.getBudget());
+        this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
+        Double budgetExpenses = 0.00;
+        if (variables.getActiveBudget().getExpenses().size() > 0) {
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                budgetExpenses += expense.getPrice();
             }
-            String budgetText = String.format("%.2f", variables.getBudget());
-            this.budget.setText("Total: " + budgetText + " " + currency.getSymbol());
-            Double budgetExpenses = 0.00;
-            if (variables.getActiveBudget().getExpenses().size() > 0){
-                for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                    budgetExpenses += expense.getPrice();
-                }
-            }
+        }
 
-            specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount()-budgetExpenses) + " " + currency.getSymbol());
+        specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount() - budgetExpenses) + " " + currency.getSymbol());
 
 
     }
@@ -225,7 +227,7 @@ public class BudgetController {
                 budgetExpenses += expense.getPrice();
             }
         }
-        String activeBudgetText = String.format("%.2f", variables.getActiveBudget().getAmount()-budgetExpenses);
+        String activeBudgetText = String.format("%.2f", variables.getActiveBudget().getAmount() - budgetExpenses);
         specificBudget.setText(variables.getActiveBudget().getName() + " " + activeBudgetText + " " + currency.getSymbol());
     }
 }

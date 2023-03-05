@@ -9,9 +9,7 @@ import static java.util.Map.entry;
 
 public class Variables {
     private static Variables INSTANCE = null;
-    private Integer loggedUserId;
     private final Map<String, Double> currencies = Map.ofEntries(entry("EUR", 1.00), entry("USD", 1.08), entry("SEK", 11.1091), entry("JPY", 140.64), entry("ISK", 152.58), entry("CAD", 1.43), entry("RUB", 78.21), entry("CHF", 0.99), entry("NOK", 10.84), entry("DKK", 7.45), entry("GBP", 0.89));
-
     private final Map<String, Double> categories = new HashMap<>() {{
         put("Groceries", 0.00);
         put("Restaurants", 0.00);
@@ -22,7 +20,7 @@ public class Variables {
         put("Transport", 0.00);
         put("Other", 0.00);
     }};
-
+    private Integer loggedUserId;
     private Map<String, Double> constExpenses = new HashMap<>() {{
         put("Rent", 0.00);
         put("Water bill", 0.00);
@@ -37,7 +35,6 @@ public class Variables {
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
     private Budget activeBudget;
-
     private ArrayList<Budget> budgets = new ArrayList<>();
     private Budget budgetObject;
     private Double totalBudget = 0.00;
@@ -52,44 +49,6 @@ public class Variables {
         return INSTANCE;
     }
 
-    public void calculate(String calculation, Double amount) {
-        switch (calculation) {
-            case ("addToBudget"):
-                totalBudget += amount;
-                break;
-            case ("addWithIncome"):
-                income += amount;
-                totalBudget += amount;
-                break;
-            case ("addToIncome"):
-                income += amount;
-                break;
-            case ("subtractFromBudget"):
-                totalBudget -= amount;
-                activeBudget.decreaseAmount(amount);
-                break;
-            case ("subtractWithExpenses"):
-                expense += amount;
-                activeBudget.decreaseAmount(amount);
-                break;
-            case ("subtractExpense"):
-                expense -= amount;
-                activeBudget.increaseAmount(amount);
-                break;
-        }
-    }
-
-    public void setCategories(String category, Double amount, Boolean addMoney) {
-        double newAmount = categories.get(category);
-        if (addMoney) {
-            newAmount += amount;
-        } else {
-            newAmount -= amount;
-        }
-        newAmount += amount;
-        categories.put(category, newAmount);
-    }
-
     public void setLoggedCurrency(String course) {
         currentCourseMultiplier = currencies.get(course);
         currentCurrency = course;
@@ -102,14 +61,12 @@ public class Variables {
             for (Budget budget : budgets) {
                 budget.setAmount(budget.getAmount() / currentCourseMultiplier);
             }
-
         }
         if (constantExpenses.size() > 0) {
             for (ConstantExpense constantExpense : constantExpenses) {
                 constantExpense.setAmount(constantExpense.getAmount() / currentCourseMultiplier);
             }
         }
-
 
         ArrayList<Salary> incomes = incomeDao.getAllSalaries(loggedUserId);
 
@@ -118,8 +75,6 @@ public class Variables {
                 salary.setSalary(salary.getSalary() / currentCourseMultiplier);
             }
         }
-
-
         Double multiplierBefore = currentCourseMultiplier;
 
         currentCourseMultiplier = currencies.get(course);
@@ -196,33 +151,12 @@ public class Variables {
         constExpenses.put(key, amount);
     }
 
-    public Double getConstExpense(String key) {
-        return constExpenses.get(key);
-    }
-
     public ArrayList<Budget> getBudgets() {
         return budgets;
     }
 
     public void resetBudgets() {
         budgets = new ArrayList<>();
-    }
-
-    public Double getSpecificBudget(String name) {
-        HashMap<String, Double> budgetsMap = new HashMap<>();
-
-        for (Budget budget : budgets) {
-            budgetsMap.put(budget.getName(), budget.getAmount());
-        }
-        return budgetsMap.get(name);
-    }
-
-    public Double getTotalExpenses() {
-        Double totalExpenses = 0.00;
-        for (int i = 0; i < activeBudget.getExpenses().size(); i++) {
-            totalExpenses += activeBudget.getExpenses().get(i).getPrice();
-        }
-        return totalExpenses;
     }
 
     public String getCurrentCurrency() {
@@ -249,6 +183,10 @@ public class Variables {
         return new ArrayList<>(categories.keySet());
     }
 
+    public Budget getActiveBudget() {
+        return activeBudget;
+    }
+
     public void setActiveBudget(String name) {
         for (Budget budget : budgets) {
             if (budget.getName().equals(name)) {
@@ -257,29 +195,12 @@ public class Variables {
         }
     }
 
-    public Budget getActiveBudget() {
-        return activeBudget;
-    }
-
-    public void convertConstExpense() {
-        for (Map.Entry<String, Double> entry : constExpenses.entrySet()) {
-            String expense = entry.getKey();
-            Double cost = entry.getValue() / currentCourseMultiplier;
-        }
-
-        for (Map.Entry<String, Double> entry : constExpenses.entrySet()) {
-            String expense = entry.getKey();
-            Double cost = entry.getValue() * currentCourseMultiplier;
-            setConstExpenses(expense, cost);
-        }
+    public Integer getLoggedUserId() {
+        return loggedUserId;
     }
 
     public void setLoggedUserId(Integer id) {
         loggedUserId = id;
-    }
-
-    public Integer getLoggedUserId() {
-        return loggedUserId;
     }
 
     public void addConstantExpense(ConstantExpense constantExpense) {
@@ -314,5 +235,33 @@ public class Variables {
         expense = 0.00;
         income = 0.00;
         constantExpenses = new ArrayList<>();
+    }
+
+    public void resetAndSetDefaults() {
+        currentCourseMultiplier = 1.00;
+        currentCurrency = "EUR";
+        activeBudget = null;
+        budgets.clear();
+        budgetObject = null;
+        totalBudget = 0.00;
+        expense = 0.00;
+        income = 0.00;
+        constantExpenses = new ArrayList<>();
+        ThemeManager.getInstance().setCurrentColor("#85bb65");
+
+        Dao loginSignupDao = new Dao();
+
+        ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+
+        if (constantExpenses.length == 0) {
+            ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
+            for (String defaultConstExpenseName : defaultConstExpenseNames) {
+                loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+            }
+            ConstantExpense[] defaultConstExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+            for (ConstantExpense constantExpense : defaultConstExpenses) {
+                Variables.getInstance().addConstantExpense(constantExpense);
+            }
+        }
     }
 }

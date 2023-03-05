@@ -15,6 +15,22 @@ public class Dao {
     private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ?";
     private final Connection conn = MariaDBConnector.getInstance();
 
+    public static void printSQLException(SQLException ex) {
+        for (Throwable e : ex) {
+            if (e instanceof SQLException) {
+                e.printStackTrace(System.err);
+                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
+                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
+                System.err.println("Message: " + e.getMessage());
+                Throwable t = ex.getCause();
+                while (t != null) {
+                    System.out.println("Cause: " + t);
+                    t = t.getCause();
+                }
+            }
+        }
+    }
+
     public void insertRecord(String username, String password) {
         try {
 
@@ -83,9 +99,9 @@ public class Dao {
         return null;
     }
 
-    public String loggedThemeColor(Integer id){
+    public String loggedThemeColor(Integer id) {
 
-        try  {
+        try {
             String sql = "SELECT ThemeColor FROM Registration WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
@@ -97,7 +113,7 @@ public class Dao {
             resultSet.close();
             preparedStatement.close();
 
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             printSQLException(e);
         }
 
@@ -120,7 +136,6 @@ public class Dao {
             return false;
         }
     }
-
 
     public String loggedCurrency(Integer id) {
         try {
@@ -168,8 +183,8 @@ public class Dao {
         return null;
     }
 
-    public ConstantExpense getConstantExpense(Integer id){
-        try  {
+    public ConstantExpense getConstantExpense(Integer id) {
+        try {
 
             String sql = "SELECT * FROM Constantexpenses WHERE ConstantexpenseId = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -185,15 +200,15 @@ public class Dao {
             preparedStatement.close();
 
 
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             printSQLException(e);
         }
 
         return null;
     }
 
-    public ConstantExpense getConstantExpenseByName(String name, Integer id){
-        try  {
+    public ConstantExpense getConstantExpenseByName(String name, Integer id) {
+        try {
 
             String sql = "SELECT * FROM Constantexpenses WHERE Title = ? AND registration_id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -211,15 +226,15 @@ public class Dao {
             preparedStatement.close();
 
 
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             printSQLException(e);
         }
 
         return null;
     }
 
-    public Expense getExpense(Integer id){
-        try  {
+    public Expense getExpense(Integer id) {
+        try {
 
             String sql = "SELECT * FROM Expenses WHERE ExpenseId = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -264,7 +279,7 @@ public class Dao {
         }
     }
 
-    public void saveConstantExpense(Integer id, String name, Double money)  {
+    public void saveConstantExpense(Integer id, String name, Double money) {
 
         try {
 
@@ -280,7 +295,7 @@ public class Dao {
         }
     }
 
-    public void saveBudget(Integer id, String name, Double money)  {
+    public void saveBudget(Integer id, String name, Double money) {
 
         try {
             String sql = "INSERT INTO Budgets VALUES (NULL, ?, ?, ?)";
@@ -353,7 +368,7 @@ public class Dao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                ConstantExpense constantExpense = new ConstantExpense(rs.getInt(1), rs.getString(2) ,rs.getDouble(3));
+                ConstantExpense constantExpense = new ConstantExpense(rs.getInt(1), rs.getString(2), rs.getDouble(3));
                 constantExpenses.add(constantExpense);
             }
 
@@ -369,7 +384,7 @@ public class Dao {
 
     }
 
-    public Expense[] getExpenses(Integer id){
+    public Expense[] getExpenses(Integer id) {
         String sql = "SELECT * FROM Expenses WHERE BudgetId = ?";
         Expense[] result;
         ArrayList<Expense> expenses = new ArrayList<>();
@@ -396,7 +411,6 @@ public class Dao {
         return result;
     }
 
-
     public boolean changeUserCurrency(Integer id, String currency) {
 
         try {
@@ -412,7 +426,7 @@ public class Dao {
         return false;
     }
 
-    public boolean changeUserThemeColor(Integer id, String color){
+    public boolean changeUserThemeColor(Integer id, String color) {
         try {
             String sql = "UPDATE Registration SET ThemeColor = ? WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -426,7 +440,7 @@ public class Dao {
         return false;
     }
 
-    public boolean changeConstantExpenseValue(Integer id, Double money){
+    public boolean changeConstantExpenseValue(Integer id, Double money) {
         try {
             String sql = "UPDATE Constantexpenses SET Amount = ? WHERE ConstantexpenseId = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -504,20 +518,41 @@ public class Dao {
         }
     }
 
+    public void deleteUserData(Integer userId) {
+        String deleteIncomes = "DELETE FROM Incomes WHERE UserID = ?";
+        String deleteConstantExpenses = "DELETE FROM Constantexpenses WHERE registration_id = ?";
+        String deleteBudgets = "DELETE FROM Budgets WHERE registration_id = ?";
+        String deleteExpenses = "DELETE FROM Expenses WHERE BudgetId IN (SELECT BudgetId FROM Budgets WHERE registration_id = ?)";
+        String updateUserInfoSql = "UPDATE Registration SET ThemeColor = '#85bb65', currency = 'EUR' WHERE id = ?";
 
-    public static void printSQLException(SQLException ex) {
-        for (Throwable e : ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
+        try {
+            try (PreparedStatement stmt = conn.prepareStatement(deleteIncomes)) {
+                stmt.setInt(1, userId);
+                stmt.executeUpdate();
             }
+
+            try (PreparedStatement stmt = conn.prepareStatement(deleteConstantExpenses)) {
+                stmt.setInt(1, userId);
+                stmt.executeUpdate();
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(deleteBudgets)) {
+                stmt.setInt(1, userId);
+                stmt.executeUpdate();
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(deleteExpenses)) {
+                stmt.setInt(1, userId);
+                stmt.executeUpdate();
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(updateUserInfoSql)) {
+                stmt.setInt(1, userId);
+                stmt.executeUpdate();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }

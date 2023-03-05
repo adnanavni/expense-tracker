@@ -1,9 +1,5 @@
 package fi.metropolia.expensetracker.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
@@ -17,18 +13,36 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Window;
 
-public class LoginController {
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
+public class LoginController {
     @FXML
     private AnchorPane content;
     @FXML
     private TextField userName;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private Button submitButton;
+
+    public static void infoBox(String infoMessage, String headerText, String title) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setContentText(infoMessage);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.showAndWait();
+    }
+
+    private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
+    }
 
     @FXML
     public void login(ActionEvent event) throws SQLException, IOException {
@@ -76,7 +90,7 @@ public class LoginController {
                 Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
             }
             ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
-            if(constantExpenses.length == 0){
+            if (constantExpenses.length == 0) {
                 ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
                 for (String defaultConstExpenseName : defaultConstExpenseNames) {
                     loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
@@ -85,8 +99,7 @@ public class LoginController {
                 for (ConstantExpense constantExpense : defaultConstExpenses) {
                     Variables.getInstance().addConstantExpense(constantExpense);
                 }
-            }
-            else {
+            } else {
                 for (ConstantExpense constantExpense : constantExpenses) {
                     Variables.getInstance().addConstantExpense(constantExpense);
                 }
@@ -106,22 +119,5 @@ public class LoginController {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("registration_form-view.fxml"));
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
-    }
-
-    public static void infoBox(String infoMessage, String headerText, String title) {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setContentText(infoMessage);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.showAndWait();
-    }
-
-    private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
     }
 }

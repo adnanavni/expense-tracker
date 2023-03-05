@@ -1,18 +1,13 @@
 package fi.metropolia.expensetracker.module;
 
-import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Date;
-
 
 public class Expense {
     private Double price;
     private String type;
-
     private Integer id;
     private Date date;
-
-
 
     public Expense(Integer id, Double price, String type, Date date) {
         this.id = id;
@@ -25,7 +20,8 @@ public class Expense {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
         return type + ", added on: " + date + ", money spent: " + String.format("%.2f", price) + " " + currency.getSymbol();
     }
-    public Date getDate(){
+
+    public Date getDate() {
         return date;
     }
 
@@ -41,9 +37,7 @@ public class Expense {
         this.price = price;
     }
 
-    public Integer getId(){
+    public Integer getId() {
         return id;
     }
-
-
 }

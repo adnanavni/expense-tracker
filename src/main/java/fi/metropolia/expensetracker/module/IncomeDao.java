@@ -1,25 +1,19 @@
-
 package fi.metropolia.expensetracker.module;
 
 import fi.metropolia.expensetracker.datasource.MariaDBConnector;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-
 import static fi.metropolia.expensetracker.module.Dao.printSQLException;
 
-//import static fi.metropolia.expensetracker.module.Login_Signup_Dao.printSQLException;
-
 public class IncomeDao {
-
     private final Connection conn = MariaDBConnector.getInstance();
 
-    public Salary getSalary(Integer id, String type){
-        try  {
+    public Salary getSalary(Integer id, String type) {
+        try {
             String sql = "SELECT * FROM Incomes WHERE IncomeID = ? AND Type = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
@@ -35,57 +29,57 @@ public class IncomeDao {
             resultSet.close();
             preparedStatement.close();
 
-
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             printSQLException(e);
         }
         return null;
     }
 
-    public Double getSalaryWithTaxrate(Integer incomeId)  {
+    public Double getSalaryWithTaxrate(Integer incomeId) {
         try {
             String sql = "SELECT Amount_Minus_Taxes FROM Incomes WHERE IncomeID=?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, incomeId);
 
             ResultSet rs = preparedStatement.executeQuery();
-            if(rs.next())
+            if (rs.next())
                 return rs.getDouble(1);
 
             rs.close();
             preparedStatement.close();
 
         } catch (SQLException e) {
-            System.out.println( e.getMessage());
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
-    public Double getTaxrate(Integer incomeId)  {
+
+    public Double getTaxrate(Integer incomeId) {
         try {
             String sql = "SELECT Taxrate FROM Incomes WHERE IncomeID=?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, incomeId);
 
             ResultSet rs = preparedStatement.executeQuery();
-            if(rs.next())
+            if (rs.next())
                 return rs.getDouble(1);
 
             rs.close();
             preparedStatement.close();
 
         } catch (SQLException e) {
-            System.out.println( e.getMessage());
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public boolean deleteSalary(Integer id, String type){
+    public boolean deleteSalary(Integer id, String type) {
         Salary salary = getSalary(id, type);
 
-        if(salary != null){
+        if (salary != null) {
             try {
                 String sql = "DELETE FROM Incomes WHERE IncomeID =? AND Type =?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -99,13 +93,10 @@ public class IncomeDao {
                 System.out.println(e.getMessage());
                 return false;
             }
-
-        }
-        else {
+        } else {
             System.out.println("False delete");
             return false;
         }
-
     }
 
     public Integer getIncomeId(Integer userID, String type, Double salary, Date date, Double taxrate, String currency) throws SQLException {
@@ -128,15 +119,14 @@ public class IncomeDao {
             resultSet.close();
             preparedStatement.close();
 
-        }   catch (SQLException e) {
+        } catch (SQLException e) {
             printSQLException(e);
             System.out.println(e.getMessage());
         }
         return id;
     }
 
-
-    public void saveSalary(Integer userID, String type, Double salary, Double salaryMinusTaxes, Date date, Double taxrate, String currency)  {
+    public void saveSalary(Integer userID, String type, Double salary, Double salaryMinusTaxes, Date date, Double taxrate, String currency) {
         try {
 
             String sql = "INSERT INTO Incomes VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
@@ -173,8 +163,8 @@ public class IncomeDao {
 
             while (resultSet.next()) {
                 Salary salary =
-                new Salary(resultSet.getInt(1),resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
-                        resultSet.getString(2), resultSet.getDouble(7));
+                        new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                                resultSet.getString(2), resultSet.getDouble(7));
                 salaries.add(salary);
             }
             resultSet.close();
@@ -199,7 +189,7 @@ public class IncomeDao {
 
             while (resultSet.next()) {
                 Salary salary =
-                        new Salary(resultSet.getInt(1),resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                        new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
                                 resultSet.getString(2), resultSet.getDouble(7));
                 salaries.add(salary);
             }
@@ -212,7 +202,7 @@ public class IncomeDao {
         return salaries;
     }
 
-    public boolean changeIncomeValues(Integer id, Double amount, Double amount_tax, String currency){
+    public boolean changeIncomeValues(Integer id, Double amount, Double amount_tax, String currency) {
         try {
             String sql = "UPDATE Incomes SET Amount = ?, Amount_Minus_Taxes = ?, Currency = ? WHERE IncomeID = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
