@@ -104,5 +104,6 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         variables.resetAll();
+        salarySingle.resetAll();
     }
 }

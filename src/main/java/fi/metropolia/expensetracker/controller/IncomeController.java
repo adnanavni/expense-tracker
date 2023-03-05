@@ -40,6 +40,7 @@ public class IncomeController {
     private DatePicker selectedDate;
     @FXML
     private CheckBox mandatoryTaxes;
+    private Salary salary;
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -68,7 +69,7 @@ public class IncomeController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
@@ -83,7 +84,7 @@ public class IncomeController {
 
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
-                    incomeID = selected.getId();
+                    System.out.println("Selected ID " + selected.getId());
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Salary deletion");
@@ -93,9 +94,11 @@ public class IncomeController {
                     Optional<ButtonType> option = alert.showAndWait();
 
                     if (option.get() == ButtonType.OK) {
-                        incomeDao.deleteSalary(incomeID, "MONTH");
+                        incomeDao.deleteSalary(selected.getId(), "MONTH");
+                        salarySingle.deleteMonthSalary(selected);
                         salaryHistory.getItems().clear();
                         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+
                        // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
                     }
                 } else {
@@ -133,11 +136,13 @@ public class IncomeController {
         }
         Date date = java.sql.Date.valueOf(salaryDate);
 
+        this.salary = new Salary(variables.getLoggedUserId(), Double.parseDouble(addMonthSalary.getText()), salarySingle.getMonthSalaryMinusTaxes(), salaryDate, currency.toString(), "MONTH", taxRate );
         incomeDao.saveSalary(variables.getLoggedUserId(), "MONTH", salarySingle.getMonthSalary(), salarySingle.getMonthSalaryMinusTaxes(), date, taxRate, currency.toString());
-
+        salarySingle.createNewMonthSalary(salary);
 
         salaryHistory.getItems().clear();
-        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+        //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
 
         addMonthSalary.setText(null);
         addTaxRate.setText(null);

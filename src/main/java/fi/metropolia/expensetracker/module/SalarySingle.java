@@ -199,14 +199,28 @@ public class SalarySingle {
         Date parsedEnd = sdf.parse(end);
         double salariesTogether = 0;
 
-        for (Salary eachDate : incomeDao.getSalariesWithType(Variables.getInstance().getLoggedUserId(), type)) {
-            if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
-                salaries.add(eachDate.getSalaryMinusTaxes(type));
+        if (type == "MONTH") {
+            for (Salary eachDate : getMonthSalaries()) {
+                if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
+                    salaries.add(eachDate.getSalaryMinusTaxes());
+                }
             }
         }
+       if (type == "DAY") {
+           for (Salary eachDate : getDaySalaries()) {
+               if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
+                   salaries.add(eachDate.getSalaryMinusTaxes());
+               }
+           }
+       }
         for (double eachSalary : salaries) {
             salariesTogether += eachSalary;
         }
         return salariesTogether;
+    }
+
+    public void resetAll() {
+        monthSalaries.clear();
+        daySalaries.clear();
     }
 }

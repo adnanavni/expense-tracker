@@ -17,13 +17,17 @@ public class Salary {
     private String usedCurrency;
     private IncomeDao incomeDao = new IncomeDao();
 
-    public Salary(int id, double salary, LocalDate date, String usedCurrency, String type, double taxRate) throws SQLException {
+
+    private double salaryMinusTaxes;
+
+    public Salary(int id, double salary,  double salaryMinusTaxes, LocalDate date, String usedCurrency, String type, double taxRate) throws SQLException {
         this.salary = salary;
         this.date = date;
         this.usedCurrency = usedCurrency;
         this.taxRate = taxRate;
         this.type = type;
         this.id = id;
+        this.salaryMinusTaxes = salaryMinusTaxes;
     }
     public Salary() {}
 
@@ -31,6 +35,13 @@ public class Salary {
         return this.salary;
     }
 
+    public double getSalaryMinusTaxes() {
+        return salaryMinusTaxes;
+    }
+
+    public void setSalaryMinusTaxes(double salaryMinusTaxes) {
+        this.salaryMinusTaxes = salaryMinusTaxes;
+    }
     public void setSalary(Double salary) {
         this.salary = salary;
     }
@@ -67,8 +78,8 @@ public class Salary {
     public String toString() {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
         return "Salary amount of the date " + date +
-                " is " + String.format("%.2f", salary) + " " + currency.getSymbol() + " and minus " + String.format("%.2f", incomeDao.getTaxrate(id)) +
-                "% tax rate it is: " + String.format("%.2f", incomeDao.getSalaryWithTaxrate(id)) + " " + currency.getSymbol();
+                " is " + String.format("%.2f", salary) + " " + currency.getSymbol() + " and minus " + String.format("%.2f", taxRate) +
+                "% tax rate it is: " + String.format("%.2f", salaryMinusTaxes) + " " + currency.getSymbol();
     }
 
 }
