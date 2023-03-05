@@ -20,23 +20,28 @@ import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 
 public class RegisterController {
-
     @FXML
     private AnchorPane content;
     @FXML
     private TextField userName;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private Button submitButton;
 
     private String hashedPassword;
     private String passwd;
-
     private PsswdAuth auth;
     private Dao loginSignupDao;
+
+    private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
+    }
 
     @FXML
     public void register(ActionEvent event) throws SQLException, IOException, InvalidKeySpecException, NoSuchAlgorithmException {
@@ -84,14 +89,5 @@ public class RegisterController {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("login_form-view.fxml"));
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
-    }
-
-    private static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
     }
 }

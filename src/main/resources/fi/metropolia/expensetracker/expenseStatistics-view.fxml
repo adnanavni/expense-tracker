@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
-            styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0"
+            minWidth="700.0" styleClass="background" stylesheets="@css/main.css"
+            xmlns="http://javafx.com/javafx"
             fx:controller="fi.metropolia.expensetracker.controller.ExpenseStatisticsController">
     <children>
         <BarChart fx:id="barStats" layoutX="25.0" layoutY="383.0" styleClass="button" AnchorPane.bottomAnchor="0.0"

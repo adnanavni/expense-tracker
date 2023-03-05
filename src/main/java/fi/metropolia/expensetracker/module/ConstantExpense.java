@@ -7,34 +7,29 @@ public class ConstantExpense {
     private Double amount;
     private Integer id;
 
-    public ConstantExpense(Integer id, String type, Double amount){
+    public ConstantExpense(Integer id, String type, Double amount) {
         this.type = type;
         this.amount = amount;
         this.id = id;
     }
 
+    public String getType() {
+        return type;
+    }
 
+    public Double getAmount() {
+        return amount;
+    }
 
     public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType(){
-        return type;
-    }
-    public Double getAmount(){
-        return amount;
-    }
-    public Integer getId(){
+    public Integer getId() {
         return id;
     }
 
-
-    public String toString(){
+    public String toString() {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
         return type + " " + String.format("%.2f", amount) + " " + currency.getSymbol();
     }

@@ -3,13 +3,11 @@ package fi.metropolia.expensetracker.module;
 import java.util.Currency;
 import java.util.Date;
 
-
 public class Expense {
     private Double price;
     private String type;
     private Integer id;
     private Date date;
-
 
     public Expense(Integer id, Double price, String type, Date date) {
         this.id = id;

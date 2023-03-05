@@ -9,7 +9,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.chart.*;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -19,13 +21,16 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Currency;
+import java.util.HashMap;
 
 public class ExpenseStatisticsController {
     @FXML
     private AnchorPane content;
     @FXML
-   private BarChart<String, Double> barStats;
+    private BarChart<String, Double> barStats;
     @FXML
     private PieChart pieStats;
     @FXML
@@ -38,11 +43,13 @@ public class ExpenseStatisticsController {
     private Variables variables;
     private ObservableList<PieChart.Data> currentPieValues;
     private Currency currency;
+
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
 
     }
+
     public void setVariables(Variables variables) {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
@@ -57,8 +64,6 @@ public class ExpenseStatisticsController {
         ArrayList<String> chartNames = variables.getTopics();
 
         HashMap<String, Double> allValues = calculateValues("All time");
-
-
 
 
         barStats.setTitle("Expenses");
@@ -114,13 +119,13 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
                     matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        for (PieChart.Data data2 :currentPieValues) {
-                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                        for (PieChart.Data data2 : currentPieValues) {
+                            if (data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())) {
                                 matches++;
                             }
                         }
                     }
-                    if (matches<9){
+                    if (matches < 9) {
                         pieStats.getData().clear();
                         pieStats.getData().addAll(newPieChartData);
                         currentPieValues = newPieChartData;
@@ -155,13 +160,13 @@ public class ExpenseStatisticsController {
 
                     matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        for (PieChart.Data data2 :currentPieValues) {
-                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                        for (PieChart.Data data2 : currentPieValues) {
+                            if (data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())) {
                                 matches++;
                             }
                         }
                     }
-                    if (matches<9){
+                    if (matches < 9) {
                         pieStats.getData().clear();
                         pieStats.getData().addAll(newPieChartData);
                         currentPieValues = newPieChartData;
@@ -194,13 +199,13 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
                     matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        for (PieChart.Data data2 :currentPieValues) {
-                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                        for (PieChart.Data data2 : currentPieValues) {
+                            if (data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())) {
                                 matches++;
                             }
                         }
                     }
-                    if (matches<9){
+                    if (matches < 9) {
                         pieStats.getData().clear();
                         pieStats.getData().addAll(newPieChartData);
                         currentPieValues = newPieChartData;
@@ -233,13 +238,13 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
                     matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        for (PieChart.Data data2 :currentPieValues) {
-                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                        for (PieChart.Data data2 : currentPieValues) {
+                            if (data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())) {
                                 matches++;
                             }
                         }
                     }
-                    if (matches<9){
+                    if (matches < 9) {
                         pieStats.getData().clear();
                         pieStats.getData().addAll(newPieChartData);
                         currentPieValues = newPieChartData;
@@ -272,13 +277,13 @@ public class ExpenseStatisticsController {
                                     new PieChart.Data("Constant expenses", values.get("Constant expenses")));
                     matches = 0;
                     for (PieChart.Data data : newPieChartData) {
-                        for (PieChart.Data data2 :currentPieValues) {
-                            if(data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())){
+                        for (PieChart.Data data2 : currentPieValues) {
+                            if (data.getPieValue() == data2.getPieValue() && data.getName().equals(data2.getName())) {
                                 matches++;
                             }
                         }
                     }
-                    if (matches<9){
+                    if (matches < 9) {
                         pieStats.getData().clear();
                         pieStats.getData().addAll(newPieChartData);
                         currentPieValues = newPieChartData;
@@ -297,12 +302,10 @@ public class ExpenseStatisticsController {
                     barStats.getData().add(series);
                     break;
             }
-
-
         });
-
     }
-    private HashMap<String, Double> calculateValues(String timeFrame){
+
+    private HashMap<String, Double> calculateValues(String timeFrame) {
         HashMap<String, Double> values = new HashMap<>();
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -331,8 +334,8 @@ public class ExpenseStatisticsController {
 
         Double currentValue;
 
-        if(timeFrame.equals("All time") && variables.getActiveBudget().getExpenses().size() > 0){
-            for (Expense expense: variables.getActiveBudget().getExpenses()) {
+        if (timeFrame.equals("All time") && variables.getActiveBudget().getExpenses().size() > 0) {
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 switch (expense.getType()) {
                     case ("Groceries"):
                         currentValue = values.get("Groceries");
@@ -370,12 +373,12 @@ public class ExpenseStatisticsController {
                         currentValue = values.get("Constant expenses");
                         values.put("Constant expenses", currentValue + expense.getPrice());
                 }
-                
+
             }
         } else if (timeFrame.equals("This year") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense: variables.getActiveBudget().getExpenses()) {
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 cal2.setTime(expense.getDate());
-                if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
+                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
                     switch (expense.getType()) {
                         case ("Groceries"):
                             currentValue = values.get("Groceries");
@@ -416,10 +419,10 @@ public class ExpenseStatisticsController {
                 }
             }
         } else if (timeFrame.equals("This month") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense: variables.getActiveBudget().getExpenses()) {
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 cal2.setTime(expense.getDate());
-                if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
-                    if(cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
+                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
+                    if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
                         switch (expense.getType()) {
                             case ("Groceries"):
                                 currentValue = values.get("Groceries");
@@ -461,11 +464,11 @@ public class ExpenseStatisticsController {
                 }
             }
         } else if (timeFrame.equals("This week") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense: variables.getActiveBudget().getExpenses()) {
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 cal2.setTime(expense.getDate());
-                if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
-                    if(cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
-                        if(cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
+                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
+                    if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
+                        if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)) {
                             switch (expense.getType()) {
                                 case ("Groceries"):
                                     currentValue = values.get("Groceries");
@@ -507,12 +510,12 @@ public class ExpenseStatisticsController {
                     }
                 }
             }
-        } else if (timeFrame.equals("Today") && variables.getActiveBudget().getExpenses().size() > 0){
-            for (Expense expense: variables.getActiveBudget().getExpenses()) {
+        } else if (timeFrame.equals("Today") && variables.getActiveBudget().getExpenses().size() > 0) {
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 cal2.setTime(expense.getDate());
-                if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
-                    if(cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
-                        if(cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)){
+                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
+                    if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
+                        if (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)) {
                             switch (expense.getType()) {
                                 case ("Groceries"):
                                     currentValue = values.get("Groceries");
@@ -556,16 +559,16 @@ public class ExpenseStatisticsController {
             }
         }
         return values;
-        
+
     }
-    public void onChangeChartClick(){
-        if(barChartShown){
+
+    public void onChangeChartClick() {
+        if (barChartShown) {
             chartTypeBtn.setText("View as barchart");
             pieStats.setVisible(true);
             barStats.setVisible(false);
             barChartShown = false;
-        }
-        else {
+        } else {
             chartTypeBtn.setText("View as piechart");
             pieStats.setVisible(false);
             barStats.setVisible(true);
