@@ -13,6 +13,10 @@ public class ConstantExpense {
         this.id = id;
     }
 
+    public ConstantExpense() {
+
+    }
+
     public String getType() {
         return type;
     }
