@@ -1,5 +1,6 @@
 package fi.metropolia.expensetracker.module;
 
+import fi.metropolia.expensetracker.module.Dao.Dao;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
