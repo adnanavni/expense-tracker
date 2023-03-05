@@ -68,7 +68,8 @@ public class IncomeController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+        //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
 
@@ -94,7 +95,8 @@ public class IncomeController {
                     if (option.get() == ButtonType.OK) {
                         incomeDao.deleteSalary(incomeID, "MONTH");
                         salaryHistory.getItems().clear();
-                        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+                        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+                       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
                     }
                 } else {
                     // Nothing selected.

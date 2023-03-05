@@ -18,6 +18,9 @@ public class SalarySingle {
     private double monthSalaryMinusTaxes;
     private double daySalaryMinusTaxes;
     private double salaryMinusTaxes;
+
+    private ArrayList<Salary> daySalaries = new ArrayList<>();
+    private ArrayList<Salary> monthSalaries = new ArrayList<>();
     private Map<String, Integer> months = new HashMap<>() {{
         put("January", 0);
         put("February", 1);
@@ -116,6 +119,28 @@ public class SalarySingle {
 
     public ArrayList<String> getMonths() {
         return new ArrayList<>(months.keySet());
+    }
+    public ArrayList<Salary> getDaySalaries() {
+        return daySalaries;
+    }
+
+    public ArrayList<Salary> getMonthSalaries() {
+        return monthSalaries;
+    }
+    public void createNewMonthSalary(Salary salary) {
+        monthSalaries.add(salary);
+    }
+
+    public void createNewDaySalary(Salary salary) {
+        daySalaries.add(salary);
+    }
+
+    public void deleteMonthSalary(Salary salary) {
+        monthSalaries.remove(salary);
+    }
+
+    public void deleteDaySalary(Salary salary) {
+        daySalaries.remove(salary);
     }
 
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
