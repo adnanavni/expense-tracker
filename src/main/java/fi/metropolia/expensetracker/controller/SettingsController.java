@@ -6,8 +6,7 @@ import fi.metropolia.expensetracker.module.ThemeManager;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
 
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class SettingsController {
 
@@ -28,6 +28,9 @@ public class SettingsController {
 
     @FXML
     private ComboBox selectCurrency;
+
+    @FXML
+    private Button deleteDataBtn;
 
 
     public void initialize() {
@@ -94,5 +97,26 @@ public class SettingsController {
 
         Dao loginSignupDao = new Dao();
         loginSignupDao.changeUserCurrency(variables.getLoggedUserId(), selectCurrency.getSelectionModel().getSelectedItem().toString());
+    }
+
+    @FXML
+    public void deleteData() {
+        Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDelete.setTitle("Confirm Delete");
+        confirmDelete.setHeaderText("This action resets all data from the user. Are you sure you want to delete all data?");
+
+        Optional<ButtonType> result = confirmDelete.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Dao dao = new Dao();
+            dao.deleteUserData(variables.getLoggedUserId());
+            variables.resetAndSetDefaults();
+            content.setStyle(ThemeManager.getInstance().getStyle());
+
+            Alert dataDeleted = new Alert(Alert.AlertType.INFORMATION);
+            dataDeleted.setTitle("Data Deleted");
+            dataDeleted.setHeaderText(null);
+            dataDeleted.setContentText("All data has been deleted successfully.");
+            dataDeleted.showAndWait();
+        }
     }
 }

@@ -225,6 +225,7 @@ public class BudgetController {
                 budgetExpenses += expense.getPrice();
             }
         }
-        specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount() - budgetExpenses) + " " + currency.getSymbol());
+        String activeBudgetText = String.format("%.2f", variables.getActiveBudget().getAmount()-budgetExpenses);
+        specificBudget.setText(variables.getActiveBudget().getName() + " " + activeBudgetText + " " + currency.getSymbol());
     }
 }
