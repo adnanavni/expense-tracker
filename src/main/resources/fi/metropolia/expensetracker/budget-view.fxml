@@ -30,7 +30,7 @@
                 </AnchorPane>
                 <AnchorPane fx:id="editBudget" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                     <children>
-                        <TextField fx:id="modifyAmount" promptText="New Amount:" styleClass="button" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="55.0" />
+                        <TextField fx:id="modifyAmount" promptText="New Amount:" styleClass="button" AnchorPane.leftAnchor="65.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="55.0" />
                         <TextField fx:id="modifyName" promptText="New name:" styleClass="button" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="5.0" />
                         <Button fx:id="modifyBtn" alignment="CENTER" mnemonicParsing="false" onAction="#modifyBtnClick" text="Modify" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="105.0" />
                         <Button mnemonicParsing="false" onAction="#deleteBtnClick" text="Delete" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="170.0" />
