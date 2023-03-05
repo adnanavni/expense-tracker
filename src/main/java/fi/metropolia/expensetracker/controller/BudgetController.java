@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
+import fi.metropolia.expensetracker.module.Dao.Dao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -176,26 +177,52 @@ public class BudgetController {
     protected void modifyBtnClick() {
         Dao loginSignupDao = new Dao();
 
-        if (modifyName.getText() == "") {
-            modifyName.setText(variables.getActiveBudget().getName());
+        if(modifyName.getText() != null && modifyAmount.getText() != null) {
+            loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
+
+            variables.modifyBudget(modifyName.getText(), Double.parseDouble(modifyAmount.getText()));
+            variables.setActiveBudget(modifyName.getText());
+
+            update();
+            selectTopic.getItems().setAll(variables.getBudgetNames());
+
+            editBudget.setVisible(false);
         }
-        if (modifyAmount.getText() == "") {
-            modifyAmount.setText(variables.getActiveBudget().getAmount().toString());
+        else if(modifyName.getText() != null && modifyAmount.getText() == null) {
+
+            loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), modifyName.getText());
+
+            variables.modifyBudget(modifyName.getText(), variables.getActiveBudget().getAmount());
+            variables.setActiveBudget(modifyName.getText());
+
+            update();
+            selectTopic.getItems().setAll(variables.getBudgetNames());
+
+            editBudget.setVisible(false);
         }
+        else if(modifyName.getText() == null && modifyAmount.getText() != null){
+            loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), variables.getActiveBudget().getName());
 
-        loginSignupDao.ModifyBudget(selectTopic.getValue().toString(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
+            variables.modifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()));
+            variables.setActiveBudget(variables.getActiveBudget().getName());
 
-        variables.modifyBudget(modifyName.getText(), Double.parseDouble(modifyAmount.getText()));
-        variables.setActiveBudget(modifyName.getText());
+            update();
+            selectTopic.getItems().setAll(variables.getBudgetNames());
 
-        update();
-        selectTopic.getItems().setAll(variables.getBudgetNames());
+            editBudget.setVisible(false);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Modify your budget");
+            alert.setHeaderText("Your budget is not being modified");
+            alert.setContentText("Fill in the name or the amount");
+            alert.showAndWait();
+        }
 
 
         selectTopic.setValue(null);
         modifyAmount.setText(null);
         modifyName.setText(null);
-        editBudget.setVisible(false);
     }
 
     @FXML

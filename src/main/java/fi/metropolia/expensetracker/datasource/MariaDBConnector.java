@@ -34,6 +34,8 @@ public class MariaDBConnector {
         if (conn == null) {
             try {
                 conn = DriverManager.getConnection("jdbc:mysql://10.114.32.29/" + database + "?user=" + name + "&password=" + password);
+                // if the database is hosted locally remove the next comment
+                // conn = DriverManager.getConnection("jdbc:mysql://localhost/" + database + "?user=" + name + "&password=" + password);
             } catch (SQLException var1) {
                 var1.printStackTrace();
                 System.exit(-1);

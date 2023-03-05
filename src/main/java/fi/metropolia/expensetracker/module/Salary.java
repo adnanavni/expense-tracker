@@ -1,5 +1,7 @@
 package fi.metropolia.expensetracker.module;
 
+import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Currency;
