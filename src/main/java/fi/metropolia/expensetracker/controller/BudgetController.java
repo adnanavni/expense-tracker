@@ -118,7 +118,7 @@ public class BudgetController {
             }
         }
         selectTopic.getItems().setAll(variables.getBudgetNames());
-        specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
+        specificBudget.setText(variables.getActiveBudget().getName() + " " + String.format("%.2f", variables.getActiveBudget().getAmount()) + " " + currency.getSymbol());
 
         selectTopic.setValue(null);
         addBudget.setText(null);
