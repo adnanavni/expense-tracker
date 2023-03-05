@@ -29,9 +29,9 @@ public class Salary {
         this.id = id;
 
         incomeID = incomeDao.getIncomeId(Variables.getInstance().getLoggedUserId(), type, salary, java.sql.Date.valueOf(date), taxRate, usedCurrency);
-
     }
 
+    public Salary () {}
     public LocalDate getLocalDate() {
         return this.date;
     }
@@ -55,6 +55,9 @@ public class Salary {
     }
     public double getTaxRate() {
         return taxRate;
+    }
+    public void setTaxRate(double taxRate) {
+        this.taxRate = taxRate;
     }
     public String getUsedCurrency() {
         return usedCurrency;

@@ -101,7 +101,6 @@ import java.util.Optional;
                         alert.setContentText("Click an existing income.");
                         alert.showAndWait();
                     }
-
                 }
             });
         }
@@ -142,7 +141,6 @@ import java.util.Optional;
             Date date = java.sql.Date.valueOf(salaryDate);
 
             incomeDao.saveSalary(variables.getLoggedUserId(),"DAY", salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), date, taxRate, currency.toString());
-
 
             salaryHistory.getItems().clear();
             salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
