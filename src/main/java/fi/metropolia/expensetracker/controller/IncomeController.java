@@ -155,7 +155,8 @@ public class IncomeController {
     protected void calculateMonths() throws ParseException {
         int selectedIndex = monthsCombo.getSelectionModel().getSelectedIndex();
         String month = (String) monthsCombo.getItems().get(selectedIndex);
-        salaryComing.setText("Salary amount of " + month + " is " + SalarySingle.getInstance().geTotalSalaryOfMonth(month, "MONTH"));
+        String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(month, "MONTH"));
+        salaryComing.setText("Salary amount of " + month + " is " + salaryAmount + " " + currency.getSymbol());
     }
 
 
