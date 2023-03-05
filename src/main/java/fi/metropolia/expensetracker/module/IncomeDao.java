@@ -150,7 +150,7 @@ public class IncomeDao {
         }
     }
 
-    public ArrayList<Salary> getSalaries(Integer userID, String type) {
+    public ArrayList<Salary> getSalariesWithType(Integer userID, String type) {
 
         String sql = "SELECT * FROM Incomes WHERE userID = ? AND Type = ?";
 

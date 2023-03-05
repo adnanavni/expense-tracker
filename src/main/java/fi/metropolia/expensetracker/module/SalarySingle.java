@@ -60,6 +60,8 @@ public class SalarySingle {
             setMonthSalary(salary);
             wantedSalaryminusTaxes = this.monthSalaryMinusTaxes;
         }
+
+
         return wantedSalaryminusTaxes;
     }
 
@@ -68,7 +70,7 @@ public class SalarySingle {
 
     }
 
-    public void CalculateDaySalary(double hours, double hourSalary) {
+    public void calculateDaySalary(double hours, double hourSalary) {
         this.daySalary = (hours * hourSalary);
     }
 
@@ -170,7 +172,7 @@ public class SalarySingle {
         Date parsedEnd = sdf.parse(end);
         double salariesTogether = 0;
 
-        for (Salary eachDate : incomeDao.getSalaries(Variables.getInstance().getLoggedUserId(), type)) {
+        for (Salary eachDate : incomeDao.getSalariesWithType(Variables.getInstance().getLoggedUserId(), type)) {
             if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
                 salaries.add(eachDate.getSalaryMinusTaxes(type));
             }

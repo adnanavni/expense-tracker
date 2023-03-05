@@ -65,7 +65,7 @@ public class DaySalaryController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
+        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
         monthsComb.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
 
@@ -90,7 +90,7 @@ public class DaySalaryController {
                         incomeDao.deleteSalary(incomeID, "DAY");
 
                         salaryHistory.getItems().clear();
-                        salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
+                        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -118,7 +118,7 @@ public class DaySalaryController {
         IncomeDao incomeDao = new IncomeDao();
         double taxRate;
 
-        salarySingle.CalculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
+        salarySingle.calculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
 
         if (mandatoryTaxes.isSelected()) {
             double insurance = 7.15;
@@ -142,7 +142,7 @@ public class DaySalaryController {
 
 
         salaryHistory.getItems().clear();
-        salaryHistory.getItems().addAll(incomeDao.getSalaries(variables.getLoggedUserId(), "DAY"));
+        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
 
         addHourSalary.setText(null);
         addHours.setText(null);
