@@ -10,6 +10,8 @@ module fi.metropolia.expensetracker {
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires org.json;
+
 
     opens fi.metropolia.expensetracker to javafx.fxml;
     exports fi.metropolia.expensetracker;

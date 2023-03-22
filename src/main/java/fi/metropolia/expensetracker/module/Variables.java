@@ -3,7 +3,13 @@ package fi.metropolia.expensetracker.module;
 
 import fi.metropolia.expensetracker.module.Dao.Dao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +18,29 @@ import static java.util.Map.entry;
 
 public class Variables {
     private static Variables INSTANCE = null;
-    private final Map<String, Double> currencies = Map.ofEntries(entry("EUR", 1.00), entry("USD", 1.08), entry("SEK", 11.1091), entry("JPY", 140.64), entry("ISK", 152.58), entry("CAD", 1.43), entry("RUB", 78.21), entry("CHF", 0.99), entry("NOK", 10.84), entry("DKK", 7.45), entry("GBP", 0.89));
+
+
+    private final Map<String, Double> currencies;
+
+    {
+        try {
+            currencies = Map.ofEntries(
+                    entry("EUR", 1.00),
+                    entry("USD", getCurrencyExchangeRateViaGETRequest("USD")),
+                    entry("SEK", getCurrencyExchangeRateViaGETRequest("SEK")),
+                    entry("JPY", getCurrencyExchangeRateViaGETRequest("JPY")),
+                    entry("ISK", getCurrencyExchangeRateViaGETRequest("ISK")),
+                    entry("CAD", getCurrencyExchangeRateViaGETRequest("CAD")),
+                    entry("RUB", getCurrencyExchangeRateViaGETRequest("RUB")),
+                    entry("CHF", getCurrencyExchangeRateViaGETRequest("CHF")),
+                    entry("NOK", getCurrencyExchangeRateViaGETRequest("NOK")),
+                    entry("DKK", getCurrencyExchangeRateViaGETRequest("DKK")),
+                    entry("GBP", getCurrencyExchangeRateViaGETRequest("GBP")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private final Map<String, Double> categories = new HashMap<>() {{
         put("Groceries", 0.00);
         put("Restaurants", 0.00);
@@ -196,6 +224,7 @@ public class Variables {
     }
 
     public Integer getLoggedUserId() {
+
         return loggedUserId;
     }
 
@@ -257,5 +286,28 @@ public class Variables {
                 Variables.getInstance().addConstantExpense(constantExpense);
             }
         }
+    }
+    private double getCurrencyExchangeRateViaGETRequest(String to) throws IOException {
+        String GET_URL = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/" + to.toLowerCase() + ".json";
+        URL url = new URL(GET_URL);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        httpURLConnection.setRequestMethod("GET");
+        int responseCode = httpURLConnection.getResponseCode();
+
+        if(responseCode == HttpURLConnection.HTTP_OK){
+            BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while((inputLine = in.readLine()) != null){
+                response.append(inputLine);
+            }in.close();
+
+            JSONObject obj = new JSONObject(response.toString());
+            return obj.getDouble(to.toLowerCase());
+
+        }
+
+        return 0;
     }
 }
