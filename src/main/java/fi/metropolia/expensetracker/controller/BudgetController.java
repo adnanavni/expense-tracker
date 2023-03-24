@@ -6,16 +6,14 @@ import fi.metropolia.expensetracker.module.Dao.Dao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 public class BudgetController {
 
@@ -88,44 +86,57 @@ public class BudgetController {
 
     @FXML
     protected void addToBudget() {
-        if (selectTopic.getSelectionModel().getSelectedItem() != null && addBudget.getText() != "") {
-            if (selectTopic.getValue() == "New") {
-                boolean willAdd = true;
-                for (Budget budget : variables.getBudgets()) {
-                    if (Objects.equals(budget.getName(), budgetName.getText())) {
-                        willAdd = false;
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Name Exists");
-                        alert.setHeaderText("Budget with given name already exists!");
-                        alert.setContentText("Choose another name.");
-                        alert.showAndWait();
-                    }
-                }
-                if (willAdd) {
-                    Dao loginSignupDao = new Dao();
-                    loginSignupDao.saveBudget(variables.getLoggedUserId(), budgetName.getText(), Double.parseDouble(addBudget.getText()));
-                    variables.resetBudgets();
-                    Budget[] budgets = loginSignupDao.getBudgets(variables.getLoggedUserId());
-                    for (Budget budget : budgets) {
-                        variables.createNewBudget(budget);
-                    }
-                    variables.setActiveBudget(budgetName.getText());
-                    activeBudget.setText(variables.getActiveBudget().getName());
-                    String budgetText = String.format("%.2f", variables.getBudget());
-                    budget.setText("Total: " + budgetText + " " + currency.getSymbol());
 
+        String text = budgetName.getText();
+        String number = addBudget.getText();
+
+        if(text.matches("[a-zA-Z]+") && number.matches("^[0-9]+$")) {
+            if (selectTopic.getSelectionModel().getSelectedItem() != null && addBudget.getText() != "") {
+                if (selectTopic.getValue() == "New") {
+                    boolean willAdd = true;
+                    for (Budget budget : variables.getBudgets()) {
+                        if (Objects.equals(budget.getName(), budgetName.getText())) {
+                            willAdd = false;
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Name Exists");
+                            alert.setHeaderText("Budget with given name already exists!");
+                            alert.setContentText("Choose another name.");
+                            alert.showAndWait();
+                        }
+                    }
+                    if (willAdd) {
+                        Dao loginSignupDao = new Dao();
+                        loginSignupDao.saveBudget(variables.getLoggedUserId(), budgetName.getText(), Double.parseDouble(addBudget.getText()));
+                        variables.resetBudgets();
+                        Budget[] budgets = loginSignupDao.getBudgets(variables.getLoggedUserId());
+                        for (Budget budget : budgets) {
+                            variables.createNewBudget(budget);
+                        }
+                        variables.setActiveBudget(budgetName.getText());
+                        activeBudget.setText(variables.getActiveBudget().getName());
+                        String budgetText = String.format("%.2f", variables.getBudget());
+                        budget.setText("Total: " + budgetText + " " + currency.getSymbol());
+
+                    }
                 }
             }
-        }
-        selectTopic.getItems().setAll(variables.getBudgetNames());
-        specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
+            selectTopic.getItems().setAll(variables.getBudgetNames());
+            specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
 
-        selectTopic.setValue(null);
-        addBudget.setText(null);
-        budgetName.setText(null);
-        newBudget.setVisible(false);
-        editBudget.setVisible(false);
-        budgetPane.setVisible(true);
+            selectTopic.setValue(null);
+            addBudget.setText(null);
+            budgetName.setText(null);
+            newBudget.setVisible(false);
+            editBudget.setVisible(false);
+            budgetPane.setVisible(true);
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Add a budget");
+            alert.setHeaderText("You cant add a budget");
+            alert.setContentText("Fill the form correctly");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -175,47 +186,51 @@ public class BudgetController {
 
     @FXML
     protected void modifyBtnClick() {
-        Dao loginSignupDao = new Dao();
+        String text = modifyName.getText();
+        String number = modifyAmount.getText();
 
-        if(modifyName.getText() != null && modifyAmount.getText() != null) {
-            loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
+        if(text.matches("[a-zA-Z]+") && number.matches("^[0-9]+$")) {
+            Dao loginSignupDao = new Dao();
+            if(modifyName.getText() != null && modifyAmount.getText() != null) {
+                loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
 
-            variables.modifyBudget(modifyName.getText(), Double.parseDouble(modifyAmount.getText()));
-            variables.setActiveBudget(modifyName.getText());
+                variables.modifyBudget(modifyName.getText(), Double.parseDouble(modifyAmount.getText()));
+                variables.setActiveBudget(modifyName.getText());
 
-            update();
-            selectTopic.getItems().setAll(variables.getBudgetNames());
+                update();
+                selectTopic.getItems().setAll(variables.getBudgetNames());
 
-            editBudget.setVisible(false);
-        }
-        else if(modifyName.getText() != null && modifyAmount.getText() == null) {
+                editBudget.setVisible(false);
+            }
+            else if(modifyName.getText() != null && modifyAmount.getText() == null) {
 
-            loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), modifyName.getText());
+                loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), modifyName.getText());
 
-            variables.modifyBudget(modifyName.getText(), variables.getActiveBudget().getAmount());
-            variables.setActiveBudget(modifyName.getText());
+                variables.modifyBudget(modifyName.getText(), variables.getActiveBudget().getAmount());
+                variables.setActiveBudget(modifyName.getText());
 
-            update();
-            selectTopic.getItems().setAll(variables.getBudgetNames());
+                update();
+                selectTopic.getItems().setAll(variables.getBudgetNames());
 
-            editBudget.setVisible(false);
-        }
-        else if(modifyName.getText() == null && modifyAmount.getText() != null){
-            loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), variables.getActiveBudget().getName());
+                editBudget.setVisible(false);
+            }
+            else if(modifyName.getText() == null && modifyAmount.getText() != null){
+                loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), variables.getActiveBudget().getName());
 
-            variables.modifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()));
-            variables.setActiveBudget(variables.getActiveBudget().getName());
+                variables.modifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()));
+                variables.setActiveBudget(variables.getActiveBudget().getName());
 
-            update();
-            selectTopic.getItems().setAll(variables.getBudgetNames());
+                update();
+                selectTopic.getItems().setAll(variables.getBudgetNames());
 
-            editBudget.setVisible(false);
+                editBudget.setVisible(false);
+            }
         }
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Modify your budget");
             alert.setHeaderText("Your budget is not being modified");
-            alert.setContentText("Fill in the name or the amount");
+            alert.setContentText("Fill the form correctly");
             alert.showAndWait();
         }
 
@@ -227,21 +242,30 @@ public class BudgetController {
 
     @FXML
     protected void deleteBtnClick() {
-        Dao loginSignupDao = new Dao();
 
-        loginSignupDao.deleteBudget(variables.getActiveBudget().getId());
-        variables.deleteBudget();
+        Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDelete.setTitle("Confirm Delete");
+        confirmDelete.setHeaderText("This action deletes your current budget. Are you sure you want to delete your current budget?");
 
-        update();
-        activeBudget.setText("None");
+        Optional<ButtonType> result = confirmDelete.showAndWait();
 
-        selectTopic.getItems().setAll(variables.getBudgetNames());
+        if (result.get() == ButtonType.OK) {
+            Dao loginSignupDao = new Dao();
 
-        selectTopic.setValue(null);
-        modifyAmount.setText(null);
-        modifyName.setText(null);
-        editBudget.setVisible(false);
-        budgetPane.setVisible(false);
+            loginSignupDao.deleteBudget(variables.getActiveBudget().getId());
+            variables.deleteBudget();
+
+            update();
+            activeBudget.setText("None");
+
+            selectTopic.getItems().setAll(variables.getBudgetNames());
+
+            selectTopic.setValue(null);
+            modifyAmount.setText(null);
+            modifyName.setText(null);
+            editBudget.setVisible(false);
+            budgetPane.setVisible(false);
+        }
     }
 
     private void update() {
