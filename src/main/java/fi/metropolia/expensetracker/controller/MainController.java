@@ -2,18 +2,20 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Currency;
+import java.util.Random;
 
 public class MainController {
     @FXML
@@ -24,6 +26,11 @@ public class MainController {
     private ImageView settingsIcon;
     @FXML
     private AnchorPane content;
+
+    @FXML
+    private Label quote;
+
+    private int currentIndex = 0;
 
     private Variables variables = Variables.getInstance();
     private SalarySingle salarySingle = SalarySingle.getInstance();
@@ -60,6 +67,18 @@ public class MainController {
                 ex.printStackTrace();
             }
         });
+
+        currentIndex = new Random().nextInt(10);
+
+        quote.setText(variables.getQuote(currentIndex));
+
+        Timeline textUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(30), event -> {
+            currentIndex = (currentIndex + 1) % 10;
+            quote.setText(variables.getQuote(currentIndex));
+        }));
+        textUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
+        textUpdateTimeline.play();
+
     }
 
     public void changeWindowToBudget(ActionEvent event) throws IOException {
