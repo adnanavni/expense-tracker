@@ -121,37 +121,48 @@ public class ExpenseController {
 
     @FXML
     protected void onExpenseAddClick() {
-        if (selectTopic.getSelectionModel().getSelectedItem() != null) {
 
+        String number = addExpense.getText();
 
-            LocalDate expenseDate = LocalDate.now();
-            if (selectedDate.getValue() != null) {
-                expenseDate = selectedDate.getValue();
+        if(number.matches("\\d+")) {
+
+            if (selectTopic.getSelectionModel().getSelectedItem() != null) {
+                LocalDate expenseDate = LocalDate.now();
+                if (selectedDate.getValue() != null) {
+                    expenseDate = selectedDate.getValue();
+                }
+                ZoneId defaultZoneId = ZoneId.systemDefault();
+                Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
+                Dao loginSignupDao = new Dao();
+                loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
+                        , Double.parseDouble(addExpense.getText()), finalDate);
+                variables.getActiveBudget().resetExpenses();
+                Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
+                for (Expense expense : expenses) {
+                    variables.getActiveBudget().addExpenseToBudget(expense);
+                }
+                expenseHistory.getItems().clear();
+                expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
             }
-            ZoneId defaultZoneId = ZoneId.systemDefault();
-            Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
-            Dao loginSignupDao = new Dao();
-            loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
-                    , Double.parseDouble(addExpense.getText()), finalDate);
-            variables.getActiveBudget().resetExpenses();
-            Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
-            for (Expense expense : expenses) {
-                variables.getActiveBudget().addExpenseToBudget(expense);
+            Double budgetExpenses = 0.00;
+            if (variables.getActiveBudget().getExpenses().size() > 0) {
+                for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                    budgetExpenses += expense.getPrice();
+                }
             }
-            expenseHistory.getItems().clear();
-            expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
+            String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
+            expense.setText(budgetText + " " + currency.getSymbol());
+            addExpense.setText(null);
+            selectTopic.setValue(null);
+            selectedDate.setValue(null);
         }
-        Double budgetExpenses = 0.00;
-        if (variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                budgetExpenses += expense.getPrice();
-            }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Add an expense");
+            alert.setHeaderText("You cant add an expense");
+            alert.setContentText("Fill the form correctly");
+            alert.showAndWait();
         }
-        String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
-        expense.setText(budgetText + " " + currency.getSymbol());
-        addExpense.setText(null);
-        selectTopic.setValue(null);
-        selectedDate.setValue(null);
     }
 
     @FXML
@@ -165,9 +176,9 @@ public class ExpenseController {
 
     @FXML
     protected void setConstExpense() {
-        System.out.println(selectCategory.getValue());
+
         if (selectCategory.getValue().equals("New")) {
-            if (constExpense.getText() == null) {
+            if (constExpense.getText().matches("^[0-9]+$") && constExpenseName.getText().matches("[a-zA-Z]+")) {
                 if (variables.constantExpenseNameExists(constExpenseName.getText())) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Name already exists!");
@@ -193,49 +204,36 @@ public class ExpenseController {
                 }
 
             } else {
-
-                if (variables.constantExpenseNameExists(constExpenseName.getText())) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Name already exists!");
-                    alert.setHeaderText("You already have a Constant expense with that name!");
-                    alert.setContentText("Give a name that doesn't already exist.");
+                    alert.setTitle("Add a constant expense");
+                    alert.setHeaderText("You cant add a constant expense");
+                    alert.setContentText("Fill the form correctly");
                     alert.showAndWait();
-                    selectCategory.setValue(null);
-                    constExpense.setText(null);
-                    constExpenseName.setText(null);
-                } else {
-                    Dao loginSignupDao = new Dao();
-                    loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(),
-                            Double.parseDouble(constExpense.getText()));
-                    ConstantExpense newConstantExpense = loginSignupDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
-                    variables.addConstantExpense(newConstantExpense);
-                    selectCategory.setValue(null);
-                    constExpense.setText(null);
-                    constExpenseName.setText(null);
-                    selectCategory.getItems().clear();
-                    selectCategory.getItems().add(0, "New");
-                    for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-                        selectCategory.getItems().add(constantExpense);
-                    }
+            }
+        } else {
+            if(constExpense.getText().matches("^[0-9]+$")) {
+                ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
+                variables.removeConstantExpense(selectedConstExpense);
+                Dao loginSignupDao = new Dao();
+                loginSignupDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
+                ConstantExpense modifiedConstExp = loginSignupDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
+                variables.addConstantExpense(modifiedConstExp);
+                variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
+                selectCategory.setValue(null);
+                constExpense.setText(null);
+                constExpenseName.setText(null);
+                selectCategory.getItems().clear();
+                selectCategory.getItems().add(0, "New");
+                for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+                    selectCategory.getItems().add(constantExpense);
                 }
             }
-
-        } else {
-            System.out.println("NOT NEW, MODIFYING EXISTING...");
-            ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
-            variables.removeConstantExpense(selectedConstExpense);
-            Dao loginSignupDao = new Dao();
-            loginSignupDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
-            ConstantExpense modifiedConstExp = loginSignupDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
-            variables.addConstantExpense(modifiedConstExp);
-            variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
-            selectCategory.setValue(null);
-            constExpense.setText(null);
-            constExpenseName.setText(null);
-            selectCategory.getItems().clear();
-            selectCategory.getItems().add(0, "New");
-            for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-                selectCategory.getItems().add(constantExpense);
+            else{
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Modify a constant expense");
+                alert.setHeaderText("You cant modify a constant expense");
+                alert.setContentText("Fill the form correctly");
+                alert.showAndWait();
             }
         }
 

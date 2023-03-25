@@ -41,6 +41,19 @@ public class Variables {
         }
     }
 
+    private final ArrayList<String> quotes = new ArrayList<>() {{
+        add("Saving money is a way to achieve financial freedom. Start small and make it a habit.");
+        add("The key to saving is to spend less than you earn. Keep track of your expenses and create a budget.");
+        add("Use cash instead of credit cards to avoid overspending. It's harder to part with actual money.");
+        add("Avoid eating out and prepare your own meals. It's healthier and saves you money in the long run.");
+        add("Take advantage of sales and discounts. Buy what you need, not what you want.");
+        add("Always compare prices before making a purchase. Don't settle for the first offer you see.");
+        add("Avoid impulse buying. Take some time to think about whether you really need that item.");
+        add("Instead of buying new things, consider buying used or borrowing from friends.");
+        add("Make use of free entertainment options like libraries, parks, and community events.");
+        add("Remember that every little bit counts. Even small savings can add up over time.");
+    }};
+
     private final Map<String, Double> categories = new HashMap<>() {{
         put("Groceries", 0.00);
         put("Restaurants", 0.00);
@@ -309,5 +322,9 @@ public class Variables {
         }
 
         return 0;
+    }
+
+    public String getQuote(int index) {
+        return quotes.get(index);
     }
 }
