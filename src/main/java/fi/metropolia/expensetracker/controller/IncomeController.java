@@ -68,7 +68,8 @@ public class IncomeController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
 
@@ -82,7 +83,7 @@ public class IncomeController {
 
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
-                    incomeID = selected.getId();
+                    System.out.println("Selected ID " + selected.getId());
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Salary deletion");
@@ -92,9 +93,12 @@ public class IncomeController {
                     Optional<ButtonType> option = alert.showAndWait();
 
                     if (option.get() == ButtonType.OK) {
-                        incomeDao.deleteSalary(incomeID, "MONTH");
+                        incomeDao.deleteSalary(selected.getId(), "MONTH");
+                        salarySingle.deleteMonthSalary(selected);
                         salaryHistory.getItems().clear();
-                        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+                        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+
+                       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
                     }
                 } else {
                     // Nothing selected.
@@ -110,47 +114,39 @@ public class IncomeController {
 
     @FXML
     protected void onSalaryAddClick() throws SQLException {
+        IncomeDao incomeDao = new IncomeDao();
+        double taxRate;
 
-        if(addMonthSalary.getText().matches("^[0-9]+$") && addTaxRate.getText().matches("^[0-9]+$")) {
-            IncomeDao incomeDao = new IncomeDao();
-            double taxRate;
+        if (mandatoryTaxes.isSelected()) {
+            double insurance = 7.15;
+            double pension = 1.40;
+            taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance + pension);
 
-            if (mandatoryTaxes.isSelected()) {
-                double insurance = 7.15;
-                double pension = 1.40;
-                taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance + pension);
+            salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
 
-                salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
-
-            } else {
-                taxRate = Double.parseDouble(addTaxRate.getText());
-                salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
-            }
-            LocalDate salaryDate = LocalDate.now();
-
-            if (selectedDate.getValue() != null) {
-                salaryDate = selectedDate.getValue();
-            }
-            Date date = java.sql.Date.valueOf(salaryDate);
-
-            incomeDao.saveSalary(variables.getLoggedUserId(), "MONTH", salarySingle.getMonthSalary(), salarySingle.getMonthSalaryMinusTaxes(), date, taxRate, currency.toString());
-
-
-            salaryHistory.getItems().clear();
-            salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
-
-            addMonthSalary.setText(null);
-            addTaxRate.setText(null);
-            selectedDate.setValue(null);
-            mandatoryTaxes.setSelected(false);
+        } else {
+            taxRate = Double.parseDouble(addTaxRate.getText());
+            salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
         }
-        else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Add an income");
-            alert.setHeaderText("You cant add an income");
-            alert.setContentText("Fill the form correctly");
-            alert.showAndWait();
+        LocalDate salaryDate = LocalDate.now();
+
+        if (selectedDate.getValue() != null) {
+            salaryDate = selectedDate.getValue();
         }
+        Date date = java.sql.Date.valueOf(salaryDate);
+
+        this.salary = new Salary(variables.getLoggedUserId(), Double.parseDouble(addMonthSalary.getText()), salarySingle.getMonthSalaryMinusTaxes(), salaryDate, currency.toString(), "MONTH", taxRate );
+        incomeDao.saveSalary(variables.getLoggedUserId(), "MONTH", salarySingle.getMonthSalary(), salarySingle.getMonthSalaryMinusTaxes(), date, taxRate, currency.toString());
+        salarySingle.createNewMonthSalary(salary);
+
+        salaryHistory.getItems().clear();
+        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+        //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
+
+        addMonthSalary.setText(null);
+        addTaxRate.setText(null);
+        selectedDate.setValue(null);
+        mandatoryTaxes.setSelected(false);
     }
 
     @FXML

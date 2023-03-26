@@ -3,6 +3,7 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,6 +66,7 @@ public class LoginController {
         String password = passwordField.getText();
 
         Dao loginSignupDao = new Dao();
+        IncomeDao incomeDao = new IncomeDao();
         boolean flag = loginSignupDao.validate(name, password);
 
         if (!flag) {
@@ -104,6 +106,14 @@ public class LoginController {
                 for (ConstantExpense constantExpense : constantExpenses) {
                     Variables.getInstance().addConstantExpense(constantExpense);
                 }
+            }
+            ArrayList<Salary> monthSalaries = incomeDao.getSalariesWithType(Variables.getInstance().getLoggedUserId(), "MONTH");
+            for (Salary salary : monthSalaries) {
+                SalarySingle.getInstance().createNewMonthSalary(salary);
+            }
+            ArrayList<Salary> daySalaries = incomeDao.getSalariesWithType(Variables.getInstance().getLoggedUserId(), "DAY");
+            for (Salary salary : daySalaries) {
+                SalarySingle.getInstance().createNewDaySalary(salary);
             }
 
             changeWindowToHome();

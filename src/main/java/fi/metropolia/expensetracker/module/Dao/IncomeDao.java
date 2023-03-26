@@ -25,7 +25,7 @@ public class IncomeDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
 
-                return new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                return new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDouble(4), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
                         resultSet.getString(2), resultSet.getDouble(7));
             }
             resultSet.close();
@@ -87,7 +87,6 @@ public class IncomeDao {
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setInt(1, id);
                 preparedStatement.setString(2, type);
-
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
                 return true;
@@ -165,7 +164,7 @@ public class IncomeDao {
 
             while (resultSet.next()) {
                 Salary salary =
-                        new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                        new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDouble(4), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
                                 resultSet.getString(2), resultSet.getDouble(7));
                 salaries.add(salary);
             }
@@ -191,7 +190,7 @@ public class IncomeDao {
 
             while (resultSet.next()) {
                 Salary salary =
-                        new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
+                        new Salary(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDouble(4), resultSet.getDate(6).toLocalDate(), resultSet.getString(5),
                                 resultSet.getString(2), resultSet.getDouble(7));
                 salaries.add(salary);
             }
