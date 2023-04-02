@@ -300,7 +300,7 @@ public class Variables {
             }
         }
     }
-    private double getCurrencyExchangeRateViaGETRequest(String to) throws IOException {
+    public double getCurrencyExchangeRateViaGETRequest(String to) throws IOException {
         String GET_URL = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/" + to.toLowerCase() + ".json";
         URL url = new URL(GET_URL);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -323,7 +323,9 @@ public class Variables {
 
         return 0;
     }
-
+    public Double getCurrentCourseMultiplier(){
+        return currentCourseMultiplier;
+    }
     public String getQuote(int index) {
         return quotes.get(index);
     }
