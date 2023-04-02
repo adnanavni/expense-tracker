@@ -17,5 +17,8 @@
         <ComboBox fx:id="selectCurrency" layoutX="200.0" layoutY="260.0" onAction="#onChooseCurrencyBtnClick" prefWidth="150.0" promptText="Currency" styleClass="button" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="240.0" />
         <Label alignment="CENTER" layoutX="107.0" layoutY="222.0" styleClass="budgetText" text="Currency:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="200.0" />
         <Button layoutX="266.0" layoutY="696.0" mnemonicParsing="false" onAction="#deleteData" text="Delete ALL data" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" />
+      <Label layoutX="286.0" layoutY="316.0" text="Age" />
+      <TextField fx:id="ageField" layoutX="233.0" layoutY="349.0" />
+      <Button fx:id="saveAge" layoutX="233.0" layoutY="388.0" mnemonicParsing="false" onAction="#addAgeClick" text="Button" />
     </children>
 </AnchorPane>

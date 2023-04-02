@@ -19,6 +19,8 @@ public class SalarySingle {
     private double daySalaryMinusTaxes;
     private double salaryMinusTaxes;
 
+    private int age;
+
     private ArrayList<Salary> daySalaries = new ArrayList<>();
     private ArrayList<Salary> monthSalaries = new ArrayList<>();
     private Map<String, Integer> months = new HashMap<>() {{
@@ -141,6 +143,13 @@ public class SalarySingle {
 
     public void deleteDaySalary(Salary salary) {
         daySalaries.remove(salary);
+    }
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {

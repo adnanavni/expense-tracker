@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.SalarySingle;
 import fi.metropolia.expensetracker.module.ThemeManager;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.fxml.FXML;
@@ -23,6 +24,8 @@ public class SettingsController {
     private ChoiceBox<String> colorChoiceBox = new ChoiceBox<>();
     @FXML
     private ComboBox selectCurrency;
+    @FXML
+    private TextField ageField;
     private Variables variables = Variables.getInstance();
     private Currency currency;
 
@@ -71,6 +74,11 @@ public class SettingsController {
         });
 
         selectCurrency.getItems().addAll(variables.getCurrencyCodes());
+    }
+
+    public void addAgeClick() {
+        SalarySingle.getInstance().setAge(Integer.parseInt(ageField.getText()));
+        ageField.setText(null);
     }
 
     public void setVariables(Variables variables, Currency currency) {

@@ -92,7 +92,6 @@ public class DaySalaryController {
                         salarySingle.deleteDaySalary(selected);
                         salaryHistory.getItems().clear();
                         salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
-                      //  salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -125,11 +124,18 @@ public class DaySalaryController {
             salarySingle.calculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
 
             if (mandatoryTaxes.isSelected()) {
-                double insurance = 7.15;
-                double pension = 1.40;
-                taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance + pension);
+                double insurance = 0;
+                double age = salarySingle.getAge();
+                if (age < 53) {
+                    insurance = 7.15;
+                } else if (age >= 53 && age < 63) {
+                    insurance = 8.65;
+                } else if (age >= 63) {
+                    insurance = 7.15;
+                }
+               // double pension = 1.40;
+                taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance);
                 salarySingle.calculateSalaryWithTaxRate(taxRate, salarySingle.getDaySalary(), "DAY");
-
             } else {
                 taxRate = Double.parseDouble(addTaxRate.getText());
                 salarySingle.calculateSalaryWithTaxRate(taxRate, salarySingle.getDaySalary(), "DAY");

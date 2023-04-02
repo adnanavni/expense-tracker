@@ -40,6 +40,8 @@ public class IncomeController {
     private DatePicker selectedDate;
     @FXML
     private CheckBox mandatoryTaxes;
+    private Salary salary;
+
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -68,7 +70,6 @@ public class IncomeController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
@@ -83,8 +84,6 @@ public class IncomeController {
 
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
-                    System.out.println("Selected ID " + selected.getId());
-
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Salary deletion");
                     alert.setHeaderText("Do you want to delete salary of the history");
@@ -98,7 +97,6 @@ public class IncomeController {
                         salaryHistory.getItems().clear();
                         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
 
-                       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
                     }
                 } else {
                     // Nothing selected.
@@ -116,14 +114,20 @@ public class IncomeController {
     protected void onSalaryAddClick() throws SQLException {
         IncomeDao incomeDao = new IncomeDao();
         double taxRate;
-
+        int age;
+        double insurance = 0;
         if (mandatoryTaxes.isSelected()) {
-            double insurance = 7.15;
-            double pension = 1.40;
-            taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance + pension);
-
+            age = salarySingle.getAge();
+            if (age < 53) {
+                insurance = 7.15;
+            } else if (age >= 53 && age < 63) {
+                insurance = 8.65;
+            } else if (age >= 63) {
+                insurance = 7.15;
+            }
+            //double pension = 1.40;
+            taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance);
             salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
-
         } else {
             taxRate = Double.parseDouble(addTaxRate.getText());
             salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
@@ -141,7 +145,6 @@ public class IncomeController {
 
         salaryHistory.getItems().clear();
         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
-        //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "MONTH"));
 
         addMonthSalary.setText(null);
         addTaxRate.setText(null);
