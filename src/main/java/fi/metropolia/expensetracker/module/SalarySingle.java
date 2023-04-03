@@ -18,6 +18,10 @@ public class SalarySingle {
     private double monthSalaryMinusTaxes;
     private double daySalaryMinusTaxes;
     private double salaryMinusTaxes;
+    private int age;
+
+    private ArrayList<Salary> daySalaries = new ArrayList<>();
+    private ArrayList<Salary> monthSalaries = new ArrayList<>();
     private Map<String, Integer> months = new HashMap<>() {{
         put("January", 0);
         put("February", 1);
@@ -117,6 +121,35 @@ public class SalarySingle {
     public ArrayList<String> getMonths() {
         return new ArrayList<>(months.keySet());
     }
+    public ArrayList<Salary> getDaySalaries() {
+        return daySalaries;
+    }
+
+    public ArrayList<Salary> getMonthSalaries() {
+        return monthSalaries;
+    }
+    public void createNewMonthSalary(Salary salary) {
+        monthSalaries.add(salary);
+    }
+
+    public void createNewDaySalary(Salary salary) {
+        daySalaries.add(salary);
+    }
+
+    public void deleteMonthSalary(Salary salary) {
+        monthSalaries.remove(salary);
+    }
+
+    public void deleteDaySalary(Salary salary) {
+        daySalaries.remove(salary);
+    }
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
         int year = LocalDate.now().getYear();
@@ -174,14 +207,28 @@ public class SalarySingle {
         Date parsedEnd = sdf.parse(end);
         double salariesTogether = 0;
 
-        for (Salary eachDate : incomeDao.getSalariesWithType(Variables.getInstance().getLoggedUserId(), type)) {
-            if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
-                salaries.add(eachDate.getSalaryMinusTaxes(type));
+        if (type == "MONTH") {
+            for (Salary eachDate : getMonthSalaries()) {
+                if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
+                    salaries.add(eachDate.getSalaryMinusTaxes());
+                }
             }
         }
+       if (type == "DAY") {
+           for (Salary eachDate : getDaySalaries()) {
+               if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
+                   salaries.add(eachDate.getSalaryMinusTaxes());
+               }
+           }
+       }
         for (double eachSalary : salaries) {
             salariesTogether += eachSalary;
         }
         return salariesTogether;
+    }
+
+    public void resetAll() {
+        monthSalaries.clear();
+        daySalaries.clear();
     }
 }

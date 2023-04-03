@@ -47,6 +47,7 @@ public class DaySalaryController {
     private CheckBox mandatoryTaxes;
 
     private IncomeDao incomeDao = new IncomeDao();
+    private Salary salary;
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -64,7 +65,8 @@ public class DaySalaryController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
+        salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+        //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
         monthsComb.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
 
@@ -87,9 +89,9 @@ public class DaySalaryController {
 
                     if (option.get() == ButtonType.OK) {
                         incomeDao.deleteSalary(incomeID, "DAY");
-
+                        salarySingle.deleteDaySalary(selected);
                         salaryHistory.getItems().clear();
-                        salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
+                        salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -122,11 +124,18 @@ public class DaySalaryController {
             salarySingle.calculateDaySalary(Double.parseDouble(addHours.getText()), Double.parseDouble(addHourSalary.getText()));
 
             if (mandatoryTaxes.isSelected()) {
-                double insurance = 7.15;
-                double pension = 1.40;
-                taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance + pension);
+                double insurance = 0;
+                double age = salarySingle.getAge();
+                if (age < 53) {
+                    insurance = 7.15;
+                } else if (age >= 53 && age < 63) {
+                    insurance = 8.65;
+                } else if (age >= 63) {
+                    insurance = 7.15;
+                }
+               // double pension = 1.40;
+                taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance);
                 salarySingle.calculateSalaryWithTaxRate(taxRate, salarySingle.getDaySalary(), "DAY");
-
             } else {
                 taxRate = Double.parseDouble(addTaxRate.getText());
                 salarySingle.calculateSalaryWithTaxRate(taxRate, salarySingle.getDaySalary(), "DAY");
@@ -139,11 +148,12 @@ public class DaySalaryController {
             }
             Date date = java.sql.Date.valueOf(salaryDate);
 
-            incomeDao.saveSalary(variables.getLoggedUserId(), "DAY", salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), date, taxRate, currency.toString());
-
-
-            salaryHistory.getItems().clear();
-            salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
+        incomeDao.saveSalary(variables.getLoggedUserId(), "DAY", salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), date, taxRate, currency.toString());
+        this.salary = new Salary(variables.getLoggedUserId(), salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), salaryDate, currency.toString(), "DAY", taxRate);
+        salarySingle.createNewDaySalary(salary);
+        salaryHistory.getItems().clear();
+        salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
 
             addHourSalary.setText(null);
             addHours.setText(null);
