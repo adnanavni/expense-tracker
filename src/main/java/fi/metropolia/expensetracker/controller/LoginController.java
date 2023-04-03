@@ -29,6 +29,8 @@ public class LoginController {
     @FXML
     private Button submitButton;
 
+    private Dao dao = new Dao();
+
     public static void infoBox(String infoMessage, String headerText, String title) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setContentText(infoMessage);
@@ -92,6 +94,7 @@ public class LoginController {
                 }
                 Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
             }
+
             ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
             if (constantExpenses.length == 0) {
                 ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
@@ -115,7 +118,7 @@ public class LoginController {
             for (Salary salary : daySalaries) {
                 SalarySingle.getInstance().createNewDaySalary(salary);
             }
-
+            SalarySingle.getInstance().setAge(dao.getAge(Variables.getInstance().getLoggedUserId()));
             changeWindowToHome();
         }
     }

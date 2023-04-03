@@ -49,6 +49,33 @@ public class Dao {
         }
     }
 
+    public Integer getAge(int id) throws SQLException {
+
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT Age FROM Registration WHERE id=?");
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+            return null;
+    }
+
+    public boolean setAge(int id, int age) throws SQLException {
+       try {
+           PreparedStatement preparedStatement = conn.prepareStatement("UPDATE Registration SET Age = ? WHERE id = ?");
+           preparedStatement.setInt(1, age);
+           preparedStatement.setInt(2, id);
+           preparedStatement.executeUpdate();
+           return true;
+       } catch (SQLException e) {
+           printSQLException(e);
+       }
+       return false;
+    }
+
     public String getPassword(String username) throws SQLException {
 
         PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM Registration WHERE username=?");

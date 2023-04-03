@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +29,13 @@ public class SettingsController {
     private TextField ageField;
     private Variables variables = Variables.getInstance();
     private Currency currency;
+    private Dao dao;
 
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
+        dao = new Dao();
 
         Map<String, String> colorMap = new HashMap<>();
         colorMap.put("#85bb65", "Default");
@@ -76,8 +79,9 @@ public class SettingsController {
         selectCurrency.getItems().addAll(variables.getCurrencyCodes());
     }
 
-    public void addAgeClick() {
+    public void addAgeClick() throws SQLException {
         SalarySingle.getInstance().setAge(Integer.parseInt(ageField.getText()));
+        dao.setAge(variables.getLoggedUserId(), Integer.parseInt(ageField.getText()));
         ageField.setText(null);
     }
 

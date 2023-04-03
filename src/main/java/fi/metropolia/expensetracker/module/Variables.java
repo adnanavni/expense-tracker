@@ -19,7 +19,6 @@ import static java.util.Map.entry;
 public class Variables {
     private static Variables INSTANCE = null;
 
-
     private final Map<String, Double> currencies;
 
     {

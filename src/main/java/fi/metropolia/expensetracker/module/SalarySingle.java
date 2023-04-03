@@ -18,7 +18,6 @@ public class SalarySingle {
     private double monthSalaryMinusTaxes;
     private double daySalaryMinusTaxes;
     private double salaryMinusTaxes;
-
     private int age;
 
     private ArrayList<Salary> daySalaries = new ArrayList<>();
