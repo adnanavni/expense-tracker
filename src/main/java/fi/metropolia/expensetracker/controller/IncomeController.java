@@ -1,8 +1,8 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 
@@ -40,12 +41,55 @@ public class IncomeController {
     private DatePicker selectedDate;
     @FXML
     private CheckBox mandatoryTaxes;
+    @FXML
+    private Label income;
+
+    @FXML
+    private Label addMonth;
+
+    @FXML
+    private Label addTax;
+
+    @FXML
+    private Label payday;
+
+    @FXML
+    private Button addBtn;
+
+    @FXML
+    private Button hourSalary;
+
+    @FXML
+    private Label history;
+
+    @FXML
+    private Label check;
+
+    @FXML
+    private Button back;
+
     private Salary salary;
+
+    private LocalizationManager lan = LocalizationManager.getInstance();
 
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
+
+        if (Locale.getDefault().getLanguage().matches("fi")) {
+            mandatoryTaxes.setVisible(true);
+        }
+
+        back.setText(lan.getString("back"));
+        income.setText(lan.getString("income"));
+        addMonth.setText(lan.getString("addMonth"));
+        addTax.setText(lan.getString("addTax"));
+        payday.setText(lan.getString("payday"));
+        addBtn.setText(lan.getString("add"));
+        hourSalary.setText(lan.getString("hourly"));
+        history.setText(lan.getString("salaryHistory"));
+        check.setText(lan.getString("check"));
     }
 
     public void backToMain(ActionEvent event) throws IOException {
@@ -70,9 +114,11 @@ public class IncomeController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
+        addMonthSalary.setPromptText(currency.getSymbol());
+
         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
         monthsCombo.getItems().addAll(salarySingle.getMonths());
-        mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
+        mandatoryTaxes.setTooltip(new Tooltip("Pakolliset verot kuten työeläkemaksu ja työttömyysvakuusmaksu."));
 
         salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -139,7 +185,7 @@ public class IncomeController {
         }
         Date date = java.sql.Date.valueOf(salaryDate);
 
-        this.salary = new Salary(variables.getLoggedUserId(), Double.parseDouble(addMonthSalary.getText()), salarySingle.getMonthSalaryMinusTaxes(), salaryDate, currency.toString(), "MONTH", taxRate );
+        this.salary = new Salary(variables.getLoggedUserId(), Double.parseDouble(addMonthSalary.getText()), salarySingle.getMonthSalaryMinusTaxes(), salaryDate, currency.toString(), "MONTH", taxRate);
         incomeDao.saveSalary(variables.getLoggedUserId(), "MONTH", salarySingle.getMonthSalary(), salarySingle.getMonthSalaryMinusTaxes(), date, taxRate, currency.toString());
         salarySingle.createNewMonthSalary(salary);
 

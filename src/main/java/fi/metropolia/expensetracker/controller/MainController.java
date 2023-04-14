@@ -30,11 +30,25 @@ public class MainController {
     @FXML
     private Label quote;
 
+    @FXML
+    private Label total;
+
+    @FXML
+    private Button budgetBtn;
+
+    @FXML
+    private Button incomeBtn;
+
+    @FXML
+    private Button logOut;
+
     private int currentIndex = 0;
 
     private Variables variables = Variables.getInstance();
     private SalarySingle salarySingle = SalarySingle.getInstance();
     private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
+
+    private LocalizationManager localizationManager = LocalizationManager.getInstance();
 
     @FXML
     public void initialize() {
@@ -79,6 +93,11 @@ public class MainController {
         textUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
         textUpdateTimeline.play();
 
+        total.setText(localizationManager.getString("totalB"));
+        budgetBtn.setText(localizationManager.getString("budget"));
+        expenseBtn.setText(localizationManager.getString("expense"));
+        incomeBtn.setText(localizationManager.getString("income"));
+        logOut.setText(localizationManager.getString("logOut"));
     }
 
     public void changeWindowToBudget(ActionEvent event) throws IOException {

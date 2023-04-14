@@ -42,6 +42,28 @@ public class ExpenseController {
     @FXML
     private TextField constExpense;
 
+    @FXML
+    private Label expenseTxt;
+
+    @FXML
+    private Label active;
+
+    @FXML
+    private Label singleExpense;
+
+    @FXML
+    private Label constantExpense;
+
+    @FXML
+    private Label history;
+
+    @FXML
+    private Button statisticBtn;
+
+    @FXML
+    private Button setBtn;
+
+    private LocalizationManager lan = LocalizationManager.getInstance();
     private Variables variables;
     private Currency currency;
 
@@ -49,6 +71,20 @@ public class ExpenseController {
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
+
+        expenseTxt.setText(lan.getString("expense"));
+        active.setText(lan.getString("activeonExpense"));
+        singleExpense.setText(lan.getString("single"));
+        constantExpense.setText(lan.getString("constant"));
+        selectCategory.setPromptText(lan.getString("category"));
+        addExpense.setPromptText(lan.getString("amount"));
+        addBtn.setText(lan.getString("add"));
+        selectCategory.setPromptText(lan.getString("expense"));
+        constExpenseName.setPromptText(lan.getString("name"));
+        constExpense.setPromptText(lan.getString("amount"));
+        setBtn.setText(lan.getString("setBtn"));
+        statisticBtn.setText(lan.getString("statistics"));
+        history.setText(lan.getString("history"));
     }
 
     public void backToMain(ActionEvent event) throws IOException {
@@ -69,7 +105,7 @@ public class ExpenseController {
             }
         }
         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
-        this.expense.setText(budgetText + " " + currency.getSymbol());
+        this.expenseTxt.setText(budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getTopics());
 
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
@@ -106,7 +142,7 @@ public class ExpenseController {
                             }
                         }
                         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount() - budgetExpenses));
-                        expense.setText(budgetText + " " + currency.getSymbol());
+                        expenseTxt.setText(budgetText + " " + currency.getSymbol());
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -124,7 +160,7 @@ public class ExpenseController {
 
         String number = addExpense.getText();
 
-        if(number.matches("\\d+")) {
+        if (number.matches("\\d+")) {
 
             if (selectTopic.getSelectionModel().getSelectedItem() != null) {
                 LocalDate expenseDate = LocalDate.now();
@@ -151,12 +187,11 @@ public class ExpenseController {
                 }
             }
             String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
-            expense.setText(budgetText + " " + currency.getSymbol());
+            expenseTxt.setText(budgetText + " " + currency.getSymbol());
             addExpense.setText(null);
             selectTopic.setValue(null);
             selectedDate.setValue(null);
-        }
-        else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Add an expense");
             alert.setHeaderText("You cant add an expense");
@@ -204,14 +239,14 @@ public class ExpenseController {
                 }
 
             } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Add a constant expense");
-                    alert.setHeaderText("You cant add a constant expense");
-                    alert.setContentText("Fill the form correctly");
-                    alert.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Add a constant expense");
+                alert.setHeaderText("You cant add a constant expense");
+                alert.setContentText("Fill the form correctly");
+                alert.showAndWait();
             }
         } else {
-            if(constExpense.getText().matches("^[0-9]+$")) {
+            if (constExpense.getText().matches("^[0-9]+$")) {
                 ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
                 variables.removeConstantExpense(selectedConstExpense);
                 Dao loginSignupDao = new Dao();
@@ -227,8 +262,7 @@ public class ExpenseController {
                 for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
                     selectCategory.getItems().add(constantExpense);
                 }
-            }
-            else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Modify a constant expense");
                 alert.setHeaderText("You cant modify a constant expense");

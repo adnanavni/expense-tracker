@@ -1,8 +1,8 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import fi.metropolia.expensetracker.module.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 public class DaySalaryController {
@@ -42,17 +43,61 @@ public class DaySalaryController {
     @FXML
     private DatePicker selectedDate;
     @FXML
-    private Button addBtn;
-    @FXML
     private CheckBox mandatoryTaxes;
+
+    @FXML
+    private Label income;
+
+    @FXML
+    private Label addHourly;
+
+    @FXML
+    private Label addHour;
+
+    @FXML
+    private Label addTax;
+
+    @FXML
+    private Label workingDay;
+
+    @FXML
+    private Button addBtn;
+
+    @FXML
+    private Button monthly;
+
+    @FXML
+    private Label history;
+
+    @FXML
+    private Label check;
+
+    @FXML
+    private Button back;
 
     private IncomeDao incomeDao = new IncomeDao();
     private Salary salary;
+
+    private LocalizationManager lan = LocalizationManager.getInstance();
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
 
+        if (Locale.getDefault().getLanguage().matches("fi")) {
+            mandatoryTaxes.setVisible(true);
+        }
+
+        back.setText(lan.getString("back"));
+        income.setText(lan.getString("income"));
+        addHourly.setText(lan.getString("addHourly"));
+        addHour.setText(lan.getString("hours"));
+        addTax.setText(lan.getString("addTax"));
+        workingDay.setText(lan.getString("workingDay"));
+        addBtn.setText(lan.getString("add"));
+        monthly.setText(lan.getString("monthly"));
+        history.setText(lan.getString("salaryHistory"));
+        check.setText(lan.getString("check"));
     }
 
     public void backToMain(ActionEvent event) throws IOException {
@@ -68,7 +113,8 @@ public class DaySalaryController {
         salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
         //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
         monthsComb.getItems().addAll(salarySingle.getMonths());
-        mandatoryTaxes.setTooltip(new Tooltip("Add mandatory taxes, such as pension contribution and unemployment insurance"));
+
+        mandatoryTaxes.setTooltip(new Tooltip("Pakolliset verot kuten työeläkemaksu ja työttömyysvakuusmaksu."));
 
         salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -117,7 +163,7 @@ public class DaySalaryController {
     @FXML
     protected void onSalaryAddClick() throws SQLException {
 
-        if(addHourSalary.getText().matches("^[0-9]+$") && addHours.getText().matches("^[0-9]+$") && addTaxRate.getText().matches("^[0-9]+$")) {
+        if (addHourSalary.getText().matches("^[0-9]+$") && addHours.getText().matches("^[0-9]+$") && addTaxRate.getText().matches("^[0-9]+$")) {
             IncomeDao incomeDao = new IncomeDao();
             double taxRate;
 
@@ -133,7 +179,7 @@ public class DaySalaryController {
                 } else if (age >= 63) {
                     insurance = 7.15;
                 }
-               // double pension = 1.40;
+                // double pension = 1.40;
                 taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance);
                 salarySingle.calculateSalaryWithTaxRate(taxRate, salarySingle.getDaySalary(), "DAY");
             } else {
@@ -148,20 +194,19 @@ public class DaySalaryController {
             }
             Date date = java.sql.Date.valueOf(salaryDate);
 
-        incomeDao.saveSalary(variables.getLoggedUserId(), "DAY", salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), date, taxRate, currency.toString());
-        this.salary = new Salary(variables.getLoggedUserId(), salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), salaryDate, currency.toString(), "DAY", taxRate);
-        salarySingle.createNewDaySalary(salary);
-        salaryHistory.getItems().clear();
-        salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
-       // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
+            incomeDao.saveSalary(variables.getLoggedUserId(), "DAY", salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), date, taxRate, currency.toString());
+            this.salary = new Salary(variables.getLoggedUserId(), salarySingle.getDaySalary(), salarySingle.getDaySalaryMinusTaxes(), salaryDate, currency.toString(), "DAY", taxRate);
+            salarySingle.createNewDaySalary(salary);
+            salaryHistory.getItems().clear();
+            salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+            // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
 
             addHourSalary.setText(null);
             addHours.setText(null);
             addTaxRate.setText(null);
             selectedDate.setValue(null);
             mandatoryTaxes.setSelected(false);
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Add an income");
             alert.setHeaderText("You cant add an income");
