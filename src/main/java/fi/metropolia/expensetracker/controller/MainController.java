@@ -84,6 +84,7 @@ public class MainController {
 
         currentIndex = new Random().nextInt(10);
 
+        variables.refreshTips();
         quote.setText(variables.getQuote(currentIndex));
 
         Timeline textUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(30), event -> {

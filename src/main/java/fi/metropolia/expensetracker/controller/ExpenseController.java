@@ -76,10 +76,9 @@ public class ExpenseController {
         active.setText(lan.getString("activeonExpense"));
         singleExpense.setText(lan.getString("single"));
         constantExpense.setText(lan.getString("constant"));
-        selectCategory.setPromptText(lan.getString("category"));
+        selectTopic.setPromptText(lan.getString("category"));
         addExpense.setPromptText(lan.getString("amount"));
         addBtn.setText(lan.getString("add"));
-        selectCategory.setPromptText(lan.getString("expense"));
         constExpenseName.setPromptText(lan.getString("name"));
         constExpense.setPromptText(lan.getString("amount"));
         setBtn.setText(lan.getString("setBtn"));

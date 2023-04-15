@@ -110,8 +110,9 @@ public class DaySalaryController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
+        addHourSalary.setPromptText(currency.getSymbol());
+
         salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
-        //salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
         monthsComb.getItems().addAll(salarySingle.getMonths());
 
         mandatoryTaxes.setTooltip(new Tooltip("Pakolliset verot kuten työeläkemaksu ja työttömyysvakuusmaksu."));
