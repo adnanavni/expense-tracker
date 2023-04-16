@@ -7,9 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0"
-            minWidth="700.0" styleClass="background" stylesheets="@css/main.css"
-            xmlns="http://javafx.com/javafx"
+<AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
+            styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
             fx:controller="fi.metropolia.expensetracker.controller.ExpenseStatisticsController">
     <children>
         <BarChart fx:id="barStats" layoutX="25.0" layoutY="383.0" styleClass="button" AnchorPane.bottomAnchor="0.0"
@@ -24,16 +24,18 @@
         <PieChart fx:id="pieStats" layoutX="25.0" layoutY="386.0" styleClass="button" visible="false"
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0"
                   AnchorPane.topAnchor="330.0"/>
-        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToExpense" text="Back"
-                AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="600.0" AnchorPane.topAnchor="15.0"/>
-        <Label alignment="CENTER" layoutX="78.0" layoutY="57.0" styleClass="header" text="Expense statistics"
-               AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0">
+        <Label fx:id="expenseStatistics" alignment="CENTER" layoutX="78.0" layoutY="57.0" styleClass="header"
+               text="Expense statistics" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="5.0"
+               AnchorPane.topAnchor="10.0">
             <font>
                 <Font name="System Bold" size="48.0"/>
             </font>
         </Label>
-        <Label alignment="CENTER" layoutX="198.0" layoutY="127.0" styleClass="budgetText" text="Active budget:"
-               AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="90.0">
+        <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToExpense" text="Back"
+                AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="570.0" AnchorPane.topAnchor="15.0"/>
+        <Label fx:id="active" alignment="CENTER" layoutX="198.0" layoutY="127.0" styleClass="budgetText"
+               text="Active budget:" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="90.0">
             <font>
                 <Font size="24.0"/>
             </font>
@@ -50,8 +52,8 @@
         <ComboBox fx:id="selectedTimeFrame" layoutX="200.0" layoutY="257.0" prefWidth="150.0" promptText="All time"
                   styleClass="button" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0"
                   AnchorPane.topAnchor="205.0"/>
-        <Label alignment="CENTER" layoutX="181.0" layoutY="216.0" styleClass="smallHeader"
-               text="Showing statistics from:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0"
+        <Label fx:id="show" alignment="CENTER" layoutX="181.0" layoutY="216.0" styleClass="smallHeader"
+               text="Showing statistics from:" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                AnchorPane.topAnchor="180.0">
             <font>
                 <Font size="18.0"/>
