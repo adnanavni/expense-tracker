@@ -15,7 +15,8 @@ public class Salary {
     private Integer id;
     private LocalDate date;
     private String usedCurrency;
-    private IncomeDao incomeDao = new IncomeDao();
+
+    LocalizationManager localizationManager = LocalizationManager.getInstance();
 
 
     private double salaryMinusTaxes;
@@ -77,9 +78,7 @@ public class Salary {
     @Override
     public String toString() {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
-        return "Salary amount of the date " + date +
-                " is " + String.format("%.2f", salary) + " " + currency.getSymbol() + " and minus " + String.format("%.2f", taxRate) +
-                "% tax rate it is: " + String.format("%.2f", salaryMinusTaxes) + " " + currency.getSymbol();
+        return date + " " +  localizationManager.getString("salaryText") + String.format("%.2f", taxRate) + "% "  +
+                localizationManager.getString("is") + " " + String.format("%.2f", salaryMinusTaxes) + " " + currency.getSymbol();
     }
-
 }

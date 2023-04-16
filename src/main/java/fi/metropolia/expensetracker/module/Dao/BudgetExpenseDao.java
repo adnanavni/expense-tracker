@@ -33,7 +33,7 @@ public class BudgetExpenseDao {
     }
     public String loggedCurrency(Integer id) {
         try {
-            String sql = "SELECT currency FROM Registration WHERE id=?";
+            String sql = "SELECT currency FROM UserInfo WHERE id=?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setInt(1, id);

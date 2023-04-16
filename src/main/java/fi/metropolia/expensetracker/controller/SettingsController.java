@@ -1,8 +1,6 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.Dao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import fi.metropolia.expensetracker.module.LocalizationManager;
 import fi.metropolia.expensetracker.module.SalarySingle;
@@ -151,16 +149,20 @@ public class SettingsController {
             Locale English = new Locale("en", "GB");
             Locale.setDefault(English);
             localizationManager.setLocale(English);
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "English");
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Finnish")) {
             Locale Finnish = new Locale("fi", "FI");
             Locale.setDefault(Finnish);
             localizationManager.setLocale(Finnish);
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "Finnish");
+
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Icelandic")) {
             Locale Icelandic = new Locale("is", "IS");
             Locale.setDefault(Icelandic);
             localizationManager.setLocale(Icelandic);
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "Icelandic");
             refresh();
         }
     }

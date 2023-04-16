@@ -1,22 +1,17 @@
 package fi.metropolia.expensetracker.module.Dao;
 
 import fi.metropolia.expensetracker.datasource.MariaDBConnector;
-import fi.metropolia.expensetracker.module.Budget;
-import fi.metropolia.expensetracker.module.ConstantExpense;
-import fi.metropolia.expensetracker.module.Expense;
 import fi.metropolia.expensetracker.module.PsswdAuth;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 
-public class Dao {
+public class RegisterLoginDao {
 
-    private static final String INSERT_QUERY = "INSERT INTO Registration (username, password) VALUES (?, ?)";
-    private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ?";
+    private static final String INSERT_QUERY = "INSERT INTO UserInfo (username, password) VALUES (?, ?)";
+    private static final String SELECT_QUERY = "SELECT * FROM UserInfo WHERE username = ?";
     private final Connection conn = MariaDBConnector.getInstance();
 
     public static void printSQLException(SQLException ex) {
@@ -52,7 +47,7 @@ public class Dao {
 
     public String getPassword(String username) throws SQLException {
 
-        PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM Registration WHERE username=?");
+        PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM UserInfo WHERE username=?");
         prepPsswordState.setString(1, username);
         ResultSet resultSet = prepPsswordState.executeQuery();
         if (resultSet.next()) {
@@ -86,7 +81,7 @@ public class Dao {
     public Integer loggedID(String name) {
 
         try {
-            String sql = "SELECT id FROM Registration WHERE username = ?";
+            String sql = "SELECT id FROM UserInfo WHERE username = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setString(1, name);
@@ -107,7 +102,7 @@ public class Dao {
 
 
     public boolean userExists(String username) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM Registration WHERE username = ?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM UserInfo WHERE username = ?");
         stmt.setString(1, username);
         ResultSet rs = stmt.executeQuery();
 
@@ -127,7 +122,7 @@ public class Dao {
 
         if (userExists(username)) {
             try {
-                String sql = "DELETE FROM Registration WHERE username = ?";
+                String sql = "DELETE FROM UserInfo WHERE username = ?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setString(1, username);
                 preparedStatement.executeUpdate();

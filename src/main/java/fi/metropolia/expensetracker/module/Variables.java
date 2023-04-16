@@ -2,7 +2,7 @@ package fi.metropolia.expensetracker.module;
 
 
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import org.json.JSONObject;
@@ -100,7 +100,7 @@ public class Variables {
     }
 
     public void setCurrentCourseMultiplier(String course) {
-        Dao loginSignupDao = new Dao();
+        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
         IncomeDao incomeDao = new IncomeDao();
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {
@@ -289,7 +289,7 @@ public class Variables {
         constantExpenses = new ArrayList<>();
         ThemeManager.getInstance().setCurrentColor("#85bb65");
 
-        Dao loginSignupDao = new Dao();
+        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
 
         ConstantExpense[] constantExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
 

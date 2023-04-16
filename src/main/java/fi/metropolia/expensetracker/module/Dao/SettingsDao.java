@@ -29,7 +29,7 @@ public class SettingsDao {
     public boolean changeUserCurrency(Integer id, String currency) {
 
         try {
-            String sql = "UPDATE Registration SET currency = ? WHERE id= ?";
+            String sql = "UPDATE UserInfo SET currency = ? WHERE id= ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, currency);
             ps.setInt(2, id);
@@ -43,7 +43,7 @@ public class SettingsDao {
 
     public Integer getAge(int id) throws SQLException {
 
-        PreparedStatement preparedStatement = conn.prepareStatement("SELECT Age FROM Registration WHERE id=?");
+        PreparedStatement preparedStatement = conn.prepareStatement("SELECT Age FROM UserInfo WHERE id=?");
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
@@ -58,7 +58,7 @@ public class SettingsDao {
 
     public boolean setLanguage(int id, String language) {
         try {
-            PreparedStatement preparedStatement = conn.prepareStatement(" UPDATE Registration SET Language = ? WHERE id = ? ");
+            PreparedStatement preparedStatement = conn.prepareStatement(" UPDATE UserInfo SET Language = ? WHERE id = ? ");
             preparedStatement.setString(1, language);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
@@ -71,7 +71,7 @@ public class SettingsDao {
 
     public boolean setAge(int id, int age) {
         try {
-            PreparedStatement preparedStatement = conn.prepareStatement("UPDATE Registration SET Age = ? WHERE id = ?");
+            PreparedStatement preparedStatement = conn.prepareStatement("UPDATE UserInfo SET Age = ? WHERE id = ?");
             preparedStatement.setInt(1, age);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
@@ -84,7 +84,7 @@ public class SettingsDao {
     public String loggedThemeColor(Integer id) {
 
         try {
-            String sql = "SELECT ThemeColor FROM Registration WHERE id = ?";
+            String sql = "SELECT ThemeColor FROM UserInfo WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setInt(1, id);
@@ -104,7 +104,7 @@ public class SettingsDao {
 
     public boolean changeUserThemeColor(Integer id, String color) {
         try {
-            String sql = "UPDATE Registration SET ThemeColor = ? WHERE id = ?";
+            String sql = "UPDATE UserInfo SET ThemeColor = ? WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, color);
             ps.setInt(2, id);
@@ -120,7 +120,7 @@ public class SettingsDao {
         String deleteConstantExpenses = "DELETE FROM Constantexpenses WHERE registration_id = ?";
         String deleteBudgets = "DELETE FROM Budgets WHERE registration_id = ?";
         String deleteExpenses = "DELETE FROM Expenses WHERE BudgetId IN (SELECT BudgetId FROM Budgets WHERE registration_id = ?)";
-        String updateUserInfoSql = "UPDATE Registration SET ThemeColor = '#85bb65', currency = 'EUR' WHERE id = ?";
+        String updateUserInfoSql = "UPDATE UserInfo SET ThemeColor = '#85bb65', currency = 'EUR' WHERE id = ?";
 
         try {
             try (PreparedStatement stmt = conn.prepareStatement(deleteIncomes)) {

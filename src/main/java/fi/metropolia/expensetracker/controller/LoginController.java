@@ -3,7 +3,7 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.event.ActionEvent;
@@ -31,9 +31,10 @@ public class LoginController {
     @FXML
     private Button submitButton;
 
-    private Dao dao = new Dao();
+    private RegisterLoginDao dao = new RegisterLoginDao();
     private SettingsDao settingsDao = new SettingsDao();
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
+    LocalizationManager localizationManager = LocalizationManager.getInstance();
 
     public static void infoBox(String infoMessage, String headerText, String title) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -58,27 +59,27 @@ public class LoginController {
         Window owner = submitButton.getScene().getWindow();
 
         if (userName.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
-                    "Please enter your username");
+            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
+                    localizationManager.getString("emptyUsername"));
             return;
         }
         if (passwordField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
-                    "Please enter a password");
+            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
+                    localizationManager.getString("emptyPassword"));
             return;
         }
 
         String name = userName.getText();
         String password = passwordField.getText();
 
-        Dao loginSignupDao = new Dao();
+        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
         IncomeDao incomeDao = new IncomeDao();
         boolean flag = loginSignupDao.validate(name, password);
 
         if (!flag) {
-            infoBox("Please enter correct username and password or create a new account!", null, "Failed");
+            infoBox(localizationManager.getString("wrongInfo"), null, "Failed");
         } else {
-            infoBox("Login Successful!", null, "Successful");
+            infoBox(localizationManager.getString("loginSuccesMsg"), null, localizationManager.getString("loginSuccesTitle"));
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setLoggedCurrency(budgetExpenseDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
             ThemeManager.getInstance().setCurrentColor(settingsDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));

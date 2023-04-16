@@ -3,7 +3,7 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -150,7 +150,7 @@ public class BudgetController {
                         }
                     }
                     if (willAdd) {
-                        Dao loginSignupDao = new Dao();
+                        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
                         budgetExpenseDao.saveBudget(variables.getLoggedUserId(), budgetName.getText(), Double.parseDouble(addBudget.getText()));
                         variables.resetBudgets();
                         Budget[] budgets = budgetExpenseDao.getBudgets(variables.getLoggedUserId());
@@ -207,7 +207,7 @@ public class BudgetController {
         ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
 
 
-        Dao loginSignupDao = new Dao();
+        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
         budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
         variables.getActiveBudget().resetExpenses();
         Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
@@ -234,7 +234,7 @@ public class BudgetController {
         String number = modifyAmount.getText();
 
         if (text.matches("[a-zA-Z]+") && number.matches("^[0-9]+$")) {
-            Dao loginSignupDao = new Dao();
+            RegisterLoginDao loginSignupDao = new RegisterLoginDao();
             if (modifyName.getText() != null && modifyAmount.getText() != null) {
                 budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
 
@@ -291,7 +291,7 @@ public class BudgetController {
         Optional<ButtonType> result = confirmDelete.showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            Dao loginSignupDao = new Dao();
+            RegisterLoginDao loginSignupDao = new RegisterLoginDao();
 
             budgetExpenseDao.deleteBudget(variables.getActiveBudget().getId());
             variables.deleteBudget();
