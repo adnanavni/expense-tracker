@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Expense;
+import fi.metropolia.expensetracker.module.LocalizationManager;
 import fi.metropolia.expensetracker.module.ThemeManager;
 import fi.metropolia.expensetracker.module.Variables;
 import javafx.collections.FXCollections;
@@ -40,14 +41,37 @@ public class ExpenseStatisticsController {
     private Boolean barChartShown = true;
     @FXML
     private Label budgetName;
+
+    @FXML
+    private Label expenseStatistics;
+
+    @FXML
+    private Label active;
+
+    @FXML
+    private Label show;
+
+
+    @FXML
+    private Button back;
+
+
     private Variables variables;
     private ObservableList<PieChart.Data> currentPieValues;
     private Currency currency;
+
+    private LocalizationManager lan = LocalizationManager.getInstance();
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
 
+        expenseStatistics.setText(lan.getString("expenseStatistics"));
+        active.setText(lan.getString("activeonExpense"));
+        show.setText(lan.getString("show"));
+
+        chartTypeBtn.setText(lan.getString("piechart"));
+        back.setText(lan.getString("back"));
     }
 
     public void setVariables(Variables variables) {
@@ -564,12 +588,12 @@ public class ExpenseStatisticsController {
 
     public void onChangeChartClick() {
         if (barChartShown) {
-            chartTypeBtn.setText("View as barchart");
+            chartTypeBtn.setText(lan.getString("barchart"));
             pieStats.setVisible(true);
             barStats.setVisible(false);
             barChartShown = false;
         } else {
-            chartTypeBtn.setText("View as piechart");
+            chartTypeBtn.setText(lan.getString("piechart"));
             pieStats.setVisible(false);
             barStats.setVisible(true);
             barChartShown = true;

@@ -40,7 +40,8 @@ public class Variables {
         }
     }
 
-    private final ArrayList<String> quotes = new ArrayList<>() {{
+    LocalizationManager lan = LocalizationManager.getInstance();
+    private ArrayList<String> quotes = new ArrayList<>() {{
         add("Saving money is a way to achieve financial freedom. Start small and make it a habit.");
         add("The key to saving is to spend less than you earn. Keep track of your expenses and create a budget.");
         add("Use cash instead of credit cards to avoid overspending. It's harder to part with actual money.");
@@ -299,6 +300,7 @@ public class Variables {
             }
         }
     }
+
     public double getCurrencyExchangeRateViaGETRequest(String to) throws IOException {
         String GET_URL = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/" + to.toLowerCase() + ".json";
         URL url = new URL(GET_URL);
@@ -306,14 +308,15 @@ public class Variables {
         httpURLConnection.setRequestMethod("GET");
         int responseCode = httpURLConnection.getResponseCode();
 
-        if(responseCode == HttpURLConnection.HTTP_OK){
+        if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
 
-            while((inputLine = in.readLine()) != null){
+            while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
-            }in.close();
+            }
+            in.close();
 
             JSONObject obj = new JSONObject(response.toString());
             return obj.getDouble(to.toLowerCase());
@@ -322,10 +325,19 @@ public class Variables {
 
         return 0;
     }
-    public Double getCurrentCourseMultiplier(){
+
+    public Double getCurrentCourseMultiplier() {
         return currentCourseMultiplier;
     }
+
     public String getQuote(int index) {
         return quotes.get(index);
+    }
+
+    public void refreshTips() {
+        for (Integer i = 0; i < quotes.size(); i++) {
+            String n = i.toString();
+            quotes.set(i, lan.getString(n));
+        }
     }
 }
