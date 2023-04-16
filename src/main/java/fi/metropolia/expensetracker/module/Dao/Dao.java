@@ -15,8 +15,8 @@ import java.util.Date;
 
 public class Dao {
 
-    private static final String INSERT_QUERY = "INSERT INTO Registration (username, password) VALUES (?, ?)";
-    private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ?";
+    private static final String INSERT_QUERY = "INSERT INTO UserInfo (username, password) VALUES (?, ?)";
+    private static final String SELECT_QUERY = "SELECT * FROM UserInfo WHERE username = ?";
     private final Connection conn = MariaDBConnector.getInstance();
 
     public static void printSQLException(SQLException ex) {
@@ -51,7 +51,7 @@ public class Dao {
 
     public Integer getAge(int id) throws SQLException {
 
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT Age FROM Registration WHERE id=?");
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT Age FROM UserInfo WHERE id=?");
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -65,7 +65,7 @@ public class Dao {
 
     public boolean setAge(int id, int age) throws SQLException {
        try {
-           PreparedStatement preparedStatement = conn.prepareStatement("UPDATE Registration SET Age = ? WHERE id = ?");
+           PreparedStatement preparedStatement = conn.prepareStatement("UPDATE UserInfo SET Age = ? WHERE id = ?");
            preparedStatement.setInt(1, age);
            preparedStatement.setInt(2, id);
            preparedStatement.executeUpdate();
@@ -78,7 +78,7 @@ public class Dao {
 
     public String getPassword(String username) throws SQLException {
 
-        PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM Registration WHERE username=?");
+        PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM UserInfo WHERE username=?");
         prepPsswordState.setString(1, username);
         ResultSet resultSet = prepPsswordState.executeQuery();
         if (resultSet.next()) {
@@ -112,7 +112,7 @@ public class Dao {
     public Integer loggedID(String name) {
 
         try {
-            String sql = "SELECT id FROM Registration WHERE username = ?";
+            String sql = "SELECT id FROM UserInfo WHERE username = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setString(1, name);
@@ -133,7 +133,7 @@ public class Dao {
     public String loggedThemeColor(Integer id) {
 
         try {
-            String sql = "SELECT ThemeColor FROM Registration WHERE id = ?";
+            String sql = "SELECT ThemeColor FROM UserInfo WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setInt(1, id);
@@ -152,7 +152,7 @@ public class Dao {
     }
 
     public boolean userExists(String username) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM Registration WHERE username = ?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM UserInfo WHERE username = ?");
         stmt.setString(1, username);
         ResultSet rs = stmt.executeQuery();
 
@@ -172,7 +172,7 @@ public class Dao {
 
         if (userExists(username)) {
             try {
-                String sql = "DELETE FROM Registration WHERE username = ?";
+                String sql = "DELETE FROM UserInfo WHERE username = ?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setString(1, username);
                 preparedStatement.executeUpdate();
@@ -188,7 +188,7 @@ public class Dao {
 
     public String loggedCurrency(Integer id) {
         try {
-            String sql = "SELECT currency FROM Registration WHERE id=?";
+            String sql = "SELECT currency FROM UserInfo WHERE id=?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setInt(1, id);
@@ -439,7 +439,7 @@ public class Dao {
     public boolean changeUserCurrency(Integer id, String currency) {
 
         try {
-            String sql = "UPDATE Registration SET currency = ? WHERE id= ?";
+            String sql = "UPDATE UserInfo SET currency = ? WHERE id= ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, currency);
             ps.setInt(2, id);
@@ -453,7 +453,7 @@ public class Dao {
 
     public boolean changeUserThemeColor(Integer id, String color) {
         try {
-            String sql = "UPDATE Registration SET ThemeColor = ? WHERE id = ?";
+            String sql = "UPDATE UserInfo SET ThemeColor = ? WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, color);
             ps.setInt(2, id);
@@ -548,7 +548,7 @@ public class Dao {
         String deleteConstantExpenses = "DELETE FROM Constantexpenses WHERE registration_id = ?";
         String deleteBudgets = "DELETE FROM Budgets WHERE registration_id = ?";
         String deleteExpenses = "DELETE FROM Expenses WHERE BudgetId IN (SELECT BudgetId FROM Budgets WHERE registration_id = ?)";
-        String updateUserInfoSql = "UPDATE Registration SET ThemeColor = '#85bb65', currency = 'EUR' WHERE id = ?";
+        String updateUserInfoSql = "UPDATE UserInfo SET ThemeColor = '#85bb65', currency = 'EUR' WHERE id = ?";
 
         try {
             try (PreparedStatement stmt = conn.prepareStatement(deleteIncomes)) {
