@@ -108,8 +108,6 @@ public class IncomeController {
     }
 
     public void setVariables(SalarySingle salary, Variables variables) {
-        IncomeDao incomeDao = new IncomeDao();
-
         this.salarySingle = salary;
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
@@ -126,8 +124,6 @@ public class IncomeController {
                 IncomeDao incomeDao = new IncomeDao();
                 int selectedIndex = salaryHistory.getSelectionModel().getSelectedIndex();
                 if (selectedIndex >= 0) {
-                    int incomeID = 0;
-
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

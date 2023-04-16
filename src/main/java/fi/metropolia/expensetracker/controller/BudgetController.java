@@ -2,7 +2,9 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
+import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
 import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -76,6 +78,8 @@ public class BudgetController {
     private Currency currency;
 
     private LocalizationManager language = LocalizationManager.getInstance();
+    private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
+    private SettingsDao settingsDao = new SettingsDao();
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -147,9 +151,9 @@ public class BudgetController {
                     }
                     if (willAdd) {
                         Dao loginSignupDao = new Dao();
-                        loginSignupDao.saveBudget(variables.getLoggedUserId(), budgetName.getText(), Double.parseDouble(addBudget.getText()));
+                        budgetExpenseDao.saveBudget(variables.getLoggedUserId(), budgetName.getText(), Double.parseDouble(addBudget.getText()));
                         variables.resetBudgets();
-                        Budget[] budgets = loginSignupDao.getBudgets(variables.getLoggedUserId());
+                        Budget[] budgets = budgetExpenseDao.getBudgets(variables.getLoggedUserId());
                         for (Budget budget : budgets) {
                             variables.createNewBudget(budget);
                         }
@@ -204,9 +208,9 @@ public class BudgetController {
 
 
         Dao loginSignupDao = new Dao();
-        loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
+        budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
         variables.getActiveBudget().resetExpenses();
-        Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
+        Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
         for (Expense expense : expenses) {
             variables.getActiveBudget().addExpenseToBudget(expense);
         }
@@ -232,7 +236,7 @@ public class BudgetController {
         if (text.matches("[a-zA-Z]+") && number.matches("^[0-9]+$")) {
             Dao loginSignupDao = new Dao();
             if (modifyName.getText() != null && modifyAmount.getText() != null) {
-                loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
+                budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
 
                 variables.modifyBudget(modifyName.getText(), Double.parseDouble(modifyAmount.getText()));
                 variables.setActiveBudget(modifyName.getText());
@@ -243,7 +247,7 @@ public class BudgetController {
                 editBudget.setVisible(false);
             } else if (modifyName.getText() != null && modifyAmount.getText() == null) {
 
-                loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), modifyName.getText());
+                budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), modifyName.getText());
 
                 variables.modifyBudget(modifyName.getText(), variables.getActiveBudget().getAmount());
                 variables.setActiveBudget(modifyName.getText());
@@ -253,7 +257,7 @@ public class BudgetController {
 
                 editBudget.setVisible(false);
             } else if (modifyName.getText() == null && modifyAmount.getText() != null) {
-                loginSignupDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), variables.getActiveBudget().getName());
+                budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), variables.getActiveBudget().getName());
 
                 variables.modifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()));
                 variables.setActiveBudget(variables.getActiveBudget().getName());
@@ -289,7 +293,7 @@ public class BudgetController {
         if (result.get() == ButtonType.OK) {
             Dao loginSignupDao = new Dao();
 
-            loginSignupDao.deleteBudget(variables.getActiveBudget().getId());
+            budgetExpenseDao.deleteBudget(variables.getActiveBudget().getId());
             variables.deleteBudget();
 
             update();

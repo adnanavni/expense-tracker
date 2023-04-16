@@ -1,8 +1,10 @@
 package fi.metropolia.expensetracker.module;
 
 
+import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
 import fi.metropolia.expensetracker.module.Dao.Dao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -18,6 +20,8 @@ import static java.util.Map.entry;
 
 public class Variables {
     private static Variables INSTANCE = null;
+    private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
+    private SettingsDao settingsDao = new SettingsDao();
 
     private final Map<String, Double> currencies;
 
@@ -135,14 +139,14 @@ public class Variables {
         if (budgets.size() > 0) {
             for (Budget budget : budgets) {
                 budget.setAmount(budget.getAmount() * currentCourseMultiplier);
-                loginSignupDao.changeBudgetMoney(budget.getId(), budget.getAmount());
+                budgetExpenseDao.changeBudgetMoney(budget.getId(), budget.getAmount());
                 if (budget.getExpenses().size() > 0) {
 
                     for (Expense expense : budget.getExpenses()) {
                         double newPrice = expense.getPrice() / multiplierBefore;
                         newPrice = newPrice * currentCourseMultiplier;
                         expense.setPrice(newPrice);
-                        loginSignupDao.changeExpenseMoney(expense.getId(), expense.getPrice());
+                        budgetExpenseDao.changeExpenseMoney(expense.getId(), expense.getPrice());
                     }
                 }
             }
@@ -150,7 +154,7 @@ public class Variables {
         if (constantExpenses.size() > 0) {
             for (ConstantExpense constantExpense : constantExpenses) {
                 constantExpense.setAmount(constantExpense.getAmount() * currentCourseMultiplier);
-                loginSignupDao.changeConstantExpenseValue(constantExpense.getId(), constantExpense.getAmount());
+                budgetExpenseDao.changeConstantExpenseValue(constantExpense.getId(), constantExpense.getAmount());
             }
         }
 
@@ -287,14 +291,14 @@ public class Variables {
 
         Dao loginSignupDao = new Dao();
 
-        ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+        ConstantExpense[] constantExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
 
         if (constantExpenses.length == 0) {
             ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
             for (String defaultConstExpenseName : defaultConstExpenseNames) {
-                loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+                budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
             }
-            ConstantExpense[] defaultConstExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+            ConstantExpense[] defaultConstExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
             for (ConstantExpense constantExpense : defaultConstExpenses) {
                 Variables.getInstance().addConstantExpense(constantExpense);
             }

@@ -2,8 +2,10 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
+import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
 import fi.metropolia.expensetracker.module.Dao.Dao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +32,8 @@ public class LoginController {
     private Button submitButton;
 
     private Dao dao = new Dao();
+    private SettingsDao settingsDao = new SettingsDao();
+    private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
 
     public static void infoBox(String infoMessage, String headerText, String title) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -76,17 +80,17 @@ public class LoginController {
         } else {
             infoBox("Login Successful!", null, "Successful");
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
-            Variables.getInstance().setLoggedCurrency(loginSignupDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
-            ThemeManager.getInstance().setCurrentColor(loginSignupDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
+            Variables.getInstance().setLoggedCurrency(budgetExpenseDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
+            ThemeManager.getInstance().setCurrentColor(settingsDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
 
-            Budget[] budgets = loginSignupDao.getBudgets(Variables.getInstance().getLoggedUserId());
+            Budget[] budgets = budgetExpenseDao.getBudgets(Variables.getInstance().getLoggedUserId());
             if (budgets.length > 0) {
                 for (Budget budget : budgets) {
                     Variables.getInstance().createNewBudget(budget);
                 }
 
                 for (Budget budget : Variables.getInstance().getBudgets()) {
-                    Expense[] budgetExpenses = loginSignupDao.getExpenses(budget.getId());
+                    Expense[] budgetExpenses = budgetExpenseDao.getExpenses(budget.getId());
                     for (Expense expense : budgetExpenses) {
                         budget.addExpenseToBudget(expense);
                     }
@@ -95,13 +99,13 @@ public class LoginController {
                 Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
             }
 
-            ConstantExpense[] constantExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+            ConstantExpense[] constantExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
             if (constantExpenses.length == 0) {
                 ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
                 for (String defaultConstExpenseName : defaultConstExpenseNames) {
-                    loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+                    budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
                 }
-                ConstantExpense[] defaultConstExpenses = loginSignupDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+                ConstantExpense[] defaultConstExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
                 for (ConstantExpense constantExpense : defaultConstExpenses) {
                     Variables.getInstance().addConstantExpense(constantExpense);
                 }
@@ -118,7 +122,7 @@ public class LoginController {
             for (Salary salary : daySalaries) {
                 SalarySingle.getInstance().createNewDaySalary(salary);
             }
-            SalarySingle.getInstance().setAge(dao.getAge(Variables.getInstance().getLoggedUserId()));
+            SalarySingle.getInstance().setAge(settingsDao.getAge(Variables.getInstance().getLoggedUserId()));
             changeWindowToHome();
         }
     }
