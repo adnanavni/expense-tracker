@@ -27,6 +27,8 @@ public class RegisterController {
     @FXML
     private PasswordField passwordField;
     @FXML
+    private PasswordField secondPasswordField;
+    @FXML
     private Button submitButton;
 
     private String hashedPassword;
@@ -57,6 +59,17 @@ public class RegisterController {
         if (passwordField.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
                     "Please enter a password");
+            return;
+        }
+        if (secondPasswordField.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
+                    "Please enter same password again");
+            return;
+        }
+        if(!passwordField.getText().equals(secondPasswordField.getText()) ) {
+            showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
+                    "Passwords are not the same");
+            System.out.println("first " + passwordField.getText() + " second " + secondPasswordField.getText());
             return;
         }
         if (loginSignupDao.userExists(userName.getText())) {
