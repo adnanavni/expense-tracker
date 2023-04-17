@@ -200,7 +200,6 @@ public class DaySalaryController {
             salarySingle.createNewDaySalary(salary);
             salaryHistory.getItems().clear();
             salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
-            // salaryHistory.getItems().addAll(incomeDao.getSalariesWithType(variables.getLoggedUserId(), "DAY"));
 
             addHourSalary.setText(null);
             addHours.setText(null);

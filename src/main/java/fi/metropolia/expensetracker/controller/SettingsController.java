@@ -1,7 +1,7 @@
 package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
-import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import fi.metropolia.expensetracker.module.LocalizationManager;
 import fi.metropolia.expensetracker.module.SalarySingle;
 import fi.metropolia.expensetracker.module.ThemeManager;
@@ -58,15 +58,13 @@ public class SettingsController {
 
     private Variables variables = Variables.getInstance();
     private Currency currency;
-    private Dao dao;
 
     private LocalizationManager localizationManager = LocalizationManager.getInstance();
-
+    private SettingsDao settingsDao = new SettingsDao();
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
-        dao = new Dao();
 
         Map<String, String> colorMap = new HashMap<>();
         colorMap.put("#85bb65", "Original");
@@ -101,8 +99,7 @@ public class SettingsController {
         colorChoiceBox.setOnAction(event -> {
             String selectedHexCode = colorChoiceBox.getValue();
             themeManager.setCurrentColor(selectedHexCode);
-            Dao loginSignupDao = new Dao();
-            loginSignupDao.changeUserThemeColor(variables.getLoggedUserId(), selectedHexCode);
+            settingsDao.changeUserThemeColor(variables.getLoggedUserId(), selectedHexCode);
             content.setStyle(themeManager.getStyle());
 
         });
@@ -123,7 +120,7 @@ public class SettingsController {
 
     public void addAgeClick() throws SQLException {
         SalarySingle.getInstance().setAge(Integer.parseInt(ageField.getText()));
-        dao.setAge(variables.getLoggedUserId(), Integer.parseInt(ageField.getText()));
+        settingsDao.setAge(variables.getLoggedUserId(), Integer.parseInt(ageField.getText()));
         ageField.setText(null);
     }
 
@@ -143,8 +140,7 @@ public class SettingsController {
         variables.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        Dao loginSignupDao = new Dao();
-        loginSignupDao.changeUserCurrency(variables.getLoggedUserId(), selectCurrency.getSelectionModel().getSelectedItem().toString());
+        settingsDao.changeUserCurrency(variables.getLoggedUserId(), selectCurrency.getSelectionModel().getSelectedItem().toString());
     }
 
     @FXML
@@ -153,16 +149,20 @@ public class SettingsController {
             Locale English = new Locale("en", "GB");
             Locale.setDefault(English);
             localizationManager.setLocale(English);
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "English");
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Finnish")) {
             Locale Finnish = new Locale("fi", "FI");
             Locale.setDefault(Finnish);
             localizationManager.setLocale(Finnish);
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "Finnish");
+
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Icelandic")) {
             Locale Icelandic = new Locale("is", "IS");
             Locale.setDefault(Icelandic);
             localizationManager.setLocale(Icelandic);
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "Icelandic");
             refresh();
         }
     }
@@ -175,8 +175,7 @@ public class SettingsController {
 
         Optional<ButtonType> result = confirmDelete.showAndWait();
         if (result.get() == ButtonType.OK) {
-            Dao dao = new Dao();
-            dao.deleteUserData(variables.getLoggedUserId());
+            settingsDao.deleteUserData(variables.getLoggedUserId());
             variables.resetAndSetDefaults();
             content.setStyle(ThemeManager.getInstance().getStyle());
 

@@ -19,22 +19,24 @@ public class SalarySingle {
     private double daySalaryMinusTaxes;
     private double salaryMinusTaxes;
     private int age;
+    LocalizationManager localizationManager = LocalizationManager.getInstance();
 
     private ArrayList<Salary> daySalaries = new ArrayList<>();
     private ArrayList<Salary> monthSalaries = new ArrayList<>();
+
     private Map<String, Integer> months = new HashMap<>() {{
-        put("January", 0);
-        put("February", 1);
-        put("March", 2);
-        put("April", 3);
-        put("May", 4);
-        put("June", 5);
-        put("July", 6);
-        put("August", 7);
-        put("September", 8);
-        put("October", 9);
-        put("November", 10);
-        put("December", 11);
+        put(localizationManager.getString("january"), 0);
+        put(localizationManager.getString("february"), 1);
+        put(localizationManager.getString("march"), 2);
+        put(localizationManager.getString("april"), 3);
+        put(localizationManager.getString("may"), 4);
+        put(localizationManager.getString("june"), 5);
+        put(localizationManager.getString("july"), 6);
+        put(localizationManager.getString("august"), 7);
+        put(localizationManager.getString("september"), 8);
+        put(localizationManager.getString("october"), 9);
+        put(localizationManager.getString("november"), 10);
+        put(localizationManager.getString("december"), 11);
     }};
 
     private SalarySingle() {

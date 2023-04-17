@@ -2,31 +2,21 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="content" minHeight="800.0" minWidth="700.0" styleClass="background"
-            stylesheets="@css/main.css" xmlns="http://javafx.com/javafx"
-            fx:controller="fi.metropolia.expensetracker.controller.RegisterController">
 
-    <Label alignment="CENTER" layoutX="86.0" layoutY="74.0" prefHeight="74.0" prefWidth="426.0" styleClass="header"
-           text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-           AnchorPane.topAnchor="10.0"/>
+<AnchorPane fx:id="content" minHeight="800.0" minWidth="700.0" styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.RegisterController">
+
+    <Label alignment="CENTER" layoutX="86.0" layoutY="74.0" prefHeight="74.0" prefWidth="426.0" styleClass="header" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
     <!-- Add Header Label -->
-    <Label alignment="CENTER" layoutX="196.0" layoutY="201.0" styleClass="budgetText" text="Registration:"
-           AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="150.0"/>
-    <Label alignment="CENTER" layoutX="198.0" layoutY="229.0" styleClass="smallHeader" text="Username:"
-           AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="200.0"/>
-    <TextField fx:id="userName" layoutX="200.0" layoutY="260.0" styleClass="button" AnchorPane.leftAnchor="200.0"
-               AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="225.0"/>
-    <Label alignment="CENTER" layoutX="200.0" layoutY="362.0" styleClass="smallHeader" text="Password:"
-           AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="270.0"/>
-    <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="387.0" styleClass="button"
-                   AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="295.0"/>
-    <Button fx:id="submitButton" layoutX="214.0" layoutY="440.0" onAction="#register" text="Sign up"
-            AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="350.0">
+    <Label alignment="CENTER" layoutX="196.0" layoutY="201.0" styleClass="budgetText" text="Registration:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="150.0" />
+    <Label alignment="CENTER" layoutX="198.0" layoutY="229.0" styleClass="smallHeader" text="Username:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="200.0" />
+    <TextField fx:id="userName" layoutX="200.0" layoutY="260.0" styleClass="button" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="225.0" />
+    <Label alignment="CENTER" layoutX="107.0" layoutY="269.0" styleClass="smallHeader" text="Password:" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="269.0" />
+    <Button fx:id="submitButton" layoutX="275.0" layoutY="457.0" onAction="#register" text="Sign up" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="457.0">
     </Button>
-    <Label alignment="CENTER" layoutX="260.0" layoutY="602.0" styleClass="smallHeader" text="Already registered?"
-           AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="550.0"/>
-    <Label alignment="CENTER" layoutX="197.0" layoutY="571.0" styleClass="smallHeader" text="Login instead!"
-           AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="571.0"/>
-    <Button layoutX="230.0" layoutY="592.0" mnemonicParsing="false" onAction="#changeWindowToLogin" text="Login"
-            AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="600.0"/>
+    <Label alignment="CENTER" layoutX="260.0" layoutY="602.0" styleClass="smallHeader" text="Already registered?" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="550.0" />
+    <Label alignment="CENTER" layoutX="197.0" layoutY="571.0" styleClass="smallHeader" text="Login instead!" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="571.0" />
+    <Button layoutX="230.0" layoutY="592.0" mnemonicParsing="false" onAction="#changeWindowToLogin" text="Login" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="600.0" />
+   <Label layoutX="269.0" layoutY="340.0" styleClass="smallHeader" text="Confirm password:" />
+   <PasswordField fx:id="secondPasswordField" layoutX="200.0" layoutY="362.0" prefHeight="36.0" prefWidth="300.0" styleClass="button" />
+   <PasswordField fx:id="passwordField" layoutX="202.0" layoutY="292.0" prefHeight="36.0" prefWidth="300.0" styleClass="button" />
 </AnchorPane>

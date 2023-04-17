@@ -4,7 +4,6 @@ import fi.metropolia.expensetracker.datasource.MariaDBConnector;
 import fi.metropolia.expensetracker.module.Budget;
 import fi.metropolia.expensetracker.module.ConstantExpense;
 import fi.metropolia.expensetracker.module.Expense;
-import fi.metropolia.expensetracker.module.PsswdAuth;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,10 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Dao {
+public class BudgetExpenseDao {
 
-    private static final String INSERT_QUERY = "INSERT INTO Registration (username, password) VALUES (?, ?)";
-    private static final String SELECT_QUERY = "SELECT * FROM Registration WHERE username = ?";
     private final Connection conn = MariaDBConnector.getInstance();
 
     public static void printSQLException(SQLException ex) {
@@ -34,161 +31,9 @@ public class Dao {
             }
         }
     }
-
-    public void insertRecord(String username, String password) {
-        try {
-
-            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_QUERY);
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-    }
-
-    public Integer getAge(int id) throws SQLException {
-
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT Age FROM Registration WHERE id=?");
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-            resultSet.close();
-            preparedStatement.close();
-
-            return null;
-    }
-
-    public boolean setAge(int id, int age) throws SQLException {
-       try {
-           PreparedStatement preparedStatement = conn.prepareStatement("UPDATE Registration SET Age = ? WHERE id = ?");
-           preparedStatement.setInt(1, age);
-           preparedStatement.setInt(2, id);
-           preparedStatement.executeUpdate();
-           return true;
-       } catch (SQLException e) {
-           printSQLException(e);
-       }
-       return false;
-    }
-
-    public String getPassword(String username) throws SQLException {
-
-        PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM Registration WHERE username=?");
-        prepPsswordState.setString(1, username);
-        ResultSet resultSet = prepPsswordState.executeQuery();
-        if (resultSet.next()) {
-            return resultSet.getString(1);
-        }
-        resultSet.close();
-        prepPsswordState.close();
-
-        return null;
-    }
-
-    public boolean validate(String username, String password) {
-        try {
-            PreparedStatement preparedStatement = conn.prepareStatement(SELECT_QUERY);
-            preparedStatement.setString(1, username);
-            PsswdAuth auth = new PsswdAuth();
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next() && auth.authenticate(password.toCharArray(), getPassword(username))) {
-                return true;
-            }
-            resultSet.close();
-            preparedStatement.close();
-
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-        return false;
-    }
-
-    public Integer loggedID(String name) {
-
-        try {
-            String sql = "SELECT id FROM Registration WHERE username = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-
-            preparedStatement.setString(1, name);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-            resultSet.close();
-            preparedStatement.close();
-
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-
-        return null;
-    }
-
-    public String loggedThemeColor(Integer id) {
-
-        try {
-            String sql = "SELECT ThemeColor FROM Registration WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getString(1);
-            }
-            resultSet.close();
-            preparedStatement.close();
-
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-
-        return null;
-    }
-
-    public boolean userExists(String username) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM Registration WHERE username = ?");
-        stmt.setString(1, username);
-        ResultSet rs = stmt.executeQuery();
-
-        int count = 0;
-        if (rs.next()) {
-            count = rs.getInt(1);
-        }
-        if (count > 0) {
-            // The username already exists
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean deleteUser(String username) throws SQLException {
-
-        if (userExists(username)) {
-            try {
-                String sql = "DELETE FROM Registration WHERE username = ?";
-                PreparedStatement preparedStatement = conn.prepareStatement(sql);
-                preparedStatement.setString(1, username);
-                preparedStatement.executeUpdate();
-                return true;
-            } catch (SQLException e) {
-                printSQLException(e);
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
     public String loggedCurrency(Integer id) {
         try {
-            String sql = "SELECT currency FROM Registration WHERE id=?";
+            String sql = "SELECT currency FROM UserInfo WHERE id=?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             preparedStatement.setInt(1, id);
@@ -436,34 +281,8 @@ public class Dao {
         return result;
     }
 
-    public boolean changeUserCurrency(Integer id, String currency) {
 
-        try {
-            String sql = "UPDATE Registration SET currency = ? WHERE id= ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, currency);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-        return false;
-    }
 
-    public boolean changeUserThemeColor(Integer id, String color) {
-        try {
-            String sql = "UPDATE Registration SET ThemeColor = ? WHERE id = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, color);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
-        return false;
-    }
 
     public boolean changeConstantExpenseValue(Integer id, Double money) {
         try {
@@ -540,44 +359,6 @@ public class Dao {
             }
         } else {
             return false;
-        }
-    }
-
-    public void deleteUserData(Integer userId) {
-        String deleteIncomes = "DELETE FROM Incomes WHERE UserID = ?";
-        String deleteConstantExpenses = "DELETE FROM Constantexpenses WHERE registration_id = ?";
-        String deleteBudgets = "DELETE FROM Budgets WHERE registration_id = ?";
-        String deleteExpenses = "DELETE FROM Expenses WHERE BudgetId IN (SELECT BudgetId FROM Budgets WHERE registration_id = ?)";
-        String updateUserInfoSql = "UPDATE Registration SET ThemeColor = '#85bb65', currency = 'EUR' WHERE id = ?";
-
-        try {
-            try (PreparedStatement stmt = conn.prepareStatement(deleteIncomes)) {
-                stmt.setInt(1, userId);
-                stmt.executeUpdate();
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement(deleteConstantExpenses)) {
-                stmt.setInt(1, userId);
-                stmt.executeUpdate();
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement(deleteBudgets)) {
-                stmt.setInt(1, userId);
-                stmt.executeUpdate();
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement(deleteExpenses)) {
-                stmt.setInt(1, userId);
-                stmt.executeUpdate();
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement(updateUserInfoSql)) {
-                stmt.setInt(1, userId);
-                stmt.executeUpdate();
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
     }
 }
