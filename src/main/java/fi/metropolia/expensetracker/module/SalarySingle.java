@@ -23,21 +23,26 @@ public class SalarySingle {
 
     private ArrayList<Salary> daySalaries = new ArrayList<>();
     private ArrayList<Salary> monthSalaries = new ArrayList<>();
+    Map<String, Integer> months;
 
-    private Map<String, Integer> months = new HashMap<>() {{
-        put(localizationManager.getString("january"), 0);
-        put(localizationManager.getString("february"), 1);
-        put(localizationManager.getString("march"), 2);
-        put(localizationManager.getString("april"), 3);
-        put(localizationManager.getString("may"), 4);
-        put(localizationManager.getString("june"), 5);
-        put(localizationManager.getString("july"), 6);
-        put(localizationManager.getString("august"), 7);
-        put(localizationManager.getString("september"), 8);
-        put(localizationManager.getString("october"), 9);
-        put(localizationManager.getString("november"), 10);
-        put(localizationManager.getString("december"), 11);
-    }};
+
+
+    public void refreshMonthsCombLanguage() {
+         months = new HashMap<>() {{
+            put(localizationManager.getString("january"), 0);
+            put(localizationManager.getString("february"), 1);
+            put(localizationManager.getString("march"), 2);
+            put(localizationManager.getString("april"), 3);
+            put(localizationManager.getString("may"), 4);
+            put(localizationManager.getString("june"), 5);
+            put(localizationManager.getString("july"), 6);
+            put(localizationManager.getString("august"), 7);
+            put(localizationManager.getString("september"), 8);
+            put(localizationManager.getString("october"), 9);
+            put(localizationManager.getString("november"), 10);
+            put(localizationManager.getString("december"), 11);
+        }};
+    }
 
     private SalarySingle() {
     }
@@ -202,7 +207,6 @@ public class SalarySingle {
     }
 
     public double getSalariesBetweenStartAndFinish(String start, String end, String type) throws ParseException {
-        IncomeDao incomeDao = new IncomeDao();
         ArrayList<Double> salaries = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date parsedStart = sdf.parse(start);
@@ -233,4 +237,5 @@ public class SalarySingle {
         monthSalaries.clear();
         daySalaries.clear();
     }
+
 }

@@ -36,7 +36,7 @@ public class IncomeController {
     private ListView salaryHistory;
     @FXML
     private Label salaryComing;
-    private SalarySingle salarySingle;
+    private SalarySingle salarySingle = SalarySingle.getInstance();
     @FXML
     private DatePicker selectedDate;
     @FXML
@@ -75,6 +75,7 @@ public class IncomeController {
 
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
+        salarySingle.refreshMonthsCombLanguage();
         content.setStyle(themeManager.getStyle());
 
         if (Locale.getDefault().getLanguage().matches("fi")) {

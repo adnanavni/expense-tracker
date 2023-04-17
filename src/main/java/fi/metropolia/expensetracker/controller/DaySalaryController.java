@@ -38,7 +38,7 @@ public class DaySalaryController {
     @FXML
     private Label salaryComing;
 
-    private SalarySingle salarySingle;
+    private SalarySingle salarySingle = SalarySingle.getInstance();
 
     @FXML
     private DatePicker selectedDate;
@@ -83,6 +83,7 @@ public class DaySalaryController {
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
+        salarySingle.refreshMonthsCombLanguage();
 
         if (Locale.getDefault().getLanguage().matches("fi")) {
             mandatoryTaxes.setVisible(true);

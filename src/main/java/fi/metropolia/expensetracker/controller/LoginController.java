@@ -59,13 +59,13 @@ public class LoginController {
         Window owner = submitButton.getScene().getWindow();
 
         if (userName.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
-                    localizationManager.getString("emptyUsername"));
+            showAlert(Alert.AlertType.ERROR, owner, "formError",
+                   "Please enter your username");
             return;
         }
         if (passwordField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
-                    localizationManager.getString("emptyPassword"));
+            showAlert(Alert.AlertType.ERROR, owner, "formError",
+                    "Please enter a password");
             return;
         }
 
@@ -77,9 +77,9 @@ public class LoginController {
         boolean flag = loginSignupDao.validate(name, password);
 
         if (!flag) {
-            infoBox(localizationManager.getString("wrongInfo"), null, "Failed");
+            infoBox("Please enter correct username and password or create a new account!", null, "Failed");
         } else {
-            infoBox(localizationManager.getString("loginSuccesMsg"), null, localizationManager.getString("loginSuccesTitle"));
+            infoBox("Loogin succesfull", null, "Succesfull");
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setLoggedCurrency(budgetExpenseDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
             ThemeManager.getInstance().setCurrentColor(settingsDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
