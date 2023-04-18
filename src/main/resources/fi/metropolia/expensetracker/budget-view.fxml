@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.text.Font?>
 <AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
             styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/"
             xmlns:fx="http://javafx.com/fxml/"
@@ -91,5 +94,31 @@
                         AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="60.0"/>
             </children>
         </AnchorPane>
+        <AnchorPane AnchorPane.leftAnchor="375.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="340.0">
+            <children>
+                <Label fx:id="show" alignment="CENTER" styleClass="smallHeader" text="Showing statistics from:"
+                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <ComboBox fx:id="selectedTimeFrame" layoutX="78.0" layoutY="140.0" promptText="All time"
+                          styleClass="button" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0"
+                          AnchorPane.topAnchor="30.0"/>
+            </children>
+        </AnchorPane>
+        <BarChart fx:id="barStats" layoutX="44.0" layoutY="400.0" onMouseClicked="#onChangeChartClick"
+                  styleClass="button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
+                  AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="420.0">
+            <xAxis>
+                <CategoryAxis side="BOTTOM"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT"/>
+            </yAxis>
+        </BarChart>
+        <PieChart fx:id="pieStats" layoutX="35.0" layoutY="396.0" onMouseClicked="#onChangeChartClick"
+                  styleClass="button" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
+                  AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="420.0"/>
     </children>
 </AnchorPane>
