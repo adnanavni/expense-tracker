@@ -56,7 +56,9 @@ public class MainController {
         content.setStyle(themeManager.getStyle());
 
         if (variables.getBudgets().size() < 1) {
-            budget.setText("No budgets yet");
+            // Change to correct language
+            budget.setText(localizationManager.getString("emptyBudget"));
+
             expenseBtn.setDisable(true);
         } else {
             expenseBtn.setDisable(false);

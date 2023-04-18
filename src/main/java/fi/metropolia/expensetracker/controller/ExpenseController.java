@@ -2,7 +2,9 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
-import fi.metropolia.expensetracker.module.Dao.Dao;
+import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
+import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
+import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -66,6 +68,8 @@ public class ExpenseController {
     private LocalizationManager lan = LocalizationManager.getInstance();
     private Variables variables;
     private Currency currency;
+    private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
+    private SettingsDao settingsDao = new SettingsDao();
 
 
     public void initialize() {
@@ -117,7 +121,7 @@ public class ExpenseController {
             @Override
             public void handle(MouseEvent event) {
                 int selectedIndex = expenseHistory.getSelectionModel().getSelectedIndex();
-                Dao loginSignupDao = new Dao();
+                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
                 if (selectedIndex >= 0) {
                     Expense selected = (Expense) expenseHistory.getItems().get(selectedIndex);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -130,7 +134,7 @@ public class ExpenseController {
                     if (option.get() == ButtonType.OK) {
                         expenseHistory.getItems().remove(selected);
                         variables.getActiveBudget().removeExpenseFromBudget(selected);
-                        loginSignupDao.deleteExpense(selected.getId());
+                        budgetExpenseDao.deleteExpense(selected.getId());
                         expenseHistory.getItems().clear();
                         expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
 
@@ -168,11 +172,11 @@ public class ExpenseController {
                 }
                 ZoneId defaultZoneId = ZoneId.systemDefault();
                 Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
-                Dao loginSignupDao = new Dao();
-                loginSignupDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
+                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
+                budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
                         , Double.parseDouble(addExpense.getText()), finalDate);
                 variables.getActiveBudget().resetExpenses();
-                Expense[] expenses = loginSignupDao.getExpenses(variables.getActiveBudget().getId());
+                Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
                 for (Expense expense : expenses) {
                     variables.getActiveBudget().addExpenseToBudget(expense);
                 }
@@ -223,9 +227,9 @@ public class ExpenseController {
                     constExpense.setText(null);
                     constExpenseName.setText(null);
                 } else {
-                    Dao loginSignupDao = new Dao();
-                    loginSignupDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(), 0.00);
-                    ConstantExpense newConstantExpense = loginSignupDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
+                    RegisterLoginDao loginSignupDao = new RegisterLoginDao();
+                    budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(), 0.00);
+                    ConstantExpense newConstantExpense = budgetExpenseDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
                     variables.addConstantExpense(newConstantExpense);
                     selectCategory.setValue(null);
                     constExpense.setText(null);
@@ -248,9 +252,9 @@ public class ExpenseController {
             if (constExpense.getText().matches("^[0-9]+$")) {
                 ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
                 variables.removeConstantExpense(selectedConstExpense);
-                Dao loginSignupDao = new Dao();
-                loginSignupDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
-                ConstantExpense modifiedConstExp = loginSignupDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
+                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
+                budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
+                ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
                 variables.addConstantExpense(modifiedConstExp);
                 variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
                 selectCategory.setValue(null);
