@@ -87,7 +87,7 @@ public class RegisterController {
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
 
             showAlert(Alert.AlertType.CONFIRMATION, owner, localizationManager.getString("registrationSuccessTitle"),
-                    localizationManager.getString("welcome") + userName.getText());
+                    localizationManager.getString("welcome") + " " +  userName.getText());
 
             changeWindowToHome();
         }

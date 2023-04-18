@@ -21,27 +21,16 @@ public class BudgetController {
 
     @FXML
     private AnchorPane content;
-
-    @FXML
-    private Label budget;
-
     @FXML
     private Label activeBudget;
     @FXML
     private TextField addBudget;
-
     @FXML
     private TextField budgetName;
-
     @FXML
     private ComboBox selectTopic;
-
-    @FXML
-    private Label specificBudget;
-
     @FXML
     private AnchorPane budgetPane;
-
     @FXML
     private ComboBox expenseCombo;
     @FXML
@@ -52,31 +41,31 @@ public class BudgetController {
     private TextField modifyName;
     @FXML
     private TextField modifyAmount;
-
     @FXML
     private Label total;
-
     @FXML
     private Label active;
-
     @FXML
     private Button deleteBtn;
-
     @FXML
     private Button modifyBtn;
-
     @FXML
     private Button addBtn;
-
     @FXML
     private Button back;
-
     @FXML
-    Button ConstExpenseBtn;
+    private Button ConstExpenseBtn;
+    @FXML
+    private AnchorPane modifyBudget;
+    @FXML
+    private Button modify;
+    @FXML
+    private Button delete;
+    @FXML
+    private Button shared;
 
     private Variables variables;
     private Currency currency;
-
     private LocalizationManager language = LocalizationManager.getInstance();
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
     private SettingsDao settingsDao = new SettingsDao();
@@ -89,6 +78,7 @@ public class BudgetController {
         total.setText(language.getString("total"));
         active.setText(language.getString("active"));
         selectTopic.setPromptText(language.getString("budget"));
+        activeBudget.setText(language.getString("noActive"));
 
         budgetName.setPromptText(language.getString("name"));
         addBudget.setPromptText(language.getString("amount"));
@@ -102,6 +92,11 @@ public class BudgetController {
         expenseCombo.setPromptText(language.getString("constantExpense"));
         ConstExpenseBtn.setText(language.getString("remove"));
 
+        modify.setText(language.getString("modify"));
+        delete.setText(language.getString("delete"));
+
+        shared.setText(language.getString("shared"));
+
     }
 
     public void setVariables(Variables variables) {
@@ -109,8 +104,14 @@ public class BudgetController {
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
-        total.setText("Budget");
+        total.setText(language.getString("total"));
         selectTopic.getItems().addAll(variables.getBudgetNames());
+
+        if(variables.getActiveBudget() != null) {
+            selectTopic.setValue(variables.getActiveBudget().getName());
+            modifyBudget.setVisible(true);
+            budgetPane.setVisible(true);
+        }
 
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
             expenseCombo.getItems().add(constantExpense);
@@ -166,9 +167,8 @@ public class BudgetController {
                 }
             }
             selectTopic.getItems().setAll(variables.getBudgetNames());
-            specificBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
 
-            selectTopic.setValue(null);
+            selectTopic.setValue(variables.getActiveBudget().getName());
             addBudget.setText(null);
             budgetName.setText(null);
             newBudget.setVisible(false);
@@ -186,11 +186,13 @@ public class BudgetController {
     @FXML
     protected void onSelectTopic() {
         if (selectTopic.getValue() == "New") {
+            modifyBudget.setVisible(false);
             editBudget.setVisible(false);
             newBudget.setVisible(true);
         } else if (selectTopic.getValue() != null) {
             newBudget.setVisible(false);
-            editBudget.setVisible(true);
+            modifyBudget.setVisible(true);
+            editBudget.setVisible(false);
             budgetPane.setVisible(true);
 
             for (Budget budget : variables.getBudgets()) {
@@ -200,6 +202,13 @@ public class BudgetController {
                 }
             }
         }
+    }
+
+
+    @FXML
+    protected void modifyBudget() {
+        modifyBudget.setVisible(false);
+        editBudget.setVisible(true);
     }
 
     @FXML
@@ -222,10 +231,6 @@ public class BudgetController {
                 budgetExpenses += expense.getPrice();
             }
         }
-
-        specificBudget.setText(variables.getActiveBudget().getName() + " " + (variables.getActiveBudget().getAmount() - budgetExpenses) + " " + currency.getSymbol());
-
-
     }
 
     @FXML
@@ -319,7 +324,5 @@ public class BudgetController {
                 budgetExpenses += expense.getPrice();
             }
         }
-        String activeBudgetText = String.format("%.2f", variables.getActiveBudget().getAmount() - budgetExpenses);
-        specificBudget.setText(variables.getActiveBudget().getName() + " " + activeBudgetText + " " + currency.getSymbol());
     }
 }
