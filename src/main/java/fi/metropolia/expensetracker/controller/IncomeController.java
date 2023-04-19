@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,6 +30,8 @@ public class IncomeController {
     private Variables variables;
     @FXML
     private AnchorPane content;
+    @FXML
+    private AnchorPane historyPane;
     @FXML
     private TextField addMonthSalary;
     @FXML
@@ -78,6 +82,7 @@ public class IncomeController {
         salarySingle.refreshMonthsCombLanguage();
         content.setStyle(themeManager.getStyle());
 
+
         if (Locale.getDefault().getLanguage().matches("fi")) {
             mandatoryTaxes.setVisible(true);
         }
@@ -116,6 +121,8 @@ public class IncomeController {
         addMonthSalary.setPromptText(currency.getSymbol());
 
         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+        monthsCombo.setPromptText(lan.getString("month"));
+
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Pakolliset verot kuten työeläkemaksu ja työttömyysvakuusmaksu."));
 
@@ -199,7 +206,13 @@ public class IncomeController {
     protected void calculateMonths() throws ParseException {
         int selectedIndex = monthsCombo.getSelectionModel().getSelectedIndex();
         String month = (String) monthsCombo.getItems().get(selectedIndex);
-        String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(month, "MONTH"));
-        salaryComing.setText("Salary amount of " + month + " is " + salaryAmount + " " + currency.getSymbol());
+        String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(selectedIndex, "MONTH"));
+        Locale finnish = new Locale("fi", "FI");
+        if (lan.getLocale().equals(finnish)) {
+            salaryComing.setText(lan.getString("salarycomingText") + " " +  month + lan.getString("bendingWord") + " " + lan.getString("is") +  salaryAmount + " " + currency.getSymbol());
+        }
+        else
+            salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + salaryAmount + " " + currency.getSymbol());
+
     }
 }
