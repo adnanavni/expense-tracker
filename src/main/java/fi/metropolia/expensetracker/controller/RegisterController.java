@@ -54,28 +54,28 @@ public class RegisterController {
         loginSignupDao = new RegisterLoginDao();
 
         if (userName.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
-                    localizationManager.getString("emptyUsername"));
+            showAlert(Alert.AlertType.ERROR, owner, "formError",
+                    "Please enter your username");
             return;
         }
         if (passwordField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
-                    localizationManager.getString("emptyPassword"));
+            showAlert(Alert.AlertType.ERROR, owner, "formError",
+                    "Please enter a password");
             return;
         }
         if (secondPasswordField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
-                    localizationManager.getString("emptySecondPassword"));
+            showAlert(Alert.AlertType.ERROR, owner, "formError",
+                    "Please enter same password again");
             return;
         }
         if(!passwordField.getText().equals(secondPasswordField.getText()) ) {
-            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("formError"),
-                    localizationManager.getString("passwordNotEqual"));
+            showAlert(Alert.AlertType.ERROR, owner, "formError",
+                    "Passwords are not the same");
             return;
         }
         if (loginSignupDao.userExists(userName.getText())) {
-            showAlert(Alert.AlertType.ERROR, owner, localizationManager.getString("userExistsTitle"),
-                    localizationManager.getString("userExistsMsg"));
+            showAlert(Alert.AlertType.ERROR, owner, "Username already in use!",
+                    "Please enter a new username");
         }
         if (!loginSignupDao.userExists(userName.getText())) {
             String name = userName.getText();
@@ -86,8 +86,8 @@ public class RegisterController {
             loginSignupDao.insertRecord(name, hashedPassword);
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
 
-            showAlert(Alert.AlertType.CONFIRMATION, owner, localizationManager.getString("registrationSuccessTitle"),
-                    localizationManager.getString("welcome") + " " +  userName.getText());
+            showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration succesfull!",
+                    "Welcome" + userName.getText());
 
             changeWindowToHome();
         }

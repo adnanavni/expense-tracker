@@ -5,10 +5,7 @@ import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SalarySingle {
     private static SalarySingle INSTANCE = null;
@@ -23,21 +20,26 @@ public class SalarySingle {
 
     private ArrayList<Salary> daySalaries = new ArrayList<>();
     private ArrayList<Salary> monthSalaries = new ArrayList<>();
+    public LinkedHashMap<String, Integer> months;
 
-    private Map<String, Integer> months = new HashMap<>() {{
-        put(localizationManager.getString("january"), 0);
-        put(localizationManager.getString("february"), 1);
-        put(localizationManager.getString("march"), 2);
-        put(localizationManager.getString("april"), 3);
-        put(localizationManager.getString("may"), 4);
-        put(localizationManager.getString("june"), 5);
-        put(localizationManager.getString("july"), 6);
-        put(localizationManager.getString("august"), 7);
-        put(localizationManager.getString("september"), 8);
-        put(localizationManager.getString("october"), 9);
-        put(localizationManager.getString("november"), 10);
-        put(localizationManager.getString("december"), 11);
-    }};
+
+
+    public void refreshMonthsCombLanguage() {
+         months = new LinkedHashMap<>() {{
+            put(localizationManager.getString("january"), 0);
+            put(localizationManager.getString("february"), 1);
+            put(localizationManager.getString("march"), 2);
+            put(localizationManager.getString("april"), 3);
+            put(localizationManager.getString("may"), 4);
+            put(localizationManager.getString("june"), 5);
+            put(localizationManager.getString("july"), 6);
+            put(localizationManager.getString("august"), 7);
+            put(localizationManager.getString("september"), 8);
+            put(localizationManager.getString("october"), 9);
+            put(localizationManager.getString("november"), 10);
+            put(localizationManager.getString("december"), 11);
+        }};
+    }
 
     private SalarySingle() {
     }
@@ -153,46 +155,47 @@ public class SalarySingle {
         this.age = age;
     }
 
-    public double geTotalSalaryOfMonth(String m, String type) throws ParseException {
+    public double geTotalSalaryOfMonth(int monthNumber, String type) throws ParseException {
         int year = LocalDate.now().getYear();
         int beforeYear = (year - 1);
         int nextYear = (year + 1);
         double totalSalary = 0;
-        switch (m) {
-            case ("January"):
+
+        switch (monthNumber) {
+            case (0):
                 totalSalary = getSalariesBetweenStartAndFinish("31/12/" + beforeYear, "01/02/" + year, type);
                 break;
-            case ("February"):
+            case (1):
                 totalSalary = getSalariesBetweenStartAndFinish("31/01/" + year, "01/03/" + year, type);
                 break;
-            case ("March"):
+            case (2):
                 totalSalary = getSalariesBetweenStartAndFinish("28/02/" + year, "01/04/" + year, type);
                 break;
-            case ("April"):
+            case (3):
                 totalSalary = getSalariesBetweenStartAndFinish("31/03/" + year, "01/05/" + year, type);
                 break;
-            case ("May"):
+            case (4):
                 totalSalary = getSalariesBetweenStartAndFinish("30/04/" + year, "01/06/" + year, type);
                 break;
-            case ("June"):
+            case (5):
                 totalSalary = getSalariesBetweenStartAndFinish("31/05/" + year, "01/07/" + year, type);
                 break;
-            case ("July"):
+            case (6):
                 totalSalary = getSalariesBetweenStartAndFinish("30/06/" + year, "01/08/" + year, type);
                 break;
-            case ("August"):
+            case (7):
                 totalSalary = getSalariesBetweenStartAndFinish("31/07/" + year, "01/09/" + year, type);
                 break;
-            case ("September"):
+            case (8):
                 totalSalary = getSalariesBetweenStartAndFinish("31/08/" + year, "01/10/" + year, type);
                 break;
-            case ("October"):
+            case (9):
                 totalSalary = getSalariesBetweenStartAndFinish("30/9/" + year, "01/11/" + year, type);
                 break;
-            case ("November"):
+            case (10):
                 totalSalary = getSalariesBetweenStartAndFinish("31/10/" + year, "01/12/" + year, type);
                 break;
-            case ("December"):
+            case (11):
                 totalSalary = getSalariesBetweenStartAndFinish("30/11/" + year, "01/01/" + nextYear, type);
                 break;
             default:
@@ -202,7 +205,6 @@ public class SalarySingle {
     }
 
     public double getSalariesBetweenStartAndFinish(String start, String end, String type) throws ParseException {
-        IncomeDao incomeDao = new IncomeDao();
         ArrayList<Double> salaries = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date parsedStart = sdf.parse(start);
@@ -233,4 +235,5 @@ public class SalarySingle {
         monthSalaries.clear();
         daySalaries.clear();
     }
+
 }
