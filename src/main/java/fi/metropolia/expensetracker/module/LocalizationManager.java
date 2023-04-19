@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 public class LocalizationManager {
     private static LocalizationManager instance;
     private ResourceBundle messages;
+    private Locale locale = Locale.getDefault();
 
     private LocalizationManager() {
         messages = ResourceBundle.getBundle("fi/metropolia/expensetracker/properties/messages", Locale.getDefault());
@@ -18,8 +19,12 @@ public class LocalizationManager {
         return instance;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
     public void setLocale(Locale locale) {
         messages = ResourceBundle.getBundle("fi/metropolia/expensetracker/properties/messages", locale);
+        this.locale = locale;
     }
 
     public String getString(String key) {
