@@ -9,6 +9,11 @@
 
 <AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0" styleClass="background" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.metropolia.expensetracker.controller.MainController">
     <children>
+        <ImageView fx:id="settingsIcon1" fitHeight="617.0" fitWidth="588.0" layoutX="56.0" layoutY="220.0" opacity="0.25" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@images/logo.png" />
+            </image>
+        </ImageView>
         <Label alignment="CENTER" layoutX="79.0" layoutY="14.0" prefHeight="60.0" prefWidth="411.0" styleClass="header" text="Expense Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="10.0" />
         <Label fx:id="total" alignment="CENTER" layoutX="224.0" layoutY="90.0" styleClass="titleText" text="Total budget:" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
         <Label fx:id="budget" alignment="CENTER" layoutX="261.0" layoutY="137.0" prefHeight="17.0" prefWidth="41.0" styleClass="titleText" text="0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0" />
@@ -37,7 +42,7 @@
                 <Insets />
             </opaqueInsets>
         </VBox>
-        <ImageView fx:id="settingsIcon" fitHeight="65.0" fitWidth="40.0" layoutX="646.0" layoutY="746.0" onMouseClicked="#changeWindowToSettings" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
+        <ImageView fx:id="settingsIcon" fitHeight="65.0" fitWidth="40.0" layoutX="646.0" layoutY="746.0" onMouseClicked="#changeWindowToSettings" pickOnBounds="true" preserveRatio="true" styleClass="button" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
             <image>
                 <Image url="@images/setting.png" />
             </image>
