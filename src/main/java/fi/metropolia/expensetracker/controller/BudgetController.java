@@ -134,7 +134,7 @@ public class BudgetController {
 
         if (variables.getActiveBudget() != null) {
             String budgetText = String.format("%.2f", variables.getBudget());
-            activeBudget.setText(variables.getActiveBudget().getName());
+            activeBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + currency.getSymbol());
             total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
         }
     }
@@ -174,7 +174,7 @@ public class BudgetController {
                             variables.createNewBudget(budget);
                         }
                         variables.setActiveBudget(budgetName.getText());
-                        activeBudget.setText(variables.getActiveBudget().getName());
+                        activeBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + currency.getSymbol());
                         String budgetText = String.format("%.2f", variables.getBudget());
                         total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
 
@@ -314,7 +314,7 @@ public class BudgetController {
             variables.deleteBudget();
 
             update();
-            activeBudget.setText("None");
+            activeBudget.setText(language.getString("noActive"));
 
             selectTopic.getItems().setAll(variables.getBudgetNames());
 
@@ -329,7 +329,7 @@ public class BudgetController {
     private void update() {
         String budgetText = String.format("%.2f", variables.getBudget());
         total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
-        activeBudget.setText(variables.getActiveBudget().getName());
+        activeBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + currency.getSymbol());
         Double budgetExpenses = 0.00;
         if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {

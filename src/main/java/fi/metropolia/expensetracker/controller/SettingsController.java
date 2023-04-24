@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
@@ -58,7 +59,7 @@ public class SettingsController {
     private Variables variables = Variables.getInstance();
     private Currency currency;
 
-    private LocalizationManager localizationManager = LocalizationManager.getInstance();
+    private LocalizationManager lan = LocalizationManager.getInstance();
     private SettingsDao settingsDao = new SettingsDao();
 
     public void initialize() {
@@ -103,9 +104,7 @@ public class SettingsController {
 
         });
 
-
         selectCurrency.getItems().addAll(variables.getCurrencyCodes());
-
 
         ArrayList<String> languages = new ArrayList<>();
         languages.add("English");
@@ -118,9 +117,16 @@ public class SettingsController {
     }
 
     public void addAgeClick() throws SQLException {
-        SalarySingle.getInstance().setAge(Integer.parseInt(ageField.getText()));
-        settingsDao.setAge(variables.getLoggedUserId(), Integer.parseInt(ageField.getText()));
-        ageField.setText(null);
+        if (ageField.getText().matches("^[0-9]+$") && ageField != null) {
+            SalarySingle.getInstance().setAge(Integer.parseInt(ageField.getText()));
+            settingsDao.setAge(variables.getLoggedUserId(), Integer.parseInt(ageField.getText()));
+            ageField.setText(null);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(lan.getString("Settings"));
+            alert.setHeaderText(lan.getString("formCorrect"));
+            alert.showAndWait();
+        }
     }
 
     public void setVariables(Variables variables, Currency currency) {
@@ -146,17 +152,17 @@ public class SettingsController {
     protected void onSelectLanguage() {
         if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("English")) {
             Locale English = new Locale("en", "GB");
-            localizationManager.setLocale(English);
+            lan.setLocale(English);
             settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "en_GB");
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Finnish")) {
             Locale Finnish = new Locale("fi", "FI");
-            localizationManager.setLocale(Finnish);
+            lan.setLocale(Finnish);
             settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "fi_FI");
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Icelandic")) {
             Locale Icelandic = new Locale("is", "IS");
-            localizationManager.setLocale(Icelandic);
+            lan.setLocale(Icelandic);
             settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "is_IS");
             refresh();
         }
@@ -165,8 +171,8 @@ public class SettingsController {
     @FXML
     public void deleteData() {
         Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmDelete.setTitle(localizationManager.getString("settings"));
-        confirmDelete.setHeaderText(localizationManager.getString("areYouSure"));
+        confirmDelete.setTitle(lan.getString("settings"));
+        confirmDelete.setHeaderText(lan.getString("areYouSure"));
 
         Optional<ButtonType> result = confirmDelete.showAndWait();
         if (result.get() == ButtonType.OK) {
@@ -175,21 +181,21 @@ public class SettingsController {
             content.setStyle(ThemeManager.getInstance().getStyle());
 
             Alert dataDeleted = new Alert(Alert.AlertType.INFORMATION);
-            dataDeleted.setTitle(localizationManager.getString("settings"));
-            dataDeleted.setHeaderText(localizationManager.getString("dataSuccess"));
+            dataDeleted.setTitle(lan.getString("settings"));
+            dataDeleted.setHeaderText(lan.getString("dataSuccess"));
             dataDeleted.showAndWait();
         }
     }
 
     private void refresh() {
-        settings.setText(localizationManager.getString("settings"));
-        bgColor.setText(localizationManager.getString("bgColor"));
-        currencyText.setText(localizationManager.getString("currencyText"));
-        language.setText(localizationManager.getString("language"));
-        setAge.setText(localizationManager.getString("setAge"));
-        onlyFin.setText(localizationManager.getString("onlyFin"));
-        saveAge.setText(localizationManager.getString("setBtn"));
-        deleteData.setText(localizationManager.getString("deleteAll"));
-        back.setText(localizationManager.getString("back"));
+        settings.setText(lan.getString("settings"));
+        bgColor.setText(lan.getString("bgColor"));
+        currencyText.setText(lan.getString("currencyText"));
+        language.setText(lan.getString("language"));
+        setAge.setText(lan.getString("setAge"));
+        onlyFin.setText(lan.getString("onlyFin"));
+        saveAge.setText(lan.getString("setBtn"));
+        deleteData.setText(lan.getString("deleteAll"));
+        back.setText(lan.getString("back"));
     }
 }

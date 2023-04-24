@@ -166,7 +166,7 @@ public class DaySalaryController {
     @FXML
     protected void onSalaryAddClick() throws SQLException {
 
-        if (addHourSalary.getText().matches("^[0-9]+$") && addHours.getText().matches("^[0-9]+$") && addTaxRate.getText().matches("^[0-9]+$")) {
+        if ((addHourSalary.getText().matches("^[0-9]+$") && addHours.getText().matches("^[0-9]+$")) && addTaxRate.getText().matches("^[0-9]+$") && (addHourSalary != null && addHours != null && addTaxRate != null)) {
             IncomeDao incomeDao = new IncomeDao();
             double taxRate;
 
@@ -224,7 +224,7 @@ public class DaySalaryController {
         String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(selectedIndex, "DAY"));
         Locale finnish = new Locale("fi", "FI");
         if (lan.getLocale().equals(finnish)) {
-               salaryComing.setText(lan.getString("salarycomingText") + " " +  month + lan.getString("bendingWord") + " " + lan.getString("is") +  salaryAmount + " " + currency.getSymbol());
+               salaryComing.setText(lan.getString("salarycomingText") + " " +  month + lan.getString("bendingWord") + " " + lan.getString("is") + " " +  salaryAmount + " " + currency.getSymbol());
         }
         else
          salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());

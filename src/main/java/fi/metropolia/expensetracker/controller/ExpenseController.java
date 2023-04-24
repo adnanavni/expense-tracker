@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
@@ -147,11 +148,8 @@ public class ExpenseController {
 
     @FXML
     protected void onExpenseAddClick() {
-
         String number = addExpense.getText();
-
-        if (number.matches("\\d+")) {
-
+        if (number.matches("\\d+") && addExpense != null) {
             if (selectTopic.getSelectionModel().getSelectedItem() != null) {
                 LocalDate expenseDate = LocalDate.now();
                 if (selectedDate.getValue() != null) {
@@ -160,8 +158,19 @@ public class ExpenseController {
                 ZoneId defaultZoneId = ZoneId.systemDefault();
                 Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
                 RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-                budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
-                        , Double.parseDouble(addExpense.getText()), finalDate);
+
+                ArrayList<String> categories = new ArrayList<>() {{
+                    add("Groceries");
+                    add("Restaurants");
+                    add("Hobbies");
+                    add("Clothes");
+                    add("Well-being");
+                    add("Medicines");
+                    add("Transport");
+                    add("Other");
+                }};
+
+                budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), categories.get(selectTopic.getSelectionModel().getSelectedIndex()), Double.parseDouble(addExpense.getText()), finalDate);
                 variables.getActiveBudget().resetExpenses();
                 Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
                 for (Expense expense : expenses) {
@@ -192,7 +201,7 @@ public class ExpenseController {
 
     @FXML
     protected void setConstExpense() {
-        if (constExpense.getText().matches("^[0-9]+$")) {
+        if (constExpense.getText().matches("^[0-9]+$") && constExpense != null) {
             ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
             variables.removeConstantExpense(selectedConstExpense);
             RegisterLoginDao loginSignupDao = new RegisterLoginDao();
@@ -219,6 +228,13 @@ public class ExpenseController {
     protected void btnEnable() {
         if (selectTopic.getSelectionModel().getSelectedItem() != null && addExpense.getText() != null) {
             addBtn.setDisable(false);
+        }
+    }
+
+    @FXML
+    protected void enableSetBtn() {
+        if (selectCategory.getSelectionModel().getSelectedItem() != null) {
+            setBtn.setDisable(false);
         }
     }
 }

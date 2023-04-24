@@ -234,7 +234,7 @@ public class Variables {
         categories.add(lan.getString("restaurants"));
         categories.add(lan.getString("hobbies"));
         categories.add(lan.getString("clothes"));
-        categories.add(lan.getString("wellBeing"));
+        categories.add(lan.getString("well-being"));
         categories.add(lan.getString("medicine"));
         categories.add(lan.getString("transport"));
         categories.add(lan.getString("other"));
