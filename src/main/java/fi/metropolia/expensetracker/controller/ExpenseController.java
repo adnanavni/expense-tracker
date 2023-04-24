@@ -60,10 +60,10 @@ public class ExpenseController {
     private Label history;
 
     @FXML
-    private Button statisticBtn;
+    private Button setBtn;
 
     @FXML
-    private Button setBtn;
+    private Button back;
 
     private LocalizationManager lan = LocalizationManager.getInstance();
     private Variables variables;
@@ -76,6 +76,7 @@ public class ExpenseController {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
 
+        back.setText(lan.getString("back"));
         expenseTxt.setText(lan.getString("expense"));
         active.setText(lan.getString("activeonExpense"));
         singleExpense.setText(lan.getString("single"));
@@ -86,7 +87,6 @@ public class ExpenseController {
         constExpenseName.setPromptText(lan.getString("name"));
         constExpense.setPromptText(lan.getString("amount"));
         setBtn.setText(lan.getString("setBtn"));
-        statisticBtn.setText(lan.getString("statistics"));
         history.setText(lan.getString("history"));
     }
 

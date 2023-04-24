@@ -39,10 +39,6 @@ public class Salary {
     public double getSalaryMinusTaxes() {
         return salaryMinusTaxes;
     }
-
-    public void setSalaryMinusTaxes(double salaryMinusTaxes) {
-        this.salaryMinusTaxes = salaryMinusTaxes;
-    }
     public void setSalary(Double salary) {
         this.salary = salary;
     }
