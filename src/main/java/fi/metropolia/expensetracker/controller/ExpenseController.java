@@ -24,8 +24,6 @@ public class ExpenseController {
     @FXML
     private AnchorPane content;
     @FXML
-    private Label expense;
-    @FXML
     private TextField addExpense;
     @FXML
     private ComboBox selectTopic;
@@ -40,28 +38,19 @@ public class ExpenseController {
     @FXML
     private ComboBox selectCategory;
     @FXML
-    private TextField constExpenseName;
-    @FXML
     private TextField constExpense;
-
     @FXML
     private Label expenseTxt;
-
     @FXML
     private Label active;
-
     @FXML
     private Label singleExpense;
-
     @FXML
     private Label constantExpense;
-
     @FXML
     private Label history;
-
     @FXML
     private Button setBtn;
-
     @FXML
     private Button back;
 
@@ -84,7 +73,6 @@ public class ExpenseController {
         selectTopic.setPromptText(lan.getString("category"));
         addExpense.setPromptText(lan.getString("amount"));
         addBtn.setText(lan.getString("add"));
-        constExpenseName.setPromptText(lan.getString("name"));
         constExpense.setPromptText(lan.getString("amount"));
         setBtn.setText(lan.getString("setBtn"));
         history.setText(lan.getString("history"));
@@ -116,7 +104,6 @@ public class ExpenseController {
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
             selectCategory.getItems().add(constantExpense);
         }
-        selectCategory.getItems().add(0, "New");
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -206,77 +193,30 @@ public class ExpenseController {
     }
 
     @FXML
-    protected void selectConst() {
-        if (selectCategory.getValue() == "New") {
-            constExpenseName.setVisible(true);
-        } else if (selectCategory.getValue() != null) {
-            constExpenseName.setVisible(false);
-        }
-    }
-
-    @FXML
     protected void setConstExpense() {
-
-        if (selectCategory.getValue().equals("New")) {
-            if (constExpense.getText().matches("^[0-9]+$") && constExpenseName.getText().matches("[a-zA-Z]+")) {
-                if (variables.constantExpenseNameExists(constExpenseName.getText())) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Name already exists!");
-                    alert.setHeaderText("You already have a Constant expense with that name!");
-                    alert.setContentText("Give a name that doesn't already exist.");
-                    alert.showAndWait();
-                    selectCategory.setValue(null);
-                    constExpense.setText(null);
-                    constExpenseName.setText(null);
-                } else {
-                    RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-                    budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(), 0.00);
-                    ConstantExpense newConstantExpense = budgetExpenseDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
-                    variables.addConstantExpense(newConstantExpense);
-                    selectCategory.setValue(null);
-                    constExpense.setText(null);
-                    constExpenseName.setText(null);
-                    selectCategory.getItems().clear();
-                    selectCategory.getItems().add(0, "New");
-                    for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-                        selectCategory.getItems().add(constantExpense);
-                    }
-                }
-
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Add a constant expense");
-                alert.setHeaderText("You cant add a constant expense");
-                alert.setContentText("Fill the form correctly");
-                alert.showAndWait();
+        if (constExpense.getText().matches("^[0-9]+$")) {
+            ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
+            variables.removeConstantExpense(selectedConstExpense);
+            RegisterLoginDao loginSignupDao = new RegisterLoginDao();
+            budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
+            ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
+            variables.addConstantExpense(modifiedConstExp);
+            variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
+            selectCategory.setValue(null);
+            constExpense.setText(null);
+            selectCategory.getItems().clear();
+            for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+                selectCategory.getItems().add(constantExpense);
             }
         } else {
-            if (constExpense.getText().matches("^[0-9]+$")) {
-                ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
-                variables.removeConstantExpense(selectedConstExpense);
-                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-                budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
-                ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
-                variables.addConstantExpense(modifiedConstExp);
-                variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
-                selectCategory.setValue(null);
-                constExpense.setText(null);
-                constExpenseName.setText(null);
-                selectCategory.getItems().clear();
-                selectCategory.getItems().add(0, "New");
-                for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-                    selectCategory.getItems().add(constantExpense);
-                }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Modify a constant expense");
-                alert.setHeaderText("You cant modify a constant expense");
-                alert.setContentText("Fill the form correctly");
-                alert.showAndWait();
-            }
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Modify a constant expense");
+            alert.setHeaderText("You cant modify a constant expense");
+            alert.setContentText("Fill the form correctly");
+            alert.showAndWait();
         }
-
     }
+
 
     public void toExpenseStatistics(ActionEvent event) throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("expenseStatistics-view.fxml"));
