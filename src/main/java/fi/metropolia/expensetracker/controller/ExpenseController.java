@@ -114,10 +114,8 @@ public class ExpenseController {
                 if (selectedIndex >= 0) {
                     Expense selected = (Expense) expenseHistory.getItems().get(selectedIndex);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Expense deletion");
-                    alert.setHeaderText("Delete selected expense?");
-                    alert.setContentText(selected.toString());
-
+                    alert.setTitle(lan.getString("expense"));
+                    alert.setHeaderText(lan.getString("areYouSure"));
                     Optional<ButtonType> option = alert.showAndWait();
 
                     if (option.get() == ButtonType.OK) {
@@ -138,9 +136,9 @@ public class ExpenseController {
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("No selection!");
-                    alert.setHeaderText("No selected expense!");
-                    alert.setContentText("Click an existing expense.");
+                    alert.setTitle(lan.getString("expense"));
+                    alert.setHeaderText(lan.getString("selectedExpense"));
+                    alert.setContentText(lan.getString("clickExpense"));
                     alert.showAndWait();
                 }
             }
@@ -185,9 +183,9 @@ public class ExpenseController {
             selectedDate.setValue(null);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Add an expense");
-            alert.setHeaderText("You cant add an expense");
-            alert.setContentText("Fill the form correctly");
+            alert.setTitle(lan.getString("expense"));
+            alert.setHeaderText(lan.getString("addExpense"));
+            alert.setContentText(lan.getString("formCorrect"));
             alert.showAndWait();
         }
     }
@@ -210,22 +208,11 @@ public class ExpenseController {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Modify a constant expense");
-            alert.setHeaderText("You cant modify a constant expense");
-            alert.setContentText("Fill the form correctly");
+            alert.setTitle(lan.getString("expense"));
+            alert.setHeaderText(lan.getString("modifyExpense"));
+            alert.setContentText(lan.getString("formCorrect"));
             alert.showAndWait();
         }
-    }
-
-
-    public void toExpenseStatistics(ActionEvent event) throws IOException {
-        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("expenseStatistics-view.fxml"));
-
-        AnchorPane pane = fxmloader.load();
-        content.getChildren().setAll(pane);
-
-        ExpenseStatisticsController expenseStatisticsController = fxmloader.getController();
-        expenseStatisticsController.setVariables(variables);
     }
 
     @FXML

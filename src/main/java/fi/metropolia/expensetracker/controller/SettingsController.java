@@ -11,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
@@ -166,8 +165,8 @@ public class SettingsController {
     @FXML
     public void deleteData() {
         Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmDelete.setTitle("Confirm Delete");
-        confirmDelete.setHeaderText("This action resets all data from the user. Are you sure you want to delete all data?");
+        confirmDelete.setTitle(localizationManager.getString("settings"));
+        confirmDelete.setHeaderText(localizationManager.getString("areYouSure"));
 
         Optional<ButtonType> result = confirmDelete.showAndWait();
         if (result.get() == ButtonType.OK) {
@@ -176,9 +175,8 @@ public class SettingsController {
             content.setStyle(ThemeManager.getInstance().getStyle());
 
             Alert dataDeleted = new Alert(Alert.AlertType.INFORMATION);
-            dataDeleted.setTitle("Data Deleted");
-            dataDeleted.setHeaderText(null);
-            dataDeleted.setContentText("All data has been deleted successfully.");
+            dataDeleted.setTitle(localizationManager.getString("settings"));
+            dataDeleted.setHeaderText(localizationManager.getString("dataSuccess"));
             dataDeleted.showAndWait();
         }
     }

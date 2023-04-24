@@ -128,8 +128,8 @@ public class DaySalaryController {
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Salary calculation");
-                    alert.setHeaderText("Add salary to calculation");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("areYouSure"));
                     alert.setContentText(selected.toString());
 
                     incomeID = selected.getId();
@@ -144,9 +144,9 @@ public class DaySalaryController {
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("No selection!");
-                    alert.setHeaderText("No selected income!");
-                    alert.setContentText("Click an existing income.");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("selectedIncome"));
+                    alert.setContentText(lan.getString("clickIncome"));
                     alert.showAndWait();
                 }
             }
@@ -210,9 +210,9 @@ public class DaySalaryController {
             mandatoryTaxes.setSelected(false);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Add an income");
-            alert.setHeaderText("You cant add an income");
-            alert.setContentText("Fill the form correctly");
+            alert.setTitle(lan.getString("income"));
+            alert.setHeaderText(lan.getString("addIncome"));
+            alert.setContentText(lan.getString("formCorrect"));
             alert.showAndWait();
         }
     }

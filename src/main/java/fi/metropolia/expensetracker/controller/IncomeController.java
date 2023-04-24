@@ -135,8 +135,8 @@ public class IncomeController {
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Salary deletion");
-                    alert.setHeaderText("Do you want to delete salary of the history");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("areYouSure"));
                     alert.setContentText(selected.toString());
 
                     Optional<ButtonType> option = alert.showAndWait();
@@ -151,9 +151,9 @@ public class IncomeController {
                 } else {
                     // Nothing selected.
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("No selection!");
-                    alert.setHeaderText("No selected income!");
-                    alert.setContentText("Click an existing income.");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("selectedIncome"));
+                    alert.setContentText(lan.getString("clickIncome"));
                     alert.showAndWait();
                 }
             }

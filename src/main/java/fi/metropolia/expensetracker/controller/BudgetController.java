@@ -159,9 +159,9 @@ public class BudgetController {
                         if (Objects.equals(budget.getName(), budgetName.getText())) {
                             willAdd = false;
                             Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Name Exists");
-                            alert.setHeaderText("Budget with given name already exists!");
-                            alert.setContentText("Choose another name.");
+                            alert.setTitle(language.getString("budget"));
+                            alert.setHeaderText(language.getString("budgetName"));
+                            alert.setContentText(language.getString("anotherName"));
                             alert.showAndWait();
                         }
                     }
@@ -191,9 +191,9 @@ public class BudgetController {
             budgetPane.setVisible(true);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Add a budget");
-            alert.setHeaderText("You cant add a budget");
-            alert.setContentText("Fill the form correctly");
+            alert.setTitle(language.getString("budget"));
+            alert.setHeaderText(language.getString("addBudget"));
+            alert.setContentText(language.getString("formCorrect"));
             alert.showAndWait();
         }
     }
@@ -229,8 +229,6 @@ public class BudgetController {
     @FXML
     protected void removeBtn() {
         ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
-
-
         RegisterLoginDao loginSignupDao = new RegisterLoginDao();
         budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
         variables.getActiveBudget().resetExpenses();
@@ -289,14 +287,13 @@ public class BudgetController {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Modify your budget");
-            alert.setHeaderText("Your budget is not being modified");
-            alert.setContentText("Fill the form correctly");
+            alert.setTitle(language.getString("budget"));
+            alert.setHeaderText(language.getString("modifyBudget"));
+            alert.setContentText(language.getString("formCorrect"));
             alert.showAndWait();
         }
 
 
-        selectTopic.setValue(null);
         modifyAmount.setText(null);
         modifyName.setText(null);
     }
@@ -305,8 +302,8 @@ public class BudgetController {
     protected void deleteBtnClick() {
 
         Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmDelete.setTitle("Confirm Delete");
-        confirmDelete.setHeaderText("This action deletes your current budget. Are you sure you want to delete your current budget?");
+        confirmDelete.setTitle(language.getString("budget"));
+        confirmDelete.setHeaderText(language.getString("areYouSure"));
 
         Optional<ButtonType> result = confirmDelete.showAndWait();
 
@@ -341,7 +338,8 @@ public class BudgetController {
         }
     }
 
-    public void onChangeChartClick() {
+    @FXML
+    protected void onChangeChartClick() {
         if (barChartShown) {
             pieStats.setVisible(true);
             barStats.setVisible(false);
@@ -351,5 +349,10 @@ public class BudgetController {
             barStats.setVisible(true);
             barChartShown = true;
         }
+    }
+
+    @FXML
+    protected void btnEnbale() {
+        ConstExpenseBtn.setDisable(false);
     }
 }
