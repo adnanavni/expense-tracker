@@ -20,6 +20,7 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class LoginController {
     @FXML
@@ -79,10 +80,16 @@ public class LoginController {
         if (!flag) {
             infoBox("Please enter correct username and password or create a new account!", null, "Failed");
         } else {
-            infoBox("Login succesfull!", null, "Succesfull!");
+            infoBox("Login successful!", null, "Successful!");
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setLoggedCurrency(budgetExpenseDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
             ThemeManager.getInstance().setCurrentColor(settingsDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
+
+            String language = loginSignupDao.getLanguage(Variables.getInstance().getLoggedUserId());
+            String lan = language.substring(0,2);
+            String country = language.substring(3);
+            LocalizationManager.getInstance().setLocale(new Locale(lan, country));
+
 
             Budget[] budgets = budgetExpenseDao.getBudgets(Variables.getInstance().getLoggedUserId());
             if (budgets.length > 0) {

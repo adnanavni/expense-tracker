@@ -147,22 +147,18 @@ public class SettingsController {
     protected void onSelectLanguage() {
         if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("English")) {
             Locale English = new Locale("en", "GB");
-            Locale.setDefault(English);
             localizationManager.setLocale(English);
-            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "en");
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "en_GB");
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Finnish")) {
             Locale Finnish = new Locale("fi", "FI");
-            Locale.setDefault(Finnish);
             localizationManager.setLocale(Finnish);
-            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "fi");
-
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "fi_FI");
             refresh();
         } else if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("Icelandic")) {
             Locale Icelandic = new Locale("is", "IS");
-            Locale.setDefault(Icelandic);
             localizationManager.setLocale(Icelandic);
-            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "is");
+            settingsDao.setLanguage(Variables.getInstance().getLoggedUserId(), "is_IS");
             refresh();
         }
     }

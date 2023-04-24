@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
+import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import fi.metropolia.expensetracker.module.LocalizationManager;
 import fi.metropolia.expensetracker.module.PsswdAuth;
 import fi.metropolia.expensetracker.module.Variables;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class RegisterController {
     @FXML
@@ -86,7 +88,12 @@ public class RegisterController {
             loginSignupDao.insertRecord(name, hashedPassword);
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
 
-            showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration succesfull!",
+            SettingsDao settingsDao = new SettingsDao();
+            settingsDao.setLanguage(loginSignupDao.loggedID(name), "en_GB");
+
+            LocalizationManager.getInstance().setLocale(new Locale("en_GB"));
+
+            showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration successful!",
                     "Welcome" + " " +  userName.getText());
 
             changeWindowToHome();
