@@ -88,6 +88,8 @@ public class ExpenseController {
         constExpense.setPromptText(lan.getString("amount"));
         setBtn.setText(lan.getString("setBtn"));
         history.setText(lan.getString("history"));
+
+        Variables.getInstance().refreshCategories();
     }
 
     public void backToMain(ActionEvent event) throws IOException {
@@ -109,7 +111,7 @@ public class ExpenseController {
         }
         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
         this.expenseTxt.setText(budgetText + " " + currency.getSymbol());
-        selectTopic.getItems().addAll(variables.getTopics());
+        selectTopic.getItems().addAll(variables.getCategories());
 
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
             selectCategory.getItems().add(constantExpense);

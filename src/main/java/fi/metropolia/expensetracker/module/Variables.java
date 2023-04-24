@@ -58,15 +58,15 @@ public class Variables {
         add("Remember that every little bit counts. Even small savings can add up over time.");
     }};
 
-    private final Map<String, Double> categories = new HashMap<>() {{
-        put("Groceries", 0.00);
-        put("Restaurants", 0.00);
-        put("Hobbies", 0.00);
-        put("Clothes", 0.00);
-        put("Well-being", 0.00);
-        put("Medicines", 0.00);
-        put("Transport", 0.00);
-        put("Other", 0.00);
+    private ArrayList<String> categories = new ArrayList<>() {{
+        add("Groceries");
+        add("Restaurants");
+        add("Hobbies");
+        add("Clothes");
+        add("Well-being");
+        add("Medicines");
+        add("Transport");
+        add("Other");
     }};
     private Integer loggedUserId;
     private Map<String, Double> constExpenses = new HashMap<>() {{
@@ -224,8 +224,20 @@ public class Variables {
         return totalBudget;
     }
 
-    public ArrayList<String> getTopics() {
-        return new ArrayList<>(categories.keySet());
+    public ArrayList<String> getCategories() {
+        return categories;
+    }
+
+    public void refreshCategories() {
+        categories.clear();
+        categories.add(lan.getString("groceries"));
+        categories.add(lan.getString("restaurants"));
+        categories.add(lan.getString("hobbies"));
+        categories.add(lan.getString("clothes"));
+        categories.add(lan.getString("wellBeing"));
+        categories.add(lan.getString("medicine"));
+        categories.add(lan.getString("transport"));
+        categories.add(lan.getString("other"));
     }
 
     public Budget getActiveBudget() {
@@ -315,7 +327,7 @@ public class Variables {
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
 
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
@@ -339,8 +351,8 @@ public class Variables {
     }
 
     public void refreshTips() {
-        for (Integer i = 0; i < quotes.size(); i++) {
-            String n = i.toString();
+        for (int i = 0; i < quotes.size(); i++) {
+            String n = Integer.toString(i);
             quotes.set(i, lan.getString(n));
         }
     }

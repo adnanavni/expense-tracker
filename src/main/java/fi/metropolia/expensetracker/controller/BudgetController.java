@@ -147,10 +147,14 @@ public class BudgetController {
         selectedTimeFrame.getItems().add("Today");
         barStats.setAnimated(false);
         pieStats.setAnimated(false);
+        budgetName.setText(variables.getActiveBudget().getName());
+        ArrayList<String> chartNames = variables.getCategories();
 
         HashMap<String, Double> allValues = calculateValues("All time");
 
+
         barStats.setTitle("Expenses");
+
 
         XYChart.Series series = new XYChart.Series();
         series.setName("Money spent");

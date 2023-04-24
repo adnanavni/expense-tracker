@@ -19,8 +19,6 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("login_form-view.fxml"));
 
-        Locale.setDefault(new Locale("en", "GB"));
-
         stage.setTitle("Expense Tracker");
         stage.setScene(new Scene(root, 700, 800));
         stage.getIcons().add(new Image(MainApplication.class.getResourceAsStream("images/logo.png")));
