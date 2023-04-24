@@ -22,10 +22,8 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Currency;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ExpenseStatisticsController {
     @FXML
@@ -331,260 +329,52 @@ public class ExpenseStatisticsController {
 
     private HashMap<String, Double> calculateValues(String timeFrame) {
         HashMap<String, Double> values = new HashMap<>();
+        values.put("Groceries", 0.0);
+        values.put("Restaurants", 0.0);
+        values.put("Hobbies", 0.0);
+        values.put("Clothes", 0.0);
+        values.put("Well-being", 0.0);
+        values.put("Medicines", 0.0);
+        values.put("Transport", 0.0);
+        values.put("Other", 0.0);
+        values.put("Constant expenses", 0.0);
+
         Calendar cal1 = Calendar.getInstance();
-        Calendar cal2 = Calendar.getInstance();
         ZoneId defaultZoneId = ZoneId.systemDefault();
         LocalDate currentDate = LocalDate.now();
         cal1.setTime(Date.from(currentDate.atStartOfDay(defaultZoneId).toInstant()));
 
-
-        values.put("Groceries", 0.00);
-
-        values.put("Restaurants", 0.00);
-
-        values.put("Hobbies", 0.00);
-
-        values.put("Clothes", 0.00);
-
-        values.put("Well-being", 0.00);
-
-        values.put("Medicines", 0.00);
-
-        values.put("Transport", 0.00);
-
-        values.put("Other", 0.00);
-
-        values.put("Constant expenses", 0.00);
-
-        Double currentValue;
-
-        if (timeFrame.equals("All time") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                switch (expense.getType()) {
-                    case ("Groceries"):
-                        currentValue = values.get("Groceries");
-                        values.put("Groceries", currentValue + expense.getPrice());
-                        break;
-                    case ("Restaurants"):
-                        currentValue = values.get("Restaurants");
-                        values.put("Restaurants", currentValue + expense.getPrice());
-                        break;
-                    case ("Hobbies"):
-                        currentValue = values.get("Hobbies");
-                        values.put("Hobbies", currentValue + expense.getPrice());
-                        break;
-                    case ("Clothes"):
-                        currentValue = values.get("Clothes");
-                        values.put("Clothes", currentValue + expense.getPrice());
-                        break;
-                    case ("Well-being"):
-                        currentValue = values.get("Well-being");
-                        values.put("Well-being", currentValue + expense.getPrice());
-                        break;
-                    case ("Medicines"):
-                        currentValue = values.get("Medicines");
-                        values.put("Medicines", currentValue + expense.getPrice());
-                        break;
-                    case ("Transport"):
-                        currentValue = values.get("Transport");
-                        values.put("Transport", currentValue + expense.getPrice());
-                        break;
-                    case ("Other"):
-                        currentValue = values.get("Other");
-                        values.put("Other", currentValue + expense.getPrice());
-                        break;
-                    default:
-                        currentValue = values.get("Constant expenses");
-                        values.put("Constant expenses", currentValue + expense.getPrice());
-                }
-
-            }
-        } else if (timeFrame.equals("This year") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(expense.getDate());
-                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
-                    switch (expense.getType()) {
-                        case ("Groceries"):
-                            currentValue = values.get("Groceries");
-                            values.put("Groceries", currentValue + expense.getPrice());
-                            break;
-                        case ("Restaurants"):
-                            currentValue = values.get("Restaurants");
-                            values.put("Restaurants", currentValue + expense.getPrice());
-                            break;
-                        case ("Hobbies"):
-                            currentValue = values.get("Hobbies");
-                            values.put("Hobbies", currentValue + expense.getPrice());
-                            break;
-                        case ("Clothes"):
-                            currentValue = values.get("Clothes");
-                            values.put("Clothes", currentValue + expense.getPrice());
-                            break;
-                        case ("Well-being"):
-                            currentValue = values.get("Well-being");
-                            values.put("Well-being", currentValue + expense.getPrice());
-                            break;
-                        case ("Medicines"):
-                            currentValue = values.get("Medicines");
-                            values.put("Medicines", currentValue + expense.getPrice());
-                            break;
-                        case ("Transport"):
-                            currentValue = values.get("Transport");
-                            values.put("Transport", currentValue + expense.getPrice());
-                            break;
-                        case ("Other"):
-                            currentValue = values.get("Other");
-                            values.put("Other", currentValue + expense.getPrice());
-                            break;
-                        default:
-                            currentValue = values.get("Constant expenses");
-                            values.put("Constant expenses", currentValue + expense.getPrice());
-                    }
-                }
-            }
-        } else if (timeFrame.equals("This month") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(expense.getDate());
-                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
-                    if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
-                        switch (expense.getType()) {
-                            case ("Groceries"):
-                                currentValue = values.get("Groceries");
-                                values.put("Groceries", currentValue + expense.getPrice());
-                                break;
-                            case ("Restaurants"):
-                                currentValue = values.get("Restaurants");
-                                values.put("Restaurants", currentValue + expense.getPrice());
-                                break;
-                            case ("Hobbies"):
-                                currentValue = values.get("Hobbies");
-                                values.put("Hobbies", currentValue + expense.getPrice());
-                                break;
-                            case ("Clothes"):
-                                currentValue = values.get("Clothes");
-                                values.put("Clothes", currentValue + expense.getPrice());
-                                break;
-                            case ("Well-being"):
-                                currentValue = values.get("Well-being");
-                                values.put("Well-being", currentValue + expense.getPrice());
-                                break;
-                            case ("Medicines"):
-                                currentValue = values.get("Medicines");
-                                values.put("Medicines", currentValue + expense.getPrice());
-                                break;
-                            case ("Transport"):
-                                currentValue = values.get("Transport");
-                                values.put("Transport", currentValue + expense.getPrice());
-                                break;
-                            case ("Other"):
-                                currentValue = values.get("Other");
-                                values.put("Other", currentValue + expense.getPrice());
-                                break;
-                            default:
-                                currentValue = values.get("Constant expenses");
-                                values.put("Constant expenses", currentValue + expense.getPrice());
-                        }
-                    }
-                }
-            }
-        } else if (timeFrame.equals("This week") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(expense.getDate());
-                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
-                    if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
-                        if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)) {
-                            switch (expense.getType()) {
-                                case ("Groceries"):
-                                    currentValue = values.get("Groceries");
-                                    values.put("Groceries", currentValue + expense.getPrice());
-                                    break;
-                                case ("Restaurants"):
-                                    currentValue = values.get("Restaurants");
-                                    values.put("Restaurants", currentValue + expense.getPrice());
-                                    break;
-                                case ("Hobbies"):
-                                    currentValue = values.get("Hobbies");
-                                    values.put("Hobbies", currentValue + expense.getPrice());
-                                    break;
-                                case ("Clothes"):
-                                    currentValue = values.get("Clothes");
-                                    values.put("Clothes", currentValue + expense.getPrice());
-                                    break;
-                                case ("Well-being"):
-                                    currentValue = values.get("Well-being");
-                                    values.put("Well-being", currentValue + expense.getPrice());
-                                    break;
-                                case ("Medicines"):
-                                    currentValue = values.get("Medicines");
-                                    values.put("Medicines", currentValue + expense.getPrice());
-                                    break;
-                                case ("Transport"):
-                                    currentValue = values.get("Transport");
-                                    values.put("Transport", currentValue + expense.getPrice());
-                                    break;
-                                case ("Other"):
-                                    currentValue = values.get("Other");
-                                    values.put("Other", currentValue + expense.getPrice());
-                                    break;
-                                default:
-                                    currentValue = values.get("Constant expenses");
-                                    values.put("Constant expenses", currentValue + expense.getPrice());
-                            }
-                        }
-                    }
-                }
-            }
-        } else if (timeFrame.equals("Today") && variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                cal2.setTime(expense.getDate());
-                if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
-                    if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
-                        if (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)) {
-                            switch (expense.getType()) {
-                                case ("Groceries"):
-                                    currentValue = values.get("Groceries");
-                                    values.put("Groceries", currentValue + expense.getPrice());
-                                    break;
-                                case ("Restaurants"):
-                                    currentValue = values.get("Restaurants");
-                                    values.put("Restaurants", currentValue + expense.getPrice());
-                                    break;
-                                case ("Hobbies"):
-                                    currentValue = values.get("Hobbies");
-                                    values.put("Hobbies", currentValue + expense.getPrice());
-                                    break;
-                                case ("Clothes"):
-                                    currentValue = values.get("Clothes");
-                                    values.put("Clothes", currentValue + expense.getPrice());
-                                    break;
-                                case ("Well-being"):
-                                    currentValue = values.get("Well-being");
-                                    values.put("Well-being", currentValue + expense.getPrice());
-                                    break;
-                                case ("Medicines"):
-                                    currentValue = values.get("Medicines");
-                                    values.put("Medicines", currentValue + expense.getPrice());
-                                    break;
-                                case ("Transport"):
-                                    currentValue = values.get("Transport");
-                                    values.put("Transport", currentValue + expense.getPrice());
-                                    break;
-                                case ("Other"):
-                                    currentValue = values.get("Other");
-                                    values.put("Other", currentValue + expense.getPrice());
-                                    break;
-                                default:
-                                    currentValue = values.get("Constant expenses");
-                                    values.put("Constant expenses", currentValue + expense.getPrice());
-                            }
-                        }
-                    }
-                }
-            }
+        List<Expense> expenses = variables.getActiveBudget().getExpenses();
+        switch (timeFrame) {
+            case "This month":
+                expenses = expenses.stream()
+                        .filter(expense -> {
+                            Calendar cal2 = Calendar.getInstance();
+                            cal2.setTime(expense.getDate());
+                            return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                                    cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
+                        })
+                        .collect(Collectors.toList());
+                break;
+            case "This year":
+                expenses = expenses.stream()
+                        .filter(expense -> {
+                            Calendar cal2 = Calendar.getInstance();
+                            cal2.setTime(expense.getDate());
+                            return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+                        })
+                        .collect(Collectors.toList());
+                break;
         }
-        return values;
 
+        for (Expense expense : expenses) {
+            values.computeIfAbsent(expense.getType(), k -> 0.0);
+            values.compute(expense.getType(), (k, v) -> v + expense.getPrice());
+        }
+
+        return values;
     }
+
 
     public void onChangeChartClick() {
         if (barChartShown) {
