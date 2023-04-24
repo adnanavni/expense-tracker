@@ -79,7 +79,7 @@ public class LoginController {
         if (!flag) {
             infoBox("Please enter correct username and password or create a new account!", null, "Failed");
         } else {
-            infoBox("Loogin succesfull", null, "Succesfull");
+            infoBox("Login succesfull", null, "Succesfull");
             Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
             Variables.getInstance().setLoggedCurrency(budgetExpenseDao.loggedCurrency(Variables.getInstance().getLoggedUserId()));
             ThemeManager.getInstance().setCurrentColor(settingsDao.loggedThemeColor(Variables.getInstance().getLoggedUserId()));
