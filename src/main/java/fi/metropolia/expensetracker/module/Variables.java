@@ -2,8 +2,8 @@ package fi.metropolia.expensetracker.module;
 
 
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import org.json.JSONObject;
 
@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -27,18 +26,7 @@ public class Variables {
 
     {
         try {
-            currencies = Map.ofEntries(
-                    entry("EUR", 1.00),
-                    entry("USD", getCurrencyExchangeRateViaGETRequest("USD")),
-                    entry("SEK", getCurrencyExchangeRateViaGETRequest("SEK")),
-                    entry("JPY", getCurrencyExchangeRateViaGETRequest("JPY")),
-                    entry("ISK", getCurrencyExchangeRateViaGETRequest("ISK")),
-                    entry("CAD", getCurrencyExchangeRateViaGETRequest("CAD")),
-                    entry("RUB", getCurrencyExchangeRateViaGETRequest("RUB")),
-                    entry("CHF", getCurrencyExchangeRateViaGETRequest("CHF")),
-                    entry("NOK", getCurrencyExchangeRateViaGETRequest("NOK")),
-                    entry("DKK", getCurrencyExchangeRateViaGETRequest("DKK")),
-                    entry("GBP", getCurrencyExchangeRateViaGETRequest("GBP")));
+            currencies = Map.ofEntries(entry("EUR", 1.00), entry("USD", getCurrencyExchangeRateViaGETRequest("USD")), entry("SEK", getCurrencyExchangeRateViaGETRequest("SEK")), entry("JPY", getCurrencyExchangeRateViaGETRequest("JPY")), entry("ISK", getCurrencyExchangeRateViaGETRequest("ISK")), entry("CAD", getCurrencyExchangeRateViaGETRequest("CAD")), entry("RUB", getCurrencyExchangeRateViaGETRequest("RUB")), entry("CHF", getCurrencyExchangeRateViaGETRequest("CHF")), entry("NOK", getCurrencyExchangeRateViaGETRequest("NOK")), entry("DKK", getCurrencyExchangeRateViaGETRequest("DKK")), entry("GBP", getCurrencyExchangeRateViaGETRequest("GBP")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,13 +57,13 @@ public class Variables {
         add("Other");
     }};
     private Integer loggedUserId;
-    private Map<String, Double> constExpenses = new HashMap<>() {{
-        put("Rent", 0.00);
-        put("Water bill", 0.00);
-        put("Insurance", 0.00);
-        put("Car payment", 0.00);
-        put("Cell phone", 0.00);
-        put("Internet", 0.00);
+    private ArrayList<String> constExpenses = new ArrayList<>() {{
+        add("Rent");
+        add("Water bill");
+        add("Insurance");
+        add("Car payment");
+        add("Cell phone");
+        add("Internet");
     }};
 
     private ArrayList<ConstantExpense> constantExpenses = new ArrayList<>();
@@ -189,11 +177,7 @@ public class Variables {
     }
 
     public ArrayList<String> getConstExpenses() {
-        return new ArrayList<>(constExpenses.keySet());
-    }
-
-    public void setConstExpenses(String key, Double amount) {
-        constExpenses.put(key, amount);
+        return constExpenses;
     }
 
     public ArrayList<Budget> getBudgets() {

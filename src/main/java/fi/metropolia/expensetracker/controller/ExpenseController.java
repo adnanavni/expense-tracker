@@ -77,6 +77,7 @@ public class ExpenseController {
         constExpense.setPromptText(lan.getString("amount"));
         setBtn.setText(lan.getString("setBtn"));
         history.setText(lan.getString("history"));
+        selectCategory.setPromptText(lan.getString("constantExpense"));
 
         Variables.getInstance().refreshCategories();
     }
@@ -204,11 +205,9 @@ public class ExpenseController {
         if (constExpense.getText().matches("^[0-9]+$") && constExpense != null) {
             ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
             variables.removeConstantExpense(selectedConstExpense);
-            RegisterLoginDao loginSignupDao = new RegisterLoginDao();
             budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
             ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
             variables.addConstantExpense(modifiedConstExp);
-            variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
             selectCategory.setValue(null);
             constExpense.setText(null);
             selectCategory.getItems().clear();
