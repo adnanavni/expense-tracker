@@ -9,7 +9,20 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
     -fx-cursor: hand;
 }
+#salaryHistory .cell {
+       -fx-background-color: black;
+}
+#salaryHistory .scene {
+       -fx-border-radius: 30px;
+}
 
+#salaryHistory .list-cell {
+    -fx-background-color: #BDBDBD;
+}
+
+#salaryHistory .list-cell:odd {
+  -fx-background-color: white;
+}
 .button:hover {
     -fx-background-color: #BDBDBD;
 }
