@@ -47,33 +47,24 @@ public class IncomeController {
     private CheckBox mandatoryTaxes;
     @FXML
     private Label income;
-
     @FXML
     private Label addMonth;
-
     @FXML
     private Label addTax;
-
     @FXML
     private Label payday;
-
     @FXML
     private Button addBtn;
-
     @FXML
     private Button hourSalary;
-
     @FXML
     private Label history;
-
     @FXML
     private Label check;
-
     @FXML
     private Button back;
 
     private Salary salary;
-
     private LocalizationManager lan = LocalizationManager.getInstance();
 
 
@@ -135,8 +126,8 @@ public class IncomeController {
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Salary deletion");
-                    alert.setHeaderText("Do you want to delete salary of the history");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("areYouSure"));
                     alert.setContentText(selected.toString());
 
                     Optional<ButtonType> option = alert.showAndWait();
@@ -151,9 +142,9 @@ public class IncomeController {
                 } else {
                     // Nothing selected.
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("No selection!");
-                    alert.setHeaderText("No selected income!");
-                    alert.setContentText("Click an existing income.");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("selectedIncome"));
+                    alert.setContentText(lan.getString("clickIncome"));
                     alert.showAndWait();
                 }
             }
@@ -162,44 +153,51 @@ public class IncomeController {
 
     @FXML
     protected void onSalaryAddClick() throws SQLException {
-        IncomeDao incomeDao = new IncomeDao();
-        double taxRate;
-        int age;
-        double insurance = 0;
-        if (mandatoryTaxes.isSelected()) {
-            age = salarySingle.getAge();
-            if (age < 53) {
-                insurance = 7.15;
-            } else if (age >= 53 && age < 63) {
-                insurance = 8.65;
-            } else if (age >= 63) {
-                insurance = 7.15;
+        if ((addMonth != null && addTaxRate != null) && (addMonth.getText().matches("^[0-9]+$") || addTaxRate.getText().matches("^[0-9]+$"))) {
+            IncomeDao incomeDao = new IncomeDao();
+            double taxRate;
+            int age;
+            double insurance = 0;
+            if (mandatoryTaxes.isSelected()) {
+                age = salarySingle.getAge();
+                if (age < 53) {
+                    insurance = 7.15;
+                } else if (age >= 53 && age < 63) {
+                    insurance = 8.65;
+                } else if (age >= 63) {
+                    insurance = 7.15;
+                }
+                taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance);
+                salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
+            } else {
+                taxRate = Double.parseDouble(addTaxRate.getText());
+                salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
             }
-            //double pension = 1.40;
-            taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance);
-            salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
+            LocalDate salaryDate = LocalDate.now();
+
+            if (selectedDate.getValue() != null) {
+                salaryDate = selectedDate.getValue();
+            }
+            Date date = java.sql.Date.valueOf(salaryDate);
+
+            this.salary = new Salary(variables.getLoggedUserId(), Double.parseDouble(addMonthSalary.getText()), salarySingle.getMonthSalaryMinusTaxes(), salaryDate, currency.toString(), "MONTH", taxRate);
+            incomeDao.saveSalary(variables.getLoggedUserId(), "MONTH", salarySingle.getMonthSalary(), salarySingle.getMonthSalaryMinusTaxes(), date, taxRate, currency.toString());
+            salarySingle.createNewMonthSalary(salary);
+
+            salaryHistory.getItems().clear();
+            salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+
+            addMonthSalary.setText(null);
+            addTaxRate.setText(null);
+            selectedDate.setValue(null);
+            mandatoryTaxes.setSelected(false);
         } else {
-            taxRate = Double.parseDouble(addTaxRate.getText());
-            salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(lan.getString("income"));
+            alert.setHeaderText(lan.getString("addIncome"));
+            alert.setContentText(lan.getString("formCorrect"));
+            alert.showAndWait();
         }
-        LocalDate salaryDate = LocalDate.now();
-
-        if (selectedDate.getValue() != null) {
-            salaryDate = selectedDate.getValue();
-        }
-        Date date = java.sql.Date.valueOf(salaryDate);
-
-        this.salary = new Salary(variables.getLoggedUserId(), Double.parseDouble(addMonthSalary.getText()), salarySingle.getMonthSalaryMinusTaxes(), salaryDate, currency.toString(), "MONTH", taxRate);
-        incomeDao.saveSalary(variables.getLoggedUserId(), "MONTH", salarySingle.getMonthSalary(), salarySingle.getMonthSalaryMinusTaxes(), date, taxRate, currency.toString());
-        salarySingle.createNewMonthSalary(salary);
-
-        salaryHistory.getItems().clear();
-        salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
-
-        addMonthSalary.setText(null);
-        addTaxRate.setText(null);
-        selectedDate.setValue(null);
-        mandatoryTaxes.setSelected(false);
     }
 
     @FXML
@@ -209,10 +207,9 @@ public class IncomeController {
         String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(selectedIndex, "MONTH"));
         Locale finnish = new Locale("fi", "FI");
         if (lan.getLocale().equals(finnish)) {
-            salaryComing.setText(lan.getString("salarycomingText") + " " +  month + lan.getString("bendingWord") + " " + lan.getString("is") +  salaryAmount + " " + currency.getSymbol());
-        }
-        else
-            salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + salaryAmount + " " + currency.getSymbol());
+            salaryComing.setText(lan.getString("salarycomingText") + " " + month + lan.getString("bendingWord") + " " + lan.getString("is") + " "  + salaryAmount + " " + currency.getSymbol());
+        } else
+            salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());
 
     }
 }

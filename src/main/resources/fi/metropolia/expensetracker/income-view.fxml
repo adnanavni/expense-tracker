@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
             styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/"
             xmlns:fx="http://javafx.com/fxml/"
             fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
     <children>
-        <ImageView fx:id="settingsIcon1" fitHeight="617.0" fitWidth="588.0" layoutX="56.0" layoutY="220.0" opacity="0.25" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="settingsIcon1" fitHeight="617.0" fitWidth="588.0" layoutX="56.0" layoutY="220.0"
+                   opacity="0.25" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@images/logo.png" />
+                <Image url="@images/logo.png"/>
             </image>
         </ImageView>
         <Label fx:id="income" alignment="CENTER" layoutX="107.0" layoutY="30.0" styleClass="header" text="Income"
@@ -56,13 +56,13 @@
                           AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="110.0"/>
                 <ComboBox fx:id="monthsCombo" layoutX="457.0" layoutY="36.0" onAction="#calculateMonths"
                           prefHeight="12.0" prefWidth="165.0" promptText="Month" styleClass="combo-box"
-                          AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="36.0"/>
+                          AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="36.0"/>
                 <Label fx:id="check" layoutX="182.0" layoutY="326.0" prefHeight="22.0" prefWidth="344.0"
-                       styleClass="smallHeader" text="Check salary amount of the month:" AnchorPane.leftAnchor="330.0"
-                       AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0"/>
-                <Label fx:id="salaryComing" alignment="CENTER_RIGHT" layoutX="175.0" layoutY="403.0" prefHeight="18.0"
-                       prefWidth="201.0" styleClass="smallHeader" wrapText="true" AnchorPane.leftAnchor="0.0"
-                       AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0"/>
+                       styleClass="smallHeader" text="Check salary amount of the month:" AnchorPane.leftAnchor="300.0"
+                       AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="10.0"/>
+                <Label fx:id="salaryComing" layoutX="325.0" layoutY="403.0" prefHeight="22.0" prefWidth="345.0"
+                       styleClass="smallHeader" wrapText="true" AnchorPane.leftAnchor="300.0"
+                       AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="85.0"/>
             </children>
         </AnchorPane>
         <Button fx:id="hourSalary" layoutX="490.0" layoutY="18.0" mnemonicParsing="false" onAction="#toDaySalaryView"

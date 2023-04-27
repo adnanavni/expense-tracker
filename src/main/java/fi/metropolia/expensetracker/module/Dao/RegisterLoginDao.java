@@ -118,6 +118,25 @@ public class RegisterLoginDao {
         }
     }
 
+    public String getLanguage(int id) {
+        try {
+            String sql = "SELECT Language FROM UserInfo WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return null;
+    }
+
     public boolean deleteUser(String username) throws SQLException {
 
         if (userExists(username)) {

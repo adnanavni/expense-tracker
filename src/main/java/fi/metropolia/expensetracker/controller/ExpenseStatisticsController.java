@@ -83,7 +83,7 @@ public class ExpenseStatisticsController {
         barStats.setAnimated(false);
         pieStats.setAnimated(false);
         budgetName.setText(variables.getActiveBudget().getName());
-        ArrayList<String> chartNames = variables.getTopics();
+        ArrayList<String> chartNames = variables.getCategories();
 
         HashMap<String, Double> allValues = calculateValues("All time");
 
