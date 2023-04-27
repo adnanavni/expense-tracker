@@ -14,9 +14,10 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="fi.metropolia.expensetracker.controller.ExpenseStatisticsController">
     <children>
-        <ImageView fx:id="settingsIcon1" fitHeight="617.0" fitWidth="588.0" layoutX="56.0" layoutY="220.0" opacity="0.25" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="settingsIcon1" fitHeight="617.0" fitWidth="588.0" layoutX="56.0" layoutY="220.0"
+                   opacity="0.25" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@images/logo.png" />
+                <Image url="@images/logo.png"/>
             </image>
         </ImageView>
         <BarChart fx:id="barStats" layoutX="25.0" layoutY="383.0" styleClass="button" AnchorPane.bottomAnchor="0.0"
