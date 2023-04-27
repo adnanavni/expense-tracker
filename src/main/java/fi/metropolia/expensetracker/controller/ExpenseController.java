@@ -166,7 +166,7 @@ public class ExpenseController {
                     add("Hobbies");
                     add("Clothes");
                     add("Well-being");
-                    add("Medicines");
+                    add("Medicine");
                     add("Transport");
                     add("Other");
                 }};

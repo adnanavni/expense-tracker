@@ -5,19 +5,19 @@ import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
 import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+
 import java.io.IOException;
-import java.util.Currency;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class BudgetController {
 
@@ -70,10 +70,6 @@ public class BudgetController {
     private BarChart<String, Double> barStats;
     @FXML
     private PieChart pieStats;
-    @FXML
-    private ComboBox selectedTimeFrame;
-    @FXML
-    private Label show;
 
 
     private Boolean barChartShown = true;
@@ -82,9 +78,13 @@ public class BudgetController {
     private LocalizationManager language = LocalizationManager.getInstance();
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
     private SettingsDao settingsDao = new SettingsDao();
-    private ObservableList<PieChart.Data> currentPieValues;
+    private HashMap<String, Double> expenses;
+    private XYChart.Series<String, Double> series;
 
     public void initialize() {
+        variables = Variables.getInstance();
+        currency = Currency.getInstance(variables.getCurrentCurrency());
+
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
 
@@ -99,7 +99,7 @@ public class BudgetController {
         addBtn.setText(language.getString("add"));
 
         modifyName.setPromptText(language.getString("name"));
-        modifyAmount.setPromptText(language.getString("amount"));
+        modifyAmount.setPromptText(Variables.getInstance().getActiveBudget().getAmount().toString() + " " + currency.getSymbol());
         modifyBtn.setText(language.getString("modify"));
         deleteBtn.setText(language.getString("delete"));
 
@@ -111,13 +111,13 @@ public class BudgetController {
 
         shared.setText(language.getString("shared"));
 
+        updateCharts();
 
     }
 
     public void setVariables(Variables variables) {
 
         this.variables = variables;
-        currency = Currency.getInstance(variables.getCurrentCurrency());
 
         total.setText(language.getString("total"));
         selectTopic.getItems().addAll(variables.getBudgetNames());
@@ -134,9 +134,12 @@ public class BudgetController {
 
         if (variables.getActiveBudget() != null) {
             String budgetText = String.format("%.2f", variables.getBudget());
-            activeBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + currency.getSymbol());
+            activeBudget.setText(variables.getActiveBudget().getName());
             total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
         }
+
+        updateCharts();
+
     }
 
     @FXML
@@ -151,7 +154,7 @@ public class BudgetController {
         String text = budgetName.getText();
         String number = addBudget.getText();
 
-        if (text.matches("[a-zA-Z]+") && number.matches("^[0-9]+$")) {
+        if (text != null && number.matches("^[0-9]+$")) {
             if (selectTopic.getSelectionModel().getSelectedItem() != null && addBudget.getText() != "") {
                 if (selectTopic.getValue() == "New") {
                     boolean willAdd = true;
@@ -174,7 +177,7 @@ public class BudgetController {
                             variables.createNewBudget(budget);
                         }
                         variables.setActiveBudget(budgetName.getText());
-                        activeBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + currency.getSymbol());
+                        activeBudget.setText(variables.getActiveBudget().getName());
                         String budgetText = String.format("%.2f", variables.getBudget());
                         total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
 
@@ -209,13 +212,14 @@ public class BudgetController {
             modifyBudget.setVisible(true);
             editBudget.setVisible(false);
             budgetPane.setVisible(true);
-
             for (Budget budget : variables.getBudgets()) {
                 if (budget.getName() == selectTopic.getValue()) {
                     variables.setActiveBudget(budget.getName());
                     update();
                 }
             }
+            updateCharts();
+            modifyAmount.setPromptText(variables.getActiveBudget().getAmount().toString() + " " + currency.getSymbol());
         }
     }
 
@@ -229,7 +233,6 @@ public class BudgetController {
     @FXML
     protected void removeBtn() {
         ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
-        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
         budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
         variables.getActiveBudget().resetExpenses();
         Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
@@ -251,8 +254,7 @@ public class BudgetController {
         String text = modifyName.getText();
         String number = modifyAmount.getText();
 
-        if (text.matches("[a-zA-Z]+") && number.matches("^[0-9]+$")) {
-            RegisterLoginDao loginSignupDao = new RegisterLoginDao();
+        if (text != null && number.matches("^[0-9]+$")) {
             if (modifyName.getText() != null && modifyAmount.getText() != null) {
                 budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
 
@@ -308,7 +310,6 @@ public class BudgetController {
         Optional<ButtonType> result = confirmDelete.showAndWait();
 
         if (result.get() == ButtonType.OK) {
-            RegisterLoginDao loginSignupDao = new RegisterLoginDao();
 
             budgetExpenseDao.deleteBudget(variables.getActiveBudget().getId());
             variables.deleteBudget();
@@ -329,7 +330,7 @@ public class BudgetController {
     private void update() {
         String budgetText = String.format("%.2f", variables.getBudget());
         total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
-        activeBudget.setText(variables.getActiveBudget().getName() + " " + variables.getActiveBudget().getAmount() + currency.getSymbol());
+        activeBudget.setText(variables.getActiveBudget().getName());
         Double budgetExpenses = 0.00;
         if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
@@ -354,5 +355,46 @@ public class BudgetController {
     @FXML
     protected void btnEnbale() {
         ConstExpenseBtn.setDisable(false);
+    }
+
+    public void updateCharts() {
+
+        if (Variables.getInstance().getActiveBudget() != null) {
+            expenses = budgetExpenseDao.getExpenseNameAndAmount(Variables.getInstance().getActiveBudget().getId());
+
+            if (expenses.size() > 0) {
+                barStats.setVisible(true);
+
+                XYChart.Series<String, Double> barSeries = new XYChart.Series<>();
+                barSeries.setName(language.getString("moneySpentt"));
+
+
+                ObservableList<XYChart.Data<String, Double>> barData = FXCollections.observableArrayList();
+                for (Map.Entry<String, Double> entry : expenses.entrySet()) {
+                    String originalKey = entry.getKey();
+                    String translatedKey = language.getString(originalKey.toLowerCase());
+                    barData.add(new XYChart.Data<>(translatedKey, entry.getValue()));
+                }
+
+                barSeries.setData(barData);
+
+                barStats.getData().clear();
+                barStats.getData().add(barSeries);
+
+                ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
+                for (Map.Entry<String, Double> entry : expenses.entrySet()) {
+                    pieData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+                }
+
+                pieStats.setData(pieData);
+
+            } else {
+                barStats.setVisible(false);
+                pieStats.setVisible(false);
+            }
+        } else {
+            barStats.setVisible(false);
+            pieStats.setVisible(false);
+        }
     }
 }

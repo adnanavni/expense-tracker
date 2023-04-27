@@ -26,9 +26,9 @@
         <Button fx:id="back" layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain"
                 prefHeight="39.0" prefWidth="75.0" text="Back" textAlignment="CENTER" AnchorPane.leftAnchor="20.0"
                 AnchorPane.rightAnchor="570.0" AnchorPane.topAnchor="15.0"/>
-        <Button fx:id="shared" alignment="CENTER" layoutX="554.0" layoutY="17.0" mnemonicParsing="false"
-                text="Shared Budgets" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="20.0"
-                AnchorPane.topAnchor="15.0"/>
+        <Button fx:id="shared" alignment="CENTER" layoutX="470.0" layoutY="17.0" mnemonicParsing="false"
+                prefHeight="36.0" prefWidth="210.0" text="Shared Budgets" AnchorPane.leftAnchor="470.0"
+                AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0"/>
         <Label fx:id="active" alignment="CENTER" layoutX="148.0" layoutY="72.0" styleClass="budgetText"
                text="Currently active budget:" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                AnchorPane.topAnchor="100.0">
@@ -102,8 +102,8 @@
                         AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="60.0"/>
             </children>
         </AnchorPane>
-        <BarChart fx:id="barStats" layoutX="44.0" layoutY="400.0" onMouseClicked="#onChangeChartClick"
-                  styleClass="button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
+        <BarChart fx:id="barStats" animated="false" layoutX="44.0" layoutY="400.0" onMouseClicked="#onChangeChartClick"
+                  styleClass="button" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
                   AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="420.0">
             <xAxis>
                 <CategoryAxis side="BOTTOM"/>
@@ -112,7 +112,7 @@
                 <NumberAxis side="LEFT"/>
             </yAxis>
         </BarChart>
-        <PieChart fx:id="pieStats" layoutX="35.0" layoutY="396.0" onMouseClicked="#onChangeChartClick"
+        <PieChart fx:id="pieStats" animated="false" layoutX="35.0" layoutY="396.0" onMouseClicked="#onChangeChartClick"
                   styleClass="button" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
                   AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="420.0"/>
     </children>

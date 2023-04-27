@@ -52,7 +52,7 @@ public class Variables {
         add("Hobbies");
         add("Clothes");
         add("Well-being");
-        add("Medicines");
+        add("Medicine");
         add("Transport");
         add("Other");
     }};
@@ -285,19 +285,15 @@ public class Variables {
         constantExpenses = new ArrayList<>();
         ThemeManager.getInstance().setCurrentColor("#85bb65");
 
-        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-
         ConstantExpense[] constantExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
 
-        if (constantExpenses.length == 0) {
-            ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
-            for (String defaultConstExpenseName : defaultConstExpenseNames) {
-                budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
-            }
-            ConstantExpense[] defaultConstExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
-            for (ConstantExpense constantExpense : defaultConstExpenses) {
-                Variables.getInstance().addConstantExpense(constantExpense);
-            }
+        ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
+        for (String defaultConstExpenseName : defaultConstExpenseNames) {
+            budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+        }
+        ConstantExpense[] defaultConstExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+        for (ConstantExpense constantExpense : defaultConstExpenses) {
+            Variables.getInstance().addConstantExpense(constantExpense);
         }
     }
 
