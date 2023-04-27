@@ -20,6 +20,7 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class LoginController {
     @FXML
@@ -123,9 +124,28 @@ public class LoginController {
             for (Salary salary : daySalaries) {
                 SalarySingle.getInstance().createNewDaySalary(salary);
             }
+            localizationManager.setLocale(getLanguage(settingsDao.getLanguage(Variables.getInstance().getLoggedUserId())));
+
             SalarySingle.getInstance().setAge(settingsDao.getAge(Variables.getInstance().getLoggedUserId()));
+
             changeWindowToHome();
         }
+    }
+
+    public Locale getLanguage(String language) {
+        Locale usersLanguage = Locale.getDefault();
+        switch (language) {
+            case "Finnish" :
+                usersLanguage = new Locale("fi", "FI");
+                break;
+            case "English" :
+                usersLanguage = new Locale("en", "GB");
+                break;
+            case "Icelandic" :
+                usersLanguage = new Locale("is", "IS");
+                break;
+        }
+        return usersLanguage;
     }
 
     public void changeWindowToHome() throws IOException {

@@ -175,7 +175,6 @@ public class IncomeController {
             } else if (age >= 63) {
                 insurance = 7.15;
             }
-            //double pension = 1.40;
             taxRate = (Double.parseDouble(addTaxRate.getText()) + insurance);
             salarySingle.calculateSalaryWithTaxRate(taxRate, Double.parseDouble(addMonthSalary.getText()), "MONTH");
         } else {

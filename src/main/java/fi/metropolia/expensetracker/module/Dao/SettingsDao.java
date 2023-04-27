@@ -69,6 +69,22 @@ public class SettingsDao {
         return false;
     }
 
+    public String getLanguage(int id) {
+        try {
+
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT Language from UserInfo WHERE id=?");
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+                return resultSet.getString(1);
+        }
+         catch(SQLException e) {
+                printSQLException(e);
+            }
+        return null;
+
+    }
+
     public boolean setAge(int id, int age) {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement("UPDATE UserInfo SET Age = ? WHERE id = ?");
