@@ -379,6 +379,7 @@ public class BudgetController {
                 barSeries.setData(barData);
 
                 barStats.getData().clear();
+                barStats.setTitle(language.getString("statistics"));
                 barStats.getData().add(barSeries);
 
                 ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
