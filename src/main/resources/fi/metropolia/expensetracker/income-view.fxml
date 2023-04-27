@@ -3,11 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="content" maxHeight="800.0" maxWidth="700.0" minHeight="800.0" minWidth="700.0"
             styleClass="background" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/"
             xmlns:fx="http://javafx.com/fxml/"
             fx:controller="fi.metropolia.expensetracker.controller.IncomeController">
     <children>
+        <ImageView fx:id="settingsIcon1" fitHeight="617.0" fitWidth="588.0" layoutX="56.0" layoutY="220.0" opacity="0.25" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@images/logo.png" />
+            </image>
+        </ImageView>
         <Label fx:id="income" alignment="CENTER" layoutX="107.0" layoutY="30.0" styleClass="header" text="Income"
                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0"/>
         <Button fx:id="back" layoutX="116.0" layoutY="88.0" mnemonicParsing="false" onAction="#backToMain" text="Back"
