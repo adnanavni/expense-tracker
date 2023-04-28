@@ -105,6 +105,7 @@ public class IncomeController {
     }
 
     public void setVariables(SalarySingle salary, Variables variables) {
+        StylingManager styler = new StylingManager();
         this.salarySingle = salary;
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());
@@ -112,7 +113,9 @@ public class IncomeController {
         addMonthSalary.setPromptText(currency.getSymbol());
 
         salaryHistory.getItems().addAll(salarySingle.getMonthSalaries());
+        styler.styleListView(salaryHistory);
         monthsCombo.setPromptText(lan.getString("month"));
+
 
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Pakolliset verot kuten työeläkemaksu ja työttömyysvakuusmaksu."));

@@ -9,20 +9,33 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
     -fx-cursor: hand;
 }
-#salaryHistory .cell {
-       -fx-background-color: black;
-}
+
+
+
 #salaryHistory .scene {
-       -fx-border-radius: 30px;
+
+           -fx-background-color: #E0E0E0;
+           -fx-text-fill: #000;
+           -fx-font-family: 'Arial Rounded MT Bold';
+           -fx-font-size: 16px;
+           -fx-padding: 8px;
+           -fx-border-radius: 30px;
+           -fx-background-radius: 30px;
+           -fx-cursor: hand;
+}
+/*Tausta */
+#salaryHistory .cell {
+
 }
 
 #salaryHistory .list-cell {
-    -fx-background-color: #BDBDBD;
+
 }
 
 #salaryHistory .list-cell:odd {
-  -fx-background-color: white;
-}
+  }
+
+
 .button:hover {
     -fx-background-color: #BDBDBD;
 }
@@ -62,6 +75,9 @@
 
 .secondBackground {
     -fx-background-color: #F5F5F5;
+    -fx-border-radius:30px;
+    -fx-background-radius: 30px;
+
 }
 
 .header {
