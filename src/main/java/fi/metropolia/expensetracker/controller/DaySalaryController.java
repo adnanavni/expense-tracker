@@ -107,11 +107,13 @@ public class DaySalaryController {
     public void setVariables(SalarySingle salary, Variables variables) {
         this.salarySingle = salary;
         this.variables = variables;
+        StylingManager styler = new StylingManager();
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
         addHourSalary.setPromptText(currency.getSymbol());
 
         salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+        styler.styleListView(salaryHistory);
         monthsComb.setPromptText(lan.getString("month"));
 
         monthsComb.getItems().addAll(salarySingle.getMonths());
