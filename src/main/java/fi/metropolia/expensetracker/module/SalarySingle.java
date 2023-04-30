@@ -70,8 +70,6 @@ public class SalarySingle {
             setMonthSalary(salary);
             wantedSalaryminusTaxes = this.monthSalaryMinusTaxes;
         }
-
-
         return wantedSalaryminusTaxes;
     }
 

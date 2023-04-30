@@ -77,7 +77,6 @@ public class BudgetController {
     private Currency currency;
     private LocalizationManager language = LocalizationManager.getInstance();
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
-    private SettingsDao settingsDao = new SettingsDao();
     private HashMap<String, Double> expenses;
     private XYChart.Series<String, Double> series;
 
@@ -99,7 +98,8 @@ public class BudgetController {
         addBtn.setText(language.getString("add"));
 
         modifyName.setPromptText(language.getString("name"));
-        modifyAmount.setPromptText(Variables.getInstance().getActiveBudget().getAmount().toString() + " " + currency.getSymbol());
+        //Laitoin tän kommentteihin, jotta voin tehdä uuden budjetin
+        //modifyAmount.setPromptText(Variables.getInstance().getActiveBudget().getAmount().toString() + " " + currency.getSymbol());
         modifyBtn.setText(language.getString("modify"));
         deleteBtn.setText(language.getString("delete"));
 
@@ -366,7 +366,7 @@ public class BudgetController {
                 barStats.setVisible(true);
 
                 XYChart.Series<String, Double> barSeries = new XYChart.Series<>();
-                barSeries.setName(language.getString("moneySpentt"));
+                barSeries.setName(language.getString("moneySpent"));
 
 
                 ObservableList<XYChart.Data<String, Double>> barData = FXCollections.observableArrayList();

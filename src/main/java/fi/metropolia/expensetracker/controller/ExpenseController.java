@@ -89,6 +89,8 @@ public class ExpenseController {
 
     public void setVariables(Variables variables) {
         this.variables = variables;
+        StylingManager styler = new StylingManager();
+
         currency = Currency.getInstance(variables.getCurrentCurrency());
         Budget activeBudget = variables.getActiveBudget();
         activeBudgetTxt.setText(activeBudget.getName());
@@ -107,12 +109,12 @@ public class ExpenseController {
             selectCategory.getItems().add(constantExpense);
         }
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
+        styler.styleListView(expenseHistory);
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
                 int selectedIndex = expenseHistory.getSelectionModel().getSelectedIndex();
-                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
                 if (selectedIndex >= 0) {
                     Expense selected = (Expense) expenseHistory.getItems().get(selectedIndex);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
