@@ -107,7 +107,7 @@ public class DaySalaryController {
     public void setVariables(SalarySingle salary, Variables variables) {
         this.salarySingle = salary;
         this.variables = variables;
-        StylingManager styler = new StylingManager();
+        ThemeManager styler =  ThemeManager.getInstance();
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
         addHourSalary.setPromptText(currency.getSymbol());

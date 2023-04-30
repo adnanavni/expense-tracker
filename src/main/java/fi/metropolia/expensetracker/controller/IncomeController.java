@@ -105,7 +105,7 @@ public class IncomeController {
     }
 
     public void setVariables(SalarySingle salary, Variables variables) {
-        StylingManager styler = new StylingManager();
+        ThemeManager styler = ThemeManager.getInstance();
         this.salarySingle = salary;
         this.variables = variables;
         currency = Currency.getInstance(variables.getCurrentCurrency());

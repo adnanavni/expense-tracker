@@ -89,7 +89,7 @@ public class ExpenseController {
 
     public void setVariables(Variables variables) {
         this.variables = variables;
-        StylingManager styler = new StylingManager();
+        ThemeManager styler = ThemeManager.getInstance();
 
         currency = Currency.getInstance(variables.getCurrentCurrency());
         Budget activeBudget = variables.getActiveBudget();
