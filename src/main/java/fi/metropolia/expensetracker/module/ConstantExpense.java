@@ -38,9 +38,9 @@ public class ConstantExpense {
     public String toString() {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
         type = type.toLowerCase();
-        if (type.equals("water bill") || type.equals("waterbill")) type = "waterBill";
-        if (type.equals("car payment") || type.equals("carpayment")) type = "carPayment";
-        if (type.equals("cell phone") || type.equals("cellphone")) type = "cellPhone";
+        if (type.equals("water bill") || type.equals("waterbill")) type = "waterbill";
+        if (type.equals("car payment") || type.equals("carpayment")) type = "carpayment";
+        if (type.equals("cell phone") || type.equals("cellphone")) type = "cellphone";
         return lan.getString(type) + " " + String.format("%.2f", amount) + " " + currency.getSymbol();
     }
 }

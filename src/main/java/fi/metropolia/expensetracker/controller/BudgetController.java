@@ -50,6 +50,8 @@ public class BudgetController {
     @FXML
     private Button deleteBtn;
     @FXML
+    private Button cancelModifyBtn;
+    @FXML
     private Button modifyBtn;
     @FXML
     private Button addBtn;
@@ -97,12 +99,6 @@ public class BudgetController {
         addBudget.setPromptText(language.getString("amount"));
         addBtn.setText(language.getString("add"));
 
-        modifyName.setPromptText(language.getString("name"));
-        //Laitoin tän kommentteihin, jotta voin tehdä uuden budjetin
-        //modifyAmount.setPromptText(Variables.getInstance().getActiveBudget().getAmount().toString() + " " + currency.getSymbol());
-        modifyBtn.setText(language.getString("modify"));
-        deleteBtn.setText(language.getString("delete"));
-
         expenseCombo.setPromptText(language.getString("constantExpense"));
         ConstExpenseBtn.setText(language.getString("remove"));
 
@@ -116,7 +112,6 @@ public class BudgetController {
     }
 
     public void setVariables(Variables variables) {
-
         this.variables = variables;
 
         total.setText(language.getString("total"));
@@ -226,6 +221,12 @@ public class BudgetController {
 
     @FXML
     protected void modifyBudget() {
+        modifyName.setPromptText(language.getString("name"));
+        modifyAmount.setPromptText(Variables.getInstance().getActiveBudget().getAmount().toString() + " " + currency.getSymbol());
+
+        modifyBtn.setText(language.getString("modify"));
+        cancelModifyBtn.setText(language.getString("cancel"));
+
         modifyBudget.setVisible(false);
         editBudget.setVisible(true);
     }
@@ -247,6 +248,10 @@ public class BudgetController {
                 budgetExpenses += expense.getPrice();
             }
         }
+    }
+    @FXML protected void cancelModifyClick() {
+        modifyBudget.setVisible(true);
+        editBudget.setVisible(false);
     }
 
     @FXML
@@ -324,15 +329,17 @@ public class BudgetController {
             modifyName.setText(null);
             editBudget.setVisible(false);
             budgetPane.setVisible(false);
+            modifyBudget.setVisible(false);
         }
     }
 
     private void update() {
         String budgetText = String.format("%.2f", variables.getBudget());
         total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
-        activeBudget.setText(variables.getActiveBudget().getName());
+        if (variables.getActiveBudget() != null) activeBudget.setText(variables.getActiveBudget().getName());
+        else activeBudget.setText(language.getString("noActive"));
         Double budgetExpenses = 0.00;
-        if (variables.getActiveBudget().getExpenses().size() > 0) {
+        if (variables.getActiveBudget() != null && variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 budgetExpenses += expense.getPrice();
             }

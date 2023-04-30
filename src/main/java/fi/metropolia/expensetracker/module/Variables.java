@@ -163,6 +163,7 @@ public class Variables {
         if (index != -1) {
             budgets.remove(index);
         }
+        activeBudget = null;
     }
 
     public ArrayList<String> getBudgetNames() {
