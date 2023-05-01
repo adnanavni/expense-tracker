@@ -3,8 +3,6 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
-import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -113,7 +111,6 @@ public class BudgetController {
 
     public void setVariables(Variables variables) {
         this.variables = variables;
-
         total.setText(language.getString("total"));
         selectTopic.getItems().addAll(variables.getBudgetNames());
 
@@ -129,7 +126,7 @@ public class BudgetController {
 
         if (variables.getActiveBudget() != null) {
             String budgetText = String.format("%.2f", variables.getBudget());
-            activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount());
+            activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
             total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
         }
 
@@ -160,7 +157,7 @@ public class BudgetController {
                             variables.createNewBudget(budget);
                         }
                         variables.setActiveBudget(budgetName.getText());
-                        activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount());
+                        activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
                         String budgetText = String.format("%.2f", variables.getBudget());
                         total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
 
@@ -221,23 +218,22 @@ public class BudgetController {
         String text = modifyName.getText();
         String number = modifyAmount.getText();
 
-        if ((number != null && number.matches("^[0-9]+$")) && (text != null && !isSameBudgetName(text))) {
-            budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
-            variables.modifyBudget(text, Double.parseDouble(number));
-            variables.setActiveBudget(text);
-
-        } else if (number == null && (text != null && !isSameBudgetName(text))) {
-
-            budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), text);
-            variables.modifyBudget(text, variables.getActiveBudget().getAmount());
-            variables.setActiveBudget(text);
-
-        } else if ((number != null && number.matches("^[0-9]+$")) && text == null ) {
+        if ((number != null && number.matches("^[0-9]+$")) && (text == null || text.isEmpty())) {
             budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(number), variables.getActiveBudget().getName());
 
             variables.modifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(number));
             variables.setActiveBudget(variables.getActiveBudget().getName());
 
+        } else if ((number == null || number.isEmpty()) && (text != null && !isSameBudgetName(text))) {
+
+            budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), text);
+            variables.modifyBudget(text, variables.getActiveBudget().getAmount());
+            variables.setActiveBudget(text);
+
+        } else if ((number != null && number.matches("^[0-9]+$")) && (text != null && !isSameBudgetName(text))) {
+            budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
+            variables.modifyBudget(text, Double.parseDouble(number));
+            variables.setActiveBudget(text);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle(language.getString("budget"));
@@ -245,16 +241,12 @@ public class BudgetController {
             alert.setContentText(language.getString("formCorrect"));
             alert.showAndWait();
         }
+        selectTopic.getItems().setAll(variables.getBudgetNames());
+        selectTopic.setValue(variables.getActiveBudget().getName());
+
         update();
-        backToNormalBudget();
         modifyAmount.setText(null);
         modifyName.setText(null);
-    }
-
-    private void backToNormalBudget() {
-        selectTopic.setValue(variables.getActiveBudget().getName());
-        selectTopic.getItems().setAll(variables.getBudgetNames());
-
         editBudget.setVisible(false);
         modifyBudget.setVisible(true);
     }
@@ -270,14 +262,18 @@ public class BudgetController {
         }
         String budgetText = String.format("%.2f", variables.getBudget());
         total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
+        activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
         Double budgetExpenses = 0.00;
         if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 budgetExpenses += expense.getPrice();
             }
         }
+        updateCharts();
     }
-    @FXML protected void cancelModifyClick() {
+
+    @FXML
+    protected void cancelModifyClick() {
         modifyBudget.setVisible(true);
         editBudget.setVisible(false);
     }
@@ -309,6 +305,7 @@ public class BudgetController {
             modifyBudget.setVisible(false);
         }
     }
+
     private boolean isSameBudgetName(String name) {
         boolean isSame = false;
         for (Budget budget : variables.getBudgets()) {
@@ -325,9 +322,10 @@ public class BudgetController {
     }
 
     private void update() {
-        String budgetText = String.format("%.2f", variables.getBudget());
-        total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
-        if (variables.getActiveBudget() != null) activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount());
+        String totalBudgetAmount = String.format("%.2f", variables.getBudget());
+        total.setText(language.getString("total") + " " + totalBudgetAmount + " " + currency.getSymbol());
+        if (variables.getActiveBudget() != null)
+            activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
         else activeBudget.setText(language.getString("noActive"));
         Double budgetExpenses = 0.00;
         if (variables.getActiveBudget() != null && variables.getActiveBudget().getExpenses().size() > 0) {
@@ -364,7 +362,7 @@ public class BudgetController {
                 barStats.setVisible(true);
 
                 XYChart.Series<String, Double> barSeries = new XYChart.Series<>();
-                barSeries.setName(language.getString("moneySpent"));
+                barSeries.setName(language.getString("moneySpentt"));
 
                 ObservableList<XYChart.Data<String, Double>> barData = FXCollections.observableArrayList();
                 for (Map.Entry<String, Double> entry : expenses.entrySet()) {

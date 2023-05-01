@@ -10,8 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -210,7 +208,7 @@ public class IncomeController {
         String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(selectedIndex, "MONTH"));
         Locale finnish = new Locale("fi", "FI");
         if (lan.getLocale().equals(finnish)) {
-            salaryComing.setText(lan.getString("salarycomingText") + " " + month + lan.getString("bendingWord") + " " + lan.getString("is") + " "  + salaryAmount + " " + currency.getSymbol());
+            salaryComing.setText(lan.getString("salarycomingText") + " " + month + lan.getString("bendingWord") + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());
         } else
             salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());
 

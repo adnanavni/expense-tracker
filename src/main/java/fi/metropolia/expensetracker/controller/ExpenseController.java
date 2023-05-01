@@ -60,6 +60,7 @@ public class ExpenseController {
     private Currency currency;
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
     private SettingsDao settingsDao = new SettingsDao();
+    private Budget activeBudget;
 
 
     public void initialize() {
@@ -92,8 +93,8 @@ public class ExpenseController {
         ThemeManager styler = ThemeManager.getInstance();
 
         currency = Currency.getInstance(variables.getCurrentCurrency());
-        Budget activeBudget = variables.getActiveBudget();
-        activeBudgetTxt.setText(activeBudget.getName());
+        this.activeBudget = variables.getActiveBudget();
+        activeBudgetTxt.setText(activeBudget.getName() + ": " + activeBudget.getAmount());
 
         Double budgetExpenses = 0.00;
         if (variables.getActiveBudget().getExpenses().size() > 0) {
@@ -102,7 +103,8 @@ public class ExpenseController {
             }
         }
         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
-        this.expenseTxt.setText(budgetText + " " + currency.getSymbol());
+        //this.expenseTxt.setText(budgetText + " " + currency.getSymbol());
+        this.activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getCategories());
 
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
@@ -136,7 +138,8 @@ public class ExpenseController {
                             }
                         }
                         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount() - budgetExpenses));
-                        expenseTxt.setText(budgetText + " " + currency.getSymbol());
+                        activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
+                       // expenseTxt.setText(budgetText + " " + currency.getSymbol());
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -160,7 +163,6 @@ public class ExpenseController {
                 }
                 ZoneId defaultZoneId = ZoneId.systemDefault();
                 Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
-                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
 
                 ArrayList<String> categories = new ArrayList<>() {{
                     add("Groceries");
@@ -189,7 +191,8 @@ public class ExpenseController {
                 }
             }
             String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
-            expenseTxt.setText(budgetText + " " + currency.getSymbol());
+            //expenseTxt.setText(budgetText + " " + currency.getSymbol());
+            activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
             addExpense.setText(null);
             selectTopic.setValue(null);
             selectedDate.setValue(null);
