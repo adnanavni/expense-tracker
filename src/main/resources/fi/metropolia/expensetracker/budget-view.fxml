@@ -38,10 +38,10 @@
                 </AnchorPane>
                 <AnchorPane fx:id="editBudget" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
                     <children>
-                        <TextField fx:id="modifyName" promptText="Name:" styleClass="button" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="5.0" />
+                        <TextField fx:id="modifyName" styleClass="button" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="5.0" />
                         <TextField fx:id="modifyAmount" promptText="Amount:" styleClass="button" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="50.0" />
                         <Button fx:id="modifyBtn" alignment="CENTER" mnemonicParsing="false" onAction="#modifyBtnClick" text="Modify" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="95.0" />
-                        <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#deleteBtnClick" text="Delete" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="160.0" />
+                        <Button fx:id="cancelModifyBtn" mnemonicParsing="false" onAction="#cancelModifyClick" text="Cancel" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="160.0" />
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="modifyBudget" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">

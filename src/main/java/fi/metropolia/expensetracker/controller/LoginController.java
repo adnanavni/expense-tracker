@@ -94,8 +94,7 @@ public class LoginController {
     }
 
     private void setLanguage() {
-        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-        String language = loginSignupDao.getLanguage(Variables.getInstance().getLoggedUserId());
+        String language = settingsDao.getLanguage(Variables.getInstance().getLoggedUserId());
         String lan = language.substring(0,2);
         String country = language.substring(3);
         LocalizationManager.getInstance().setLocale(new Locale(lan, country));
