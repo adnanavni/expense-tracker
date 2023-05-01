@@ -147,7 +147,6 @@ public class BudgetExpenseDao {
     }
 
     public void saveConstantExpense(Integer id, String name, Double money) {
-
         try {
 
             String sql = "INSERT INTO Constantexpenses VALUES (NULL, ?, ?, ?)";

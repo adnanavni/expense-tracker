@@ -118,16 +118,14 @@ public class BudgetController {
             selectTopic.setValue(variables.getActiveBudget().getName());
             modifyBudget.setVisible(true);
             budgetPane.setVisible(true);
+            String budgetText = String.format("%.2f", variables.getBudget());
+            activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
+            total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
+
         }
 
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
             expenseCombo.getItems().add(constantExpense);
-        }
-
-        if (variables.getActiveBudget() != null) {
-            String budgetText = String.format("%.2f", variables.getBudget());
-            activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
-            total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
         }
 
         updateCharts();
