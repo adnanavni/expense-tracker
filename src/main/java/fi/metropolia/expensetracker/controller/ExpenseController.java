@@ -103,7 +103,6 @@ public class ExpenseController {
             }
         }
         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
-        //this.expenseTxt.setText(budgetText + " " + currency.getSymbol());
         this.activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getCategories());
 
@@ -139,7 +138,6 @@ public class ExpenseController {
                         }
                         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount() - budgetExpenses));
                         activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
-                       // expenseTxt.setText(budgetText + " " + currency.getSymbol());
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -191,7 +189,6 @@ public class ExpenseController {
                 }
             }
             String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
-            //expenseTxt.setText(budgetText + " " + currency.getSymbol());
             activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
             addExpense.setText(null);
             selectTopic.setValue(null);
