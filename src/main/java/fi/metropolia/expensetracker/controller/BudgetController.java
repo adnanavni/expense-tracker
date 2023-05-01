@@ -216,22 +216,38 @@ public class BudgetController {
         String text = modifyName.getText();
         String number = modifyAmount.getText();
 
-        if ((number != null && number.matches("^[0-9]+$")) && (text == null || text.isEmpty())) {
+        if (text != null) {
+            if (text.isEmpty()) {
+                text = null;
+            }
+        }
+        if (number != null) {
+            if (number.isEmpty()) {
+                number = null;
+            }
+        }
+
+        if (number != null && number.matches("^[0-9]+$") && text == null) {
             budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(number), variables.getActiveBudget().getName());
 
             variables.modifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(number));
             variables.setActiveBudget(variables.getActiveBudget().getName());
+            System.out.println("1");
 
-        } else if ((number == null || number.isEmpty()) && (text != null && !isSameBudgetName(text))) {
+        } else if (number == null && text != null && !isSameBudgetName(text)) {
 
             budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), variables.getActiveBudget().getAmount(), text);
             variables.modifyBudget(text, variables.getActiveBudget().getAmount());
             variables.setActiveBudget(text);
 
+            System.out.println("2");
+
         } else if ((number != null && number.matches("^[0-9]+$")) && (text != null && !isSameBudgetName(text))) {
             budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
             variables.modifyBudget(text, Double.parseDouble(number));
             variables.setActiveBudget(text);
+            System.out.println("3");
+
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle(language.getString("budget"));
