@@ -2,6 +2,7 @@ package fi.metropolia.expensetracker.controller;
 
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
+import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Currency;
+import java.util.Locale;
 import java.util.Random;
 
 public class MainController {
@@ -48,6 +50,7 @@ public class MainController {
     private SalarySingle salarySingle = SalarySingle.getInstance();
     private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
 
+    private SettingsDao settingsDao = new SettingsDao();
     private LocalizationManager localizationManager = LocalizationManager.getInstance();
 
     @FXML
@@ -102,6 +105,8 @@ public class MainController {
         incomeBtn.setText(localizationManager.getString("income"));
         logOut.setText(localizationManager.getString("logOut"));
     }
+
+
 
     public void changeWindowToBudget(ActionEvent event) throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("budget-view.fxml"));

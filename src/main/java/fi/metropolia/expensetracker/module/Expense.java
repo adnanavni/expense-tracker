@@ -9,6 +9,8 @@ public class Expense {
     private Integer id;
     private Date date;
 
+    private LocalizationManager lan = LocalizationManager.getInstance();
+
     public Expense(Integer id, Double price, String type, Date date) {
         this.id = id;
         this.price = price;
@@ -18,7 +20,8 @@ public class Expense {
 
     public String toString() {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
-        return type + ", added on: " + date + ", money spent: " + String.format("%.2f", price) + " " + currency.getSymbol();
+        type = type.toLowerCase();
+        return lan.getString(type) + lan.getString("addedon") + date + lan.getString("moneySpent") + String.format("%.2f", price) + " " + currency.getSymbol();
     }
 
     public Date getDate() {

@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
@@ -23,8 +24,6 @@ import java.util.Optional;
 public class ExpenseController {
     @FXML
     private AnchorPane content;
-    @FXML
-    private Label expense;
     @FXML
     private TextField addExpense;
     @FXML
@@ -40,28 +39,19 @@ public class ExpenseController {
     @FXML
     private ComboBox selectCategory;
     @FXML
-    private TextField constExpenseName;
-    @FXML
     private TextField constExpense;
-
     @FXML
     private Label expenseTxt;
-
     @FXML
     private Label active;
-
     @FXML
     private Label singleExpense;
-
     @FXML
     private Label constantExpense;
-
     @FXML
     private Label history;
-
     @FXML
     private Button setBtn;
-
     @FXML
     private Button back;
 
@@ -84,10 +74,12 @@ public class ExpenseController {
         selectTopic.setPromptText(lan.getString("category"));
         addExpense.setPromptText(lan.getString("amount"));
         addBtn.setText(lan.getString("add"));
-        constExpenseName.setPromptText(lan.getString("name"));
         constExpense.setPromptText(lan.getString("amount"));
         setBtn.setText(lan.getString("setBtn"));
         history.setText(lan.getString("history"));
+        selectCategory.setPromptText(lan.getString("constantExpense"));
+
+        Variables.getInstance().refreshCategories();
     }
 
     public void backToMain(ActionEvent event) throws IOException {
@@ -97,6 +89,8 @@ public class ExpenseController {
 
     public void setVariables(Variables variables) {
         this.variables = variables;
+        StylingManager styler = new StylingManager();
+
         currency = Currency.getInstance(variables.getCurrentCurrency());
         Budget activeBudget = variables.getActiveBudget();
         activeBudgetTxt.setText(activeBudget.getName());
@@ -109,26 +103,23 @@ public class ExpenseController {
         }
         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
         this.expenseTxt.setText(budgetText + " " + currency.getSymbol());
-        selectTopic.getItems().addAll(variables.getTopics());
+        selectTopic.getItems().addAll(variables.getCategories());
 
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
             selectCategory.getItems().add(constantExpense);
         }
-        selectCategory.getItems().add(0, "New");
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
+        styler.styleListView(expenseHistory);
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
                 int selectedIndex = expenseHistory.getSelectionModel().getSelectedIndex();
-                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
                 if (selectedIndex >= 0) {
                     Expense selected = (Expense) expenseHistory.getItems().get(selectedIndex);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Expense deletion");
-                    alert.setHeaderText("Delete selected expense?");
-                    alert.setContentText(selected.toString());
-
+                    alert.setTitle(lan.getString("expense"));
+                    alert.setHeaderText(lan.getString("areYouSure"));
                     Optional<ButtonType> option = alert.showAndWait();
 
                     if (option.get() == ButtonType.OK) {
@@ -149,9 +140,9 @@ public class ExpenseController {
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("No selection!");
-                    alert.setHeaderText("No selected expense!");
-                    alert.setContentText("Click an existing expense.");
+                    alert.setTitle(lan.getString("expense"));
+                    alert.setHeaderText(lan.getString("selectedExpense"));
+                    alert.setContentText(lan.getString("clickExpense"));
                     alert.showAndWait();
                 }
             }
@@ -160,11 +151,8 @@ public class ExpenseController {
 
     @FXML
     protected void onExpenseAddClick() {
-
         String number = addExpense.getText();
-
-        if (number.matches("\\d+")) {
-
+        if (number.matches("\\d+") && addExpense != null) {
             if (selectTopic.getSelectionModel().getSelectedItem() != null) {
                 LocalDate expenseDate = LocalDate.now();
                 if (selectedDate.getValue() != null) {
@@ -173,8 +161,19 @@ public class ExpenseController {
                 ZoneId defaultZoneId = ZoneId.systemDefault();
                 Date finalDate = Date.from(expenseDate.atStartOfDay(defaultZoneId).toInstant());
                 RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-                budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectTopic.getSelectionModel().getSelectedItem().toString()
-                        , Double.parseDouble(addExpense.getText()), finalDate);
+
+                ArrayList<String> categories = new ArrayList<>() {{
+                    add("Groceries");
+                    add("Restaurants");
+                    add("Hobbies");
+                    add("Clothes");
+                    add("Well-being");
+                    add("Medicine");
+                    add("Transport");
+                    add("Other");
+                }};
+
+                budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), categories.get(selectTopic.getSelectionModel().getSelectedIndex()), Double.parseDouble(addExpense.getText()), finalDate);
                 variables.getActiveBudget().resetExpenses();
                 Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
                 for (Expense expense : expenses) {
@@ -196,100 +195,47 @@ public class ExpenseController {
             selectedDate.setValue(null);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Add an expense");
-            alert.setHeaderText("You cant add an expense");
-            alert.setContentText("Fill the form correctly");
+            alert.setTitle(lan.getString("expense"));
+            alert.setHeaderText(lan.getString("addExpense"));
+            alert.setContentText(lan.getString("formCorrect"));
             alert.showAndWait();
         }
     }
 
     @FXML
-    protected void selectConst() {
-        if (selectCategory.getValue() == "New") {
-            constExpenseName.setVisible(true);
-        } else if (selectCategory.getValue() != null) {
-            constExpenseName.setVisible(false);
-        }
-    }
-
-    @FXML
     protected void setConstExpense() {
-
-        if (selectCategory.getValue().equals("New")) {
-            if (constExpense.getText().matches("^[0-9]+$") && constExpenseName.getText().matches("[a-zA-Z]+")) {
-                if (variables.constantExpenseNameExists(constExpenseName.getText())) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Name already exists!");
-                    alert.setHeaderText("You already have a Constant expense with that name!");
-                    alert.setContentText("Give a name that doesn't already exist.");
-                    alert.showAndWait();
-                    selectCategory.setValue(null);
-                    constExpense.setText(null);
-                    constExpenseName.setText(null);
-                } else {
-                    RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-                    budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), constExpenseName.getText(), 0.00);
-                    ConstantExpense newConstantExpense = budgetExpenseDao.getConstantExpenseByName(constExpenseName.getText(), variables.getLoggedUserId());
-                    variables.addConstantExpense(newConstantExpense);
-                    selectCategory.setValue(null);
-                    constExpense.setText(null);
-                    constExpenseName.setText(null);
-                    selectCategory.getItems().clear();
-                    selectCategory.getItems().add(0, "New");
-                    for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-                        selectCategory.getItems().add(constantExpense);
-                    }
-                }
-
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Add a constant expense");
-                alert.setHeaderText("You cant add a constant expense");
-                alert.setContentText("Fill the form correctly");
-                alert.showAndWait();
+        if (constExpense.getText().matches("^[0-9]+$") && constExpense != null) {
+            ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
+            variables.removeConstantExpense(selectedConstExpense);
+            budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
+            ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
+            variables.addConstantExpense(modifiedConstExp);
+            selectCategory.setValue(null);
+            constExpense.setText(null);
+            selectCategory.getItems().clear();
+            for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+                selectCategory.getItems().add(constantExpense);
             }
         } else {
-            if (constExpense.getText().matches("^[0-9]+$")) {
-                ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
-                variables.removeConstantExpense(selectedConstExpense);
-                RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-                budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
-                ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
-                variables.addConstantExpense(modifiedConstExp);
-                variables.setConstExpenses(selectedConstExpense.getType(), Double.parseDouble(constExpense.getText()));
-                selectCategory.setValue(null);
-                constExpense.setText(null);
-                constExpenseName.setText(null);
-                selectCategory.getItems().clear();
-                selectCategory.getItems().add(0, "New");
-                for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-                    selectCategory.getItems().add(constantExpense);
-                }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Modify a constant expense");
-                alert.setHeaderText("You cant modify a constant expense");
-                alert.setContentText("Fill the form correctly");
-                alert.showAndWait();
-            }
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(lan.getString("expense"));
+            alert.setHeaderText(lan.getString("modifyExpense"));
+            alert.setContentText(lan.getString("formCorrect"));
+            alert.showAndWait();
         }
-
-    }
-
-    public void toExpenseStatistics(ActionEvent event) throws IOException {
-        FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("expenseStatistics-view.fxml"));
-
-        AnchorPane pane = fxmloader.load();
-        content.getChildren().setAll(pane);
-
-        ExpenseStatisticsController expenseStatisticsController = fxmloader.getController();
-        expenseStatisticsController.setVariables(variables);
     }
 
     @FXML
     protected void btnEnable() {
         if (selectTopic.getSelectionModel().getSelectedItem() != null && addExpense.getText() != null) {
             addBtn.setDisable(false);
+        }
+    }
+
+    @FXML
+    protected void enableSetBtn() {
+        if (selectCategory.getSelectionModel().getSelectedItem() != null) {
+            setBtn.setDisable(false);
         }
     }
 }

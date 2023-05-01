@@ -107,11 +107,13 @@ public class DaySalaryController {
     public void setVariables(SalarySingle salary, Variables variables) {
         this.salarySingle = salary;
         this.variables = variables;
+        StylingManager styler = new StylingManager();
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
         addHourSalary.setPromptText(currency.getSymbol());
 
         salaryHistory.getItems().addAll(salarySingle.getDaySalaries());
+        styler.styleListView(salaryHistory);
         monthsComb.setPromptText(lan.getString("month"));
 
         monthsComb.getItems().addAll(salarySingle.getMonths());
@@ -128,8 +130,8 @@ public class DaySalaryController {
                     Salary selected = (Salary) salaryHistory.getItems().get(selectedIndex);
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Salary calculation");
-                    alert.setHeaderText("Add salary to calculation");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("areYouSure"));
                     alert.setContentText(selected.toString());
 
                     incomeID = selected.getId();
@@ -144,9 +146,9 @@ public class DaySalaryController {
                     }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("No selection!");
-                    alert.setHeaderText("No selected income!");
-                    alert.setContentText("Click an existing income.");
+                    alert.setTitle(lan.getString("income"));
+                    alert.setHeaderText(lan.getString("selectedIncome"));
+                    alert.setContentText(lan.getString("clickIncome"));
                     alert.showAndWait();
                 }
             }
@@ -166,7 +168,7 @@ public class DaySalaryController {
     @FXML
     protected void onSalaryAddClick() throws SQLException {
 
-        if (addHourSalary.getText().matches("^[0-9]+$") && addHours.getText().matches("^[0-9]+$") && addTaxRate.getText().matches("^[0-9]+$")) {
+        if ((addHourSalary.getText().matches("^[0-9]+$") && addHours.getText().matches("^[0-9]+$")) && addTaxRate.getText().matches("^[0-9]+$") && (addHourSalary != null && addHours != null && addTaxRate != null)) {
             IncomeDao incomeDao = new IncomeDao();
             double taxRate;
 
@@ -210,9 +212,9 @@ public class DaySalaryController {
             mandatoryTaxes.setSelected(false);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Add an income");
-            alert.setHeaderText("You cant add an income");
-            alert.setContentText("Fill the form correctly");
+            alert.setTitle(lan.getString("income"));
+            alert.setHeaderText(lan.getString("addIncome"));
+            alert.setContentText(lan.getString("formCorrect"));
             alert.showAndWait();
         }
     }
@@ -224,7 +226,7 @@ public class DaySalaryController {
         String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(selectedIndex, "DAY"));
         Locale finnish = new Locale("fi", "FI");
         if (lan.getLocale().equals(finnish)) {
-               salaryComing.setText(lan.getString("salarycomingText") + " " +  month + lan.getString("bendingWord") + " " + lan.getString("is") +  salaryAmount + " " + currency.getSymbol());
+               salaryComing.setText(lan.getString("salarycomingText") + " " +  month + lan.getString("bendingWord") + " " + lan.getString("is") + " " +  salaryAmount + " " + currency.getSymbol());
         }
         else
          salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());

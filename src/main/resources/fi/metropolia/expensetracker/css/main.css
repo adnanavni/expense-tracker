@@ -9,6 +9,52 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
     -fx-cursor: hand;
 }
+/*
+#salaryHistory .scene {
+     -fx-background-color: #F5F5F5;
+}*/
+#salaryHistory, #expenseHistory {
+    -fx-background-color: #FFFFFF;
+}
+
+/*rivin tausta */
+/*
+#salaryHistory .cell{
+     /* -fx-background-color: #BDBDBD;*/
+}
+
+/*
+ .list-cell:odd {
+    -fx-background-color: red;
+  }*/
+
+.listView .list-cell {
+ -fx-border-color: white;
+ -fx-border-width: 5px;
+ -fx-border-radius:30px;
+  -fx-background-radius:30px;
+
+ -fx-border-padding:4px;
+
+}
+
+
+.listView .list-cell:hover, .listView list-cell:focused, .listView .list-cell:filled:selected, .listView list-cell:selected{
+    -fx-background-color: #BDBDBD;
+    -fx-background-radius:30px;
+    -fx-cursor: hand;
+    -fx-border-radius:30px;
+     /*-fx-border-color: white; */
+}
+
+.listView {
+    -fx-font-family: 'Arial Rounded MT Bold';
+    -fx-font-size: 16px;
+    -fx-padding: 8px;
+    -fx-border-radius: 30px;
+    -fx-background-radius: 30px;
+    -fx-background-color: #F5F5F5;
+}
 
 .button:hover {
     -fx-background-color: #BDBDBD;
@@ -24,7 +70,7 @@
     -fx-background-radius: 30px;
 }
 
-.text-field:hover, .text-field:focused {
+.text-field:hover, .text-field:focused{
     -fx-background-color: #BDBDBD;
 }
 
@@ -49,6 +95,9 @@
 
 .secondBackground {
     -fx-background-color: #F5F5F5;
+    -fx-border-radius:30px;
+    -fx-background-radius: 30px;
+
 }
 
 .header {

@@ -7,8 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.util.Locale;
-
 
 public class MainApplication extends Application {
     public static void main(String[] args) {
@@ -18,8 +16,6 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("login_form-view.fxml"));
-
-        Locale.setDefault(new Locale("en", "GB"));
 
         stage.setTitle("Expense Tracker");
         stage.setScene(new Scene(root, 700, 800));

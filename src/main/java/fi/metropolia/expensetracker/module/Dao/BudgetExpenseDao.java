@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class BudgetExpenseDao {
 
@@ -31,6 +32,7 @@ public class BudgetExpenseDao {
             }
         }
     }
+
     public String loggedCurrency(Integer id) {
         try {
             String sql = "SELECT currency FROM UserInfo WHERE id=?";
@@ -115,8 +117,7 @@ public class BudgetExpenseDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
 
-                return new Expense(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getString(2),
-                        resultSet.getDate(5));
+                return new Expense(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getString(2), resultSet.getDate(5));
             }
             resultSet.close();
             preparedStatement.close();
@@ -265,8 +266,7 @@ public class BudgetExpenseDao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Expense expense = new Expense(rs.getInt(1), rs.getDouble(3), rs.getString(2),
-                        rs.getDate(5));
+                Expense expense = new Expense(rs.getInt(1), rs.getDouble(3), rs.getString(2), rs.getDate(5));
                 expenses.add(expense);
             }
 
@@ -280,9 +280,6 @@ public class BudgetExpenseDao {
         }
         return result;
     }
-
-
-
 
     public boolean changeConstantExpenseValue(Integer id, Double money) {
         try {
@@ -360,5 +357,26 @@ public class BudgetExpenseDao {
         } else {
             return false;
         }
+    }
+
+    public HashMap<String, Double> getExpenseNameAndAmount(Integer id) {
+        String sql = "SELECT * FROM Expenses WHERE BudgetId = ?";
+        HashMap<String, Double> result = new HashMap<>();
+
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Expense expense = new Expense(rs.getInt(1), rs.getDouble(3), rs.getString(2), rs.getDate(5));
+                result.put(rs.getString(2), rs.getDouble(3));
+            }
+
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return result;
     }
 }

@@ -2,8 +2,8 @@ package fi.metropolia.expensetracker.module;
 
 
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import org.json.JSONObject;
 
@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -27,18 +26,7 @@ public class Variables {
 
     {
         try {
-            currencies = Map.ofEntries(
-                    entry("EUR", 1.00),
-                    entry("USD", getCurrencyExchangeRateViaGETRequest("USD")),
-                    entry("SEK", getCurrencyExchangeRateViaGETRequest("SEK")),
-                    entry("JPY", getCurrencyExchangeRateViaGETRequest("JPY")),
-                    entry("ISK", getCurrencyExchangeRateViaGETRequest("ISK")),
-                    entry("CAD", getCurrencyExchangeRateViaGETRequest("CAD")),
-                    entry("RUB", getCurrencyExchangeRateViaGETRequest("RUB")),
-                    entry("CHF", getCurrencyExchangeRateViaGETRequest("CHF")),
-                    entry("NOK", getCurrencyExchangeRateViaGETRequest("NOK")),
-                    entry("DKK", getCurrencyExchangeRateViaGETRequest("DKK")),
-                    entry("GBP", getCurrencyExchangeRateViaGETRequest("GBP")));
+            currencies = Map.ofEntries(entry("EUR", 1.00), entry("USD", getCurrencyExchangeRateViaGETRequest("USD")), entry("SEK", getCurrencyExchangeRateViaGETRequest("SEK")), entry("JPY", getCurrencyExchangeRateViaGETRequest("JPY")), entry("ISK", getCurrencyExchangeRateViaGETRequest("ISK")), entry("CAD", getCurrencyExchangeRateViaGETRequest("CAD")), entry("RUB", getCurrencyExchangeRateViaGETRequest("RUB")), entry("CHF", getCurrencyExchangeRateViaGETRequest("CHF")), entry("NOK", getCurrencyExchangeRateViaGETRequest("NOK")), entry("DKK", getCurrencyExchangeRateViaGETRequest("DKK")), entry("GBP", getCurrencyExchangeRateViaGETRequest("GBP")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -58,24 +46,24 @@ public class Variables {
         add("Remember that every little bit counts. Even small savings can add up over time.");
     }};
 
-    private final Map<String, Double> categories = new HashMap<>() {{
-        put("Groceries", 0.00);
-        put("Restaurants", 0.00);
-        put("Hobbies", 0.00);
-        put("Clothes", 0.00);
-        put("Well-being", 0.00);
-        put("Medicines", 0.00);
-        put("Transport", 0.00);
-        put("Other", 0.00);
+    private ArrayList<String> categories = new ArrayList<>() {{
+        add("Groceries");
+        add("Restaurants");
+        add("Hobbies");
+        add("Clothes");
+        add("Well-being");
+        add("Medicine");
+        add("Transport");
+        add("Other");
     }};
     private Integer loggedUserId;
-    private Map<String, Double> constExpenses = new HashMap<>() {{
-        put("Rent", 0.00);
-        put("Water bill", 0.00);
-        put("Insurance", 0.00);
-        put("Car payment", 0.00);
-        put("Cell phone", 0.00);
-        put("Internet", 0.00);
+    private ArrayList<String> constExpenses = new ArrayList<>() {{
+        add("Rent");
+        add("Water bill");
+        add("Insurance");
+        add("Car payment");
+        add("Cell phone");
+        add("Internet");
     }};
 
     private ArrayList<ConstantExpense> constantExpenses = new ArrayList<>();
@@ -189,11 +177,7 @@ public class Variables {
     }
 
     public ArrayList<String> getConstExpenses() {
-        return new ArrayList<>(constExpenses.keySet());
-    }
-
-    public void setConstExpenses(String key, Double amount) {
-        constExpenses.put(key, amount);
+        return constExpenses;
     }
 
     public ArrayList<Budget> getBudgets() {
@@ -224,8 +208,20 @@ public class Variables {
         return totalBudget;
     }
 
-    public ArrayList<String> getTopics() {
-        return new ArrayList<>(categories.keySet());
+    public ArrayList<String> getCategories() {
+        return categories;
+    }
+
+    public void refreshCategories() {
+        categories.clear();
+        categories.add(lan.getString("groceries"));
+        categories.add(lan.getString("restaurants"));
+        categories.add(lan.getString("hobbies"));
+        categories.add(lan.getString("clothes"));
+        categories.add(lan.getString("well-being"));
+        categories.add(lan.getString("medicine"));
+        categories.add(lan.getString("transport"));
+        categories.add(lan.getString("other"));
     }
 
     public Budget getActiveBudget() {
@@ -289,19 +285,15 @@ public class Variables {
         constantExpenses = new ArrayList<>();
         ThemeManager.getInstance().setCurrentColor("#85bb65");
 
-        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-
         ConstantExpense[] constantExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
 
-        if (constantExpenses.length == 0) {
-            ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
-            for (String defaultConstExpenseName : defaultConstExpenseNames) {
-                budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
-            }
-            ConstantExpense[] defaultConstExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
-            for (ConstantExpense constantExpense : defaultConstExpenses) {
-                Variables.getInstance().addConstantExpense(constantExpense);
-            }
+        ArrayList<String> defaultConstExpenseNames = Variables.getInstance().getConstExpenses();
+        for (String defaultConstExpenseName : defaultConstExpenseNames) {
+            budgetExpenseDao.saveConstantExpense(Variables.getInstance().getLoggedUserId(), defaultConstExpenseName, 0.00);
+        }
+        ConstantExpense[] defaultConstExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
+        for (ConstantExpense constantExpense : defaultConstExpenses) {
+            Variables.getInstance().addConstantExpense(constantExpense);
         }
     }
 
@@ -315,7 +307,7 @@ public class Variables {
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
 
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
@@ -339,8 +331,8 @@ public class Variables {
     }
 
     public void refreshTips() {
-        for (Integer i = 0; i < quotes.size(); i++) {
-            String n = i.toString();
+        for (int i = 0; i < quotes.size(); i++) {
+            String n = Integer.toString(i);
             quotes.set(i, lan.getString(n));
         }
     }
