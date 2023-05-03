@@ -98,6 +98,7 @@ public class RegisterController {
         loginSignupDao.insertRecord(name, hashedPassword);
         Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
 
+        Variables.getInstance().resetAndSetDefaults();
         SettingsDao settingsDao = new SettingsDao();
         settingsDao.setLanguage(loginSignupDao.loggedID(name), "en_GB");
 

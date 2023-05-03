@@ -37,46 +37,7 @@ public class IncomeDao {
         return null;
     }
 
-    public Double getSalaryWithTaxrate(Integer incomeId) {
-        try {
-            String sql = "SELECT Amount_Minus_Taxes FROM Incomes WHERE IncomeID=?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, incomeId);
 
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next())
-                return rs.getDouble(1);
-
-            rs.close();
-            preparedStatement.close();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Double getTaxrate(Integer incomeId) {
-        try {
-            String sql = "SELECT Taxrate FROM Incomes WHERE IncomeID=?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, incomeId);
-
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next())
-                return rs.getDouble(1);
-
-            rs.close();
-            preparedStatement.close();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 
     public boolean deleteSalary(Integer id, String type) {
         Salary salary = getSalary(id, type);
@@ -100,32 +61,6 @@ public class IncomeDao {
         }
     }
 
-    public Integer getIncomeId(Integer userID, String type, Double salary, Date date, Double taxrate, String currency) throws SQLException {
-        int id = 7;
-        try {
-            String sql = "SELECT IncomeID FROM Incomes WHERE userID = ? AND Type = ? AND Amount = ? AND SalaryDate =? AND Taxrate = ? AND Currency =?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, userID);
-            preparedStatement.setString(2, type);
-            preparedStatement.setDouble(3, salary);
-            preparedStatement.setDate(4, (java.sql.Date) date);
-            preparedStatement.setDouble(5, taxrate);
-            preparedStatement.setString(6, currency);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                id = resultSet.getInt(1);
-                return resultSet.getInt(1);
-            }
-            resultSet.close();
-            preparedStatement.close();
-
-        } catch (SQLException e) {
-            printSQLException(e);
-            System.out.println(e.getMessage());
-        }
-        return id;
-    }
 
     public void saveSalary(Integer userID, String type, Double salary, Double salaryMinusTaxes, Date date, Double taxrate, String currency) {
         try {

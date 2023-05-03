@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
-public class SettingsController {
+public class SettingsController implements Controller{
     @FXML
     private AnchorPane content;
     @FXML
@@ -62,9 +62,12 @@ public class SettingsController {
     private LocalizationManager lan = LocalizationManager.getInstance();
     private SettingsDao settingsDao = new SettingsDao();
 
+    @Override
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
+        this.currency = Currency.getInstance(variables.getCurrentCurrency());
+
 
         Map<String, String> colorMap = new HashMap<>();
         colorMap.put("#85bb65", "Original");
@@ -129,9 +132,9 @@ public class SettingsController {
         }
     }
 
-    public void setVariables(Variables variables, Currency currency) {
+    @Override
+    public void setVariables(SalarySingle salary, Variables variables) {
         this.variables = variables;
-        this.currency = currency;
     }
 
     public void backToMain() throws IOException {
@@ -178,8 +181,9 @@ public class SettingsController {
         if (result.get() == ButtonType.OK) {
             settingsDao.deleteUserData(variables.getLoggedUserId());
             variables.resetAndSetDefaults();
-            content.setStyle(ThemeManager.getInstance().getStyle());
+            SalarySingle.getInstance().resetAll();
 
+            content.setStyle(ThemeManager.getInstance().getStyle());
             Alert dataDeleted = new Alert(Alert.AlertType.INFORMATION);
             dataDeleted.setTitle(lan.getString("settings"));
             dataDeleted.setHeaderText(lan.getString("dataSuccess"));
