@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 
-public class IncomeController implements Controller{
+public class IncomeController implements Controller {
     @FXML
     ComboBox monthsCombo;
     private Currency currency;
@@ -101,6 +101,7 @@ public class IncomeController implements Controller{
         DaySalaryController daySalaryController = fxmloader.getController();
         daySalaryController.setVariables(salarySingle, variables);
     }
+
     @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         ThemeManager styler = ThemeManager.getInstance();

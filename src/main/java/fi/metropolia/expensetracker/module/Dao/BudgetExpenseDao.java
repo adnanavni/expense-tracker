@@ -84,7 +84,7 @@ public class BudgetExpenseDao {
         String result = firstLetter + str.substring(1);
 
         if (result.equals("Waterbill")) result = "Water bill";
-        if (result.equals("Carpayment"))  result = "Car payment";
+        if (result.equals("Carpayment")) result = "Car payment";
         if (result.equals("Cellphone")) result = "Cell phone";
 
         try {

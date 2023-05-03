@@ -3,8 +3,6 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
-import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,9 +19,9 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
 
-public class ExpenseController implements Controller{
+public class ExpenseController implements Controller {
     @FXML
-     AnchorPane budgetPane;
+    AnchorPane budgetPane;
 
     @FXML
     private AnchorPane content;
@@ -82,13 +80,13 @@ public class ExpenseController implements Controller{
     }
 
 
-
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
+
     @Override
-    public void setVariables(SalarySingle salary,Variables variables) {
+    public void setVariables(SalarySingle salary, Variables variables) {
         this.variables = variables;
         ThemeManager styler = ThemeManager.getInstance();
 
@@ -202,7 +200,6 @@ public class ExpenseController implements Controller{
             alert.showAndWait();
         }
     }
-
 
 
     @FXML

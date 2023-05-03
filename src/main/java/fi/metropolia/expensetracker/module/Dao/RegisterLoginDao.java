@@ -100,7 +100,6 @@ public class RegisterLoginDao {
     }
 
 
-
     public boolean userExists(String username) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM UserInfo WHERE username = ?");
         stmt.setString(1, username);
@@ -135,7 +134,6 @@ public class RegisterLoginDao {
             return false;
         }
     }
-
 
 
 }

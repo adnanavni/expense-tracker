@@ -22,6 +22,7 @@ public class LocalizationManager {
     public Locale getLocale() {
         return locale;
     }
+
     public void setLocale(Locale locale) {
         messages = ResourceBundle.getBundle("fi/metropolia/expensetracker/properties/messages", locale);
         Locale.setDefault(locale);

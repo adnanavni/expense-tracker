@@ -26,6 +26,7 @@ public class SettingsDao {
             }
         }
     }
+
     public boolean changeUserCurrency(Integer id, String currency) {
 
         try {
@@ -77,10 +78,9 @@ public class SettingsDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
                 return resultSet.getString(1);
+        } catch (SQLException e) {
+            printSQLException(e);
         }
-         catch(SQLException e) {
-                printSQLException(e);
-            }
         return null;
 
     }
@@ -97,6 +97,7 @@ public class SettingsDao {
         }
         return false;
     }
+
     public String loggedThemeColor(Integer id) {
 
         try {
@@ -131,6 +132,7 @@ public class SettingsDao {
         }
         return false;
     }
+
     public void deleteUserData(Integer userId) {
         String deleteIncomes = "DELETE FROM Incomes WHERE UserID = ?";
         String deleteConstantExpenses = "DELETE FROM Constantexpenses WHERE registration_id = ?";

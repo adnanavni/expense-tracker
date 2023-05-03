@@ -1,11 +1,11 @@
 package fi.metropolia.expensetracker.module;
 
-import fi.metropolia.expensetracker.module.Dao.IncomeDao;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 
 public class SalarySingle {
     private static SalarySingle INSTANCE = null;
@@ -23,9 +23,8 @@ public class SalarySingle {
     public LinkedHashMap<String, Integer> months;
 
 
-
     public void refreshMonthsCombLanguage() {
-         months = new LinkedHashMap<>() {{
+        months = new LinkedHashMap<>() {{
             put(localizationManager.getString("january"), 0);
             put(localizationManager.getString("february"), 1);
             put(localizationManager.getString("march"), 2);
@@ -123,6 +122,7 @@ public class SalarySingle {
     public ArrayList<String> getMonths() {
         return new ArrayList<>(months.keySet());
     }
+
     public ArrayList<Salary> getDaySalaries() {
         return daySalaries;
     }
@@ -130,6 +130,7 @@ public class SalarySingle {
     public ArrayList<Salary> getMonthSalaries() {
         return monthSalaries;
     }
+
     public void createNewMonthSalary(Salary salary) {
         monthSalaries.add(salary);
     }
@@ -145,6 +146,7 @@ public class SalarySingle {
     public void deleteDaySalary(Salary salary) {
         daySalaries.remove(salary);
     }
+
     public int getAge() {
         return age;
     }
@@ -216,13 +218,13 @@ public class SalarySingle {
                 }
             }
         }
-       if (type == "DAY") {
-           for (Salary eachDate : getDaySalaries()) {
-               if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
-                   salaries.add(eachDate.getSalaryMinusTaxes());
-               }
-           }
-       }
+        if (type == "DAY") {
+            for (Salary eachDate : getDaySalaries()) {
+                if (eachDate.getDate().after(parsedStart) && eachDate.getDate().before(parsedEnd)) {
+                    salaries.add(eachDate.getSalaryMinusTaxes());
+                }
+            }
+        }
         for (double eachSalary : salaries) {
             salariesTogether += eachSalary;
         }
