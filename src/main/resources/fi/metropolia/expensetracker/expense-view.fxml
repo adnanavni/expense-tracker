@@ -48,16 +48,10 @@
                 <DatePicker fx:id="selectedDate" layoutX="74.0" layoutY="109.0" styleClass="text-field" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="135.0" />
             </children>
         </AnchorPane>
-        <AnchorPane layoutX="379.0" layoutY="136.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="405.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
+        <AnchorPane fx:id="budgetPane" visible="false" AnchorPane.leftAnchor="375.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="160.0">
             <children>
-                <Label fx:id="constantExpense" alignment="CENTER" styleClass="smallHeader" text="Add constant expense" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
-                <ComboBox fx:id="selectCategory" layoutX="80.0" layoutY="59.0" onAction="#enableSetBtn" promptText="Expense" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0">
-               <styleClass>
-                  <String fx:value="text-field" />
-                  <String fx:value="combo-box" />
-               </styleClass></ComboBox>
-                <TextField fx:id="constExpense" alignment="CENTER" layoutX="100.0" layoutY="7.0" promptText="Amount:" styleClass="text-field" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="95.0" />
-                <Button fx:id="setBtn" alignment="CENTER" disable="true" layoutX="137.0" layoutY="147.0" mnemonicParsing="false" onAction="#setConstExpense" text="Set" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="140.0" />
+                <ComboBox fx:id="expenseCombo" onAction="#btnEnbale" prefHeight="39.0" prefWidth="296.0" promptText="Constant expenses" styleClass="button" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="5.0" />
+                <Button fx:id="ConstExpenseBtn" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#removeBtn" text="Remove from budget" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="60.0" />
             </children>
         </AnchorPane>
     </children>

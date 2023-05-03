@@ -30,9 +30,8 @@ public class BudgetController {
     @FXML
     private ComboBox selectTopic;
     @FXML
-    private AnchorPane budgetPane;
-    @FXML
-    private ComboBox expenseCombo;
+    private AnchorPane addConstantAnchor;
+
     @FXML
     private AnchorPane newBudget;
     @FXML
@@ -45,8 +44,7 @@ public class BudgetController {
     private Label total;
     @FXML
     private Label active;
-    @FXML
-    private Button deleteBtn;
+
     @FXML
     private Button cancelModifyBtn;
     @FXML
@@ -55,8 +53,6 @@ public class BudgetController {
     private Button addBtn;
     @FXML
     private Button back;
-    @FXML
-    private Button ConstExpenseBtn;
     @FXML
     private AnchorPane modifyBudget;
     @FXML
@@ -70,7 +66,14 @@ public class BudgetController {
     private BarChart<String, Double> barStats;
     @FXML
     private PieChart pieStats;
-
+    @FXML
+    private Label constantExpense;
+    @FXML
+    private Button setBtn;
+    @FXML
+    private ComboBox selectCategory;
+    @FXML
+    private TextField constExpense;
 
     private Boolean barChartShown = true;
     private Variables variables;
@@ -79,6 +82,8 @@ public class BudgetController {
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
     private HashMap<String, Double> expenses;
     private XYChart.Series<String, Double> series;
+    ExpenseController expenseController = new ExpenseController();
+
 
     public void initialize() {
         variables = Variables.getInstance();
@@ -92,19 +97,21 @@ public class BudgetController {
         active.setText(language.getString("active"));
         selectTopic.setPromptText(language.getString("budget"));
         activeBudget.setText(language.getString("noActive"));
+        constantExpense.setText(language.getString("constant"));
+        setBtn.setText(language.getString("setBtn"));
+        selectCategory.setPromptText(language.getString("constantExpense"));
+        constExpense.setPromptText(language.getString("amount"));
+
 
         budgetName.setPromptText(language.getString("name"));
         addBudget.setPromptText(language.getString("amount"));
         addBtn.setText(language.getString("add"));
 
-        expenseCombo.setPromptText(language.getString("constantExpense"));
-        ConstExpenseBtn.setText(language.getString("remove"));
 
         modify.setText(language.getString("modify"));
         delete.setText(language.getString("delete"));
 
         shared.setText(language.getString("shared"));
-
         updateCharts();
 
     }
@@ -113,11 +120,13 @@ public class BudgetController {
         this.variables = variables;
         total.setText(language.getString("total"));
         selectTopic.getItems().addAll(variables.getBudgetNames());
+        if (variables.getActiveBudget() == null ) addConstantAnchor.setVisible(false);
 
         if (variables.getActiveBudget() != null) {
             selectTopic.setValue(variables.getActiveBudget().getName());
             modifyBudget.setVisible(true);
-            budgetPane.setVisible(true);
+
+            addConstantAnchor.setVisible(true);
             String budgetText = String.format("%.2f", variables.getBudget());
             activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
             total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
@@ -125,9 +134,9 @@ public class BudgetController {
         }
 
         for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-            expenseCombo.getItems().add(constantExpense);
+            selectCategory.getItems().add(constantExpense);
         }
-
+        variables.refreshCategories();
         updateCharts();
 
     }
@@ -168,7 +177,7 @@ public class BudgetController {
             budgetName.setText(null);
             newBudget.setVisible(false);
             editBudget.setVisible(false);
-            budgetPane.setVisible(true);
+            addConstantAnchor.setVisible(true);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle(language.getString("budget"));
@@ -188,7 +197,8 @@ public class BudgetController {
             newBudget.setVisible(false);
             modifyBudget.setVisible(true);
             editBudget.setVisible(false);
-            budgetPane.setVisible(true);
+            addConstantAnchor.setVisible(true);
+
             for (Budget budget : variables.getBudgets()) {
                 if (budget.getName() == selectTopic.getValue()) {
                     variables.setActiveBudget(budget.getName());
@@ -265,26 +275,7 @@ public class BudgetController {
         modifyBudget.setVisible(true);
     }
 
-    @FXML
-    protected void removeBtn() {
-        ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
-        budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
-        variables.getActiveBudget().resetExpenses();
-        Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
-        for (Expense expense : expenses) {
-            variables.getActiveBudget().addExpenseToBudget(expense);
-        }
-        String budgetText = String.format("%.2f", variables.getBudget());
-        total.setText(language.getString("total") + " " + budgetText + " " + currency.getSymbol());
-        activeBudget.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
-        Double budgetExpenses = 0.00;
-        if (variables.getActiveBudget().getExpenses().size() > 0) {
-            for (Expense expense : variables.getActiveBudget().getExpenses()) {
-                budgetExpenses += expense.getPrice();
-            }
-        }
-        updateCharts();
-    }
+
 
     @FXML
     protected void cancelModifyClick() {
@@ -315,7 +306,7 @@ public class BudgetController {
             modifyAmount.setText(null);
             modifyName.setText(null);
             editBudget.setVisible(false);
-            budgetPane.setVisible(false);
+            addConstantAnchor.setVisible(false);
             modifyBudget.setVisible(false);
         }
     }
@@ -362,10 +353,7 @@ public class BudgetController {
         }
     }
 
-    @FXML
-    protected void btnEnbale() {
-        ConstExpenseBtn.setDisable(false);
-    }
+
 
     public void updateCharts() {
 
@@ -405,6 +393,35 @@ public class BudgetController {
         } else {
             barStats.setVisible(false);
             pieStats.setVisible(false);
+        }
+    }
+    @FXML
+    protected void enableSetBtn() {
+        if (selectCategory.getSelectionModel().getSelectedItem() != null) {
+            setBtn.setDisable(false);
+        }
+    }
+
+    @FXML
+    protected void setConstExpense() {
+        if (constExpense.getText().matches("^[0-9]+$") && constExpense != null) {
+            ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
+            variables.removeConstantExpense(selectedConstExpense);
+            budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
+            ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
+            variables.addConstantExpense(modifiedConstExp);
+            selectCategory.setValue(null);
+            constExpense.setText(null);
+            selectCategory.getItems().clear();
+            for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+                selectCategory.getItems().add(constantExpense);
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(language.getString("expense"));
+            alert.setHeaderText(language.getString("modifyExpense"));
+            alert.setContentText(language.getString("formCorrect"));
+            alert.showAndWait();
         }
     }
 }

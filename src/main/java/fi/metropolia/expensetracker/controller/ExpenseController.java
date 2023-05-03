@@ -23,6 +23,11 @@ import java.util.Optional;
 
 public class ExpenseController {
     @FXML
+    private Button deleteBtn;
+    @FXML
+     AnchorPane budgetPane;
+
+    @FXML
     private AnchorPane content;
     @FXML
     private TextField addExpense;
@@ -36,22 +41,21 @@ public class ExpenseController {
     private Label activeBudgetTxt;
     @FXML
     private ListView expenseHistory;
-    @FXML
-    private ComboBox selectCategory;
-    @FXML
-    private TextField constExpense;
+
     @FXML
     private Label expenseTxt;
     @FXML
     private Label active;
     @FXML
     private Label singleExpense;
-    @FXML
-    private Label constantExpense;
+
     @FXML
     private Label history;
+
     @FXML
-    private Button setBtn;
+    private Button ConstExpenseBtn;
+    @FXML
+    private ComboBox expenseCombo;
     @FXML
     private Button back;
 
@@ -66,21 +70,20 @@ public class ExpenseController {
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
+        expenseCombo.setPromptText(lan.getString("constantExpense"));
 
         back.setText(lan.getString("back"));
         expenseTxt.setText(lan.getString("expense"));
         active.setText(lan.getString("activeonExpense"));
         singleExpense.setText(lan.getString("single"));
-        constantExpense.setText(lan.getString("constant"));
         selectTopic.setPromptText(lan.getString("category"));
         addExpense.setPromptText(lan.getString("amount"));
         addBtn.setText(lan.getString("add"));
-        constExpense.setPromptText(lan.getString("amount"));
-        setBtn.setText(lan.getString("setBtn"));
         history.setText(lan.getString("history"));
-        selectCategory.setPromptText(lan.getString("constantExpense"));
 
-        Variables.getInstance().refreshCategories();
+        ConstExpenseBtn.setText(lan.getString("remove"));
+
+     //   Variables.getInstance().refreshCategories();
     }
 
     public void backToMain(ActionEvent event) throws IOException {
@@ -95,20 +98,21 @@ public class ExpenseController {
         currency = Currency.getInstance(variables.getCurrentCurrency());
         this.activeBudget = variables.getActiveBudget();
         activeBudgetTxt.setText(activeBudget.getName() + ": " + activeBudget.getAmount());
-
+        budgetPane.setVisible(true);
         Double budgetExpenses = 0.00;
         if (variables.getActiveBudget().getExpenses().size() > 0) {
             for (Expense expense : variables.getActiveBudget().getExpenses()) {
                 budgetExpenses += expense.getPrice();
             }
         }
+        for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
+            expenseCombo.getItems().add(constantExpense);
+        }
         String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
         this.activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
         selectTopic.getItems().addAll(variables.getCategories());
 
-        for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-            selectCategory.getItems().add(constantExpense);
-        }
+
         expenseHistory.getItems().addAll(activeBudget.getExpenses());
         styler.styleListView(expenseHistory);
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -202,28 +206,7 @@ public class ExpenseController {
         }
     }
 
-    @FXML
-    protected void setConstExpense() {
-        if (constExpense.getText().matches("^[0-9]+$") && constExpense != null) {
-            ConstantExpense selectedConstExpense = (ConstantExpense) selectCategory.getSelectionModel().getSelectedItem();
-            variables.removeConstantExpense(selectedConstExpense);
-            budgetExpenseDao.changeConstantExpenseValue(selectedConstExpense.getId(), Double.parseDouble(constExpense.getText()));
-            ConstantExpense modifiedConstExp = budgetExpenseDao.getConstantExpenseByName(selectedConstExpense.getType(), variables.getLoggedUserId());
-            variables.addConstantExpense(modifiedConstExp);
-            selectCategory.setValue(null);
-            constExpense.setText(null);
-            selectCategory.getItems().clear();
-            for (ConstantExpense constantExpense : variables.getConstantExpenseArray()) {
-                selectCategory.getItems().add(constantExpense);
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(lan.getString("expense"));
-            alert.setHeaderText(lan.getString("modifyExpense"));
-            alert.setContentText(lan.getString("formCorrect"));
-            alert.showAndWait();
-        }
-    }
+
 
     @FXML
     protected void btnEnable() {
@@ -232,10 +215,32 @@ public class ExpenseController {
         }
     }
 
+
     @FXML
-    protected void enableSetBtn() {
-        if (selectCategory.getSelectionModel().getSelectedItem() != null) {
-            setBtn.setDisable(false);
+    protected void removeBtn() {
+
+        ConstantExpense selectedConstExpense = (ConstantExpense) expenseCombo.getSelectionModel().getSelectedItem();
+        budgetExpenseDao.saveExpense(variables.getActiveBudget().getId(), selectedConstExpense.getType(), selectedConstExpense.getAmount(), new Date());
+        variables.getActiveBudget().resetExpenses();
+        Expense[] expenses = budgetExpenseDao.getExpenses(variables.getActiveBudget().getId());
+        for (Expense expense : expenses) {
+            variables.getActiveBudget().addExpenseToBudget(expense);
         }
+        expenseHistory.getItems().clear();
+        expenseHistory.getItems().addAll(variables.getActiveBudget().getExpenses());
+        activeBudgetTxt.setText(variables.getActiveBudget().getName() + ": " + variables.getActiveBudget().getAmount() + " " + currency.getSymbol());
+        Double budgetExpenses = 0.00;
+        if (variables.getActiveBudget().getExpenses().size() > 0) {
+            for (Expense expense : variables.getActiveBudget().getExpenses()) {
+                budgetExpenses += expense.getPrice();
+            }
+        }
+        String budgetText = String.format("%.2f", (variables.getActiveBudget().getAmount()) - budgetExpenses);
+        activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
+    }
+
+    @FXML
+    protected void btnEnbale() {
+        ConstExpenseBtn.setDisable(false);
     }
 }

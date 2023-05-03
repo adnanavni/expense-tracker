@@ -117,6 +117,11 @@ public class IncomeController {
 
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Pakolliset verot kuten työeläkemaksu ja työttömyysvakuusmaksu."));
+        setIncomeHistoryClick();
+
+    }
+
+    private void setIncomeHistoryClick() {
 
         salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
