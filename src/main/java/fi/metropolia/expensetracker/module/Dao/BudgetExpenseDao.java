@@ -40,11 +40,9 @@ public class BudgetExpenseDao {
 
             preparedStatement.setInt(1, id);
 
-
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getString(1);
-
             }
             resultSet.close();
             preparedStatement.close();
@@ -113,7 +111,6 @@ public class BudgetExpenseDao {
 
             preparedStatement.setInt(1, id);
 
-
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
 
@@ -121,7 +118,6 @@ public class BudgetExpenseDao {
             }
             resultSet.close();
             preparedStatement.close();
-
 
         } catch (SQLException e) {
             printSQLException(e);
@@ -151,7 +147,6 @@ public class BudgetExpenseDao {
     }
 
     public void saveConstantExpense(Integer id, String name, Double money) {
-
         try {
 
             String sql = "INSERT INTO Constantexpenses VALUES (NULL, ?, ?, ?)";

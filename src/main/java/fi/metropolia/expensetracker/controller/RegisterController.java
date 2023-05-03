@@ -84,20 +84,25 @@ public class RegisterController {
             passwd = passwordField.getText();
             hashedPassword = auth.hash(passwordField.getText().toCharArray());
 
-            RegisterLoginDao loginSignupDao = new RegisterLoginDao();
-            loginSignupDao.insertRecord(name, hashedPassword);
-            Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
-
-            SettingsDao settingsDao = new SettingsDao();
-            settingsDao.setLanguage(loginSignupDao.loggedID(name), "en_GB");
-
-            LocalizationManager.getInstance().setLocale(new Locale("en_GB"));
+            createUser(name);
 
             showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration successful!",
                     "Welcome" + " " +  userName.getText());
 
             changeWindowToHome();
         }
+    }
+
+    private void createUser(String name) {
+        RegisterLoginDao loginSignupDao = new RegisterLoginDao();
+        loginSignupDao.insertRecord(name, hashedPassword);
+        Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
+
+        SettingsDao settingsDao = new SettingsDao();
+        settingsDao.setLanguage(loginSignupDao.loggedID(name), "en_GB");
+
+        LocalizationManager.getInstance().setLocale(new Locale("en_GB"));
+
     }
 
     private void changeWindowToHome() throws IOException {
