@@ -17,7 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.*;
 
-public class BudgetController implements Controller{
+public class BudgetController implements Controller {
 
     @FXML
     private AnchorPane content;
@@ -115,7 +115,7 @@ public class BudgetController implements Controller{
         this.variables = variables;
         total.setText(language.getString("total"));
         selectTopic.getItems().addAll(variables.getBudgetNames());
-        if (variables.getActiveBudget() == null ) addConstantAnchor.setVisible(false);
+        if (variables.getActiveBudget() == null) addConstantAnchor.setVisible(false);
 
         if (variables.getActiveBudget() != null) {
             selectTopic.setValue(variables.getActiveBudget().getName());
@@ -237,7 +237,6 @@ public class BudgetController implements Controller{
 
             variables.modifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(number));
             variables.setActiveBudget(variables.getActiveBudget().getName());
-            System.out.println("1");
 
         } else if (number == null && text != null && !isSameBudgetName(text)) {
 
@@ -245,13 +244,11 @@ public class BudgetController implements Controller{
             variables.modifyBudget(text, variables.getActiveBudget().getAmount());
             variables.setActiveBudget(text);
 
-            System.out.println("2");
-
         } else if ((number != null && number.matches("^[0-9]+$")) && (text != null && !isSameBudgetName(text))) {
             budgetExpenseDao.ModifyBudget(variables.getActiveBudget().getName(), Double.parseDouble(modifyAmount.getText()), modifyName.getText());
             variables.modifyBudget(text, Double.parseDouble(number));
             variables.setActiveBudget(text);
-            System.out.println("3");
+
 
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -269,7 +266,6 @@ public class BudgetController implements Controller{
         editBudget.setVisible(false);
         modifyBudget.setVisible(true);
     }
-
 
 
     @FXML
@@ -349,7 +345,6 @@ public class BudgetController implements Controller{
     }
 
 
-
     public void updateCharts() {
 
         if (Variables.getInstance().getActiveBudget() != null) {
@@ -392,6 +387,7 @@ public class BudgetController implements Controller{
             pieStats.setVisible(false);
         }
     }
+
     @FXML
     protected void enableSetBtn() {
         if (selectCategory.getSelectionModel().getSelectedItem() != null) {
@@ -424,7 +420,6 @@ public class BudgetController implements Controller{
         setBtn.setDisable(true);
 
     }
-
 
 
 }
