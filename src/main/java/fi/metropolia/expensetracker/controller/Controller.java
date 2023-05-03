@@ -8,5 +8,5 @@ public interface Controller {
     public void initialize();
 
 
-    public void setVariables(SalarySingle salary , Variables variables);
+    public void setVariables(SalarySingle salary, Variables variables);
 }

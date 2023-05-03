@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+
 import static fi.metropolia.expensetracker.module.Dao.RegisterLoginDao.printSQLException;
 
 public class IncomeDao {
@@ -36,7 +37,6 @@ public class IncomeDao {
         }
         return null;
     }
-
 
 
     public boolean deleteSalary(Integer id, String type) {

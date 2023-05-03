@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
-public class SettingsController implements Controller{
+public class SettingsController implements Controller {
     @FXML
     private AnchorPane content;
     @FXML

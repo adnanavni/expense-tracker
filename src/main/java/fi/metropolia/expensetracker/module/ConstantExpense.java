@@ -39,7 +39,7 @@ public class ConstantExpense {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
         type = type.toLowerCase();
         if (type.equals("water bill")) type = "waterbill";
-        if (type.equals("car payment"))  type = "carpayment";
+        if (type.equals("car payment")) type = "carpayment";
         if (type.equals("cell phone")) type = "cellphone";
         return lan.getString(type) + " " + String.format("%.2f", amount) + " " + currency.getSymbol();
     }
