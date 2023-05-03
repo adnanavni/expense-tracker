@@ -381,7 +381,9 @@ public class BudgetController {
 
                 ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
                 for (Map.Entry<String, Double> entry : expenses.entrySet()) {
-                    pieData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+                    String originalKey = entry.getKey();
+                    String translatedKey = language.getString(originalKey.toLowerCase());
+                    pieData.add(new PieChart.Data(translatedKey, entry.getValue()));
                 }
 
                 pieStats.setData(pieData);
