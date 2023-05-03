@@ -16,7 +16,7 @@
         <AnchorPane prefHeight="388.0" prefWidth="680.0" styleClass="secondBackground" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="400.0">
             <children>
                 <ListView fx:id="expenseHistory" layoutX="23.0" layoutY="81.0" opacity="0.85" prefHeight="275.0" prefWidth="634.0" styleClass="listView" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="81.0" />
-                <Label fx:id="history" alignment="CENTER" layoutX="106.0" layoutY="26.0" styleClass="titleText" text="Expense history" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Label fx:id="history" alignment="CENTER" layoutX="106.0" layoutY="26.0" styleClass="titleText" text="Expense history" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                     <font>
                         <Font name="System Bold" size="36.0" />
                     </font>

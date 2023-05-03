@@ -17,7 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.*;
 
-public class BudgetController {
+public class BudgetController implements Controller{
 
     @FXML
     private AnchorPane content;
@@ -60,9 +60,6 @@ public class BudgetController {
     @FXML
     private Button delete;
     @FXML
-    private Button shared;
-
-    @FXML
     private BarChart<String, Double> barStats;
     @FXML
     private PieChart pieStats;
@@ -81,13 +78,12 @@ public class BudgetController {
     private LocalizationManager language = LocalizationManager.getInstance();
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
     private HashMap<String, Double> expenses;
-    private XYChart.Series<String, Double> series;
-    ExpenseController expenseController = new ExpenseController();
 
 
+    @Override
     public void initialize() {
         variables = Variables.getInstance();
-        currency = Currency.getInstance(variables.getCurrentCurrency());
+        this.currency = Currency.getInstance(variables.getCurrentCurrency());
 
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
@@ -111,12 +107,11 @@ public class BudgetController {
         modify.setText(language.getString("modify"));
         delete.setText(language.getString("delete"));
 
-        shared.setText(language.getString("shared"));
         updateCharts();
-
     }
 
-    public void setVariables(Variables variables) {
+    @Override
+    public void setVariables(SalarySingle salary, Variables variables) {
         this.variables = variables;
         total.setText(language.getString("total"));
         selectTopic.getItems().addAll(variables.getBudgetNames());
@@ -138,8 +133,8 @@ public class BudgetController {
         }
         variables.refreshCategories();
         updateCharts();
-
     }
+
 
     @FXML
     protected void backToMain(ActionEvent event) throws IOException {
@@ -402,6 +397,7 @@ public class BudgetController {
         if (selectCategory.getSelectionModel().getSelectedItem() != null) {
             setBtn.setDisable(false);
         }
+
     }
 
     @FXML
@@ -425,5 +421,10 @@ public class BudgetController {
             alert.setContentText(language.getString("formCorrect"));
             alert.showAndWait();
         }
+        setBtn.setDisable(true);
+
     }
+
+
+
 }

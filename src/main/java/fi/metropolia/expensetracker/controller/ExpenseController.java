@@ -21,9 +21,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
 
-public class ExpenseController {
-    @FXML
-    private Button deleteBtn;
+public class ExpenseController implements Controller{
     @FXML
      AnchorPane budgetPane;
 
@@ -63,7 +61,6 @@ public class ExpenseController {
     private Variables variables;
     private Currency currency;
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
-    private SettingsDao settingsDao = new SettingsDao();
     private Budget activeBudget;
 
 
@@ -82,16 +79,16 @@ public class ExpenseController {
         history.setText(lan.getString("history"));
 
         ConstExpenseBtn.setText(lan.getString("remove"));
-
-     //   Variables.getInstance().refreshCategories();
     }
+
+
 
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
-
-    public void setVariables(Variables variables) {
+    @Override
+    public void setVariables(SalarySingle salary,Variables variables) {
         this.variables = variables;
         ThemeManager styler = ThemeManager.getInstance();
 
