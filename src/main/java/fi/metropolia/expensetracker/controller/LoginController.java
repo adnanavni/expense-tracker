@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class LoginController {
+public class LoginController{
     @FXML
     private AnchorPane content;
     @FXML

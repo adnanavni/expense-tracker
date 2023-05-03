@@ -18,7 +18,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
 
-public class DaySalaryController {
+public class DaySalaryController implements Controller {
     private Variables variables;
     private Currency currency;
     @FXML
@@ -78,6 +78,7 @@ public class DaySalaryController {
 
     private LocalizationManager lan = LocalizationManager.getInstance();
 
+    @Override
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
@@ -99,11 +100,13 @@ public class DaySalaryController {
         check.setText(lan.getString("check"));
     }
 
+
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
 
+    @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         this.salarySingle = salary;
         this.variables = variables;
@@ -233,5 +236,6 @@ public class DaySalaryController {
 
 
     }
+
 }
 
