@@ -13,10 +13,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * BudgetExpenseDao is a class that provides methods for accessing
+ * and manipulating data related to budgets and expenses in the database.
+ */
 public class BudgetExpenseDao {
 
+    /**
+     * A private final field representing a connection to a MariaDB database,
+     * obtained through a singleton instance of the MariaDBConnector class.
+     */
     private final Connection conn = MariaDBConnector.getInstance();
 
+    /**
+     * This method is used to print the details of any SQLException that occurred while executing a SQL statement.
+     * It prints the SQLState, Error Code, and Message of the SQLException, and also prints the cause of the exception if any.
+     *
+     * @param ex The SQLException to be printed
+     */
     public static void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
@@ -33,6 +47,12 @@ public class BudgetExpenseDao {
         }
     }
 
+    /**
+     * Returns the currency of the user with the specified ID from the database.
+     *
+     * @param id the ID of the user whose currency to retrieve
+     * @return the currency of the user with the specified ID, or null if the user cannot be found or an error occurs
+     */
     public String loggedCurrency(Integer id) {
         try {
             String sql = "SELECT currency FROM UserInfo WHERE id=?";
@@ -54,6 +74,12 @@ public class BudgetExpenseDao {
         return null;
     }
 
+    /**
+     * Returns the budget with the specified ID from the database.
+     *
+     * @param id the ID of the budget to retrieve
+     * @return the budget with the specified ID, or null if the budget cannot be found or an error occurs
+     */
     public Budget getBudget(Integer id) {
         try {
 
@@ -77,6 +103,13 @@ public class BudgetExpenseDao {
         return null;
     }
 
+    /**
+     * Returns the constant expense with the specified name and user ID from the database.
+     *
+     * @param name the name of the constant expense to retrieve
+     * @param id   the ID of the user whose constant expense to retrieve
+     * @return the constant expense with the specified name and user ID, or null if the constant expense cannot be found or an error occurs
+     */
     public ConstantExpense getConstantExpenseByName(String name, Integer id) {
 
         String str = name;
@@ -112,6 +145,12 @@ public class BudgetExpenseDao {
         return null;
     }
 
+    /**
+     * Retrieves an Expense from the database based on its ID.
+     *
+     * @param id the ID of the Expense to retrieve.
+     * @return the Expense object with the specified ID, or null if no such Expense exists.
+     */
     public Expense getExpense(Integer id) {
         try {
 
@@ -135,6 +174,12 @@ public class BudgetExpenseDao {
         return null;
     }
 
+    /**
+     * Deletes an Expense from the database based on its ID.
+     *
+     * @param id the ID of the Expense to delete.
+     * @return true if the Expense was successfully deleted, false otherwise.
+     */
     public boolean deleteExpense(Integer id) {
         Expense expense = getExpense(id);
 
@@ -155,6 +200,13 @@ public class BudgetExpenseDao {
         }
     }
 
+    /**
+     * Saves a ConstantExpense to the database.
+     *
+     * @param id    the ID of the registration.
+     * @param name  the name of the ConstantExpense.
+     * @param money the amount of money spent on the ConstantExpense.
+     */
     public void saveConstantExpense(Integer id, String name, Double money) {
         try {
 
@@ -170,6 +222,13 @@ public class BudgetExpenseDao {
         }
     }
 
+    /**
+     * Saves a budget in the database.
+     *
+     * @param id    The user's registration id.
+     * @param name  The name of the budget.
+     * @param money The amount of money allocated for the budget.
+     */
     public void saveBudget(Integer id, String name, Double money) {
 
         try {
@@ -185,6 +244,12 @@ public class BudgetExpenseDao {
         }
     }
 
+    /**
+     * @param id    The user's registration id.
+     * @param type  The type of expense.
+     * @param money The amount of money spent.
+     * @param date  The date the expense was made.
+     */
     public void saveExpense(Integer id, String type, Double money, Date date) {
 
         try {
@@ -204,6 +269,12 @@ public class BudgetExpenseDao {
         }
     }
 
+    /**
+     * Retrieves all budgets for a given user.
+     *
+     * @param id The user's registration id.
+     * @return An array of Budget objects representing the user's budgets.
+     */
     public Budget[] getBudgets(Integer id) {
 
         String sql = "SELECT * FROM Budgets WHERE registration_id = ?";
@@ -232,6 +303,12 @@ public class BudgetExpenseDao {
 
     }
 
+    /**
+     * Retrieves all constant expenses for a given user.
+     *
+     * @param id The user's registration id.
+     * @return An array of ConstantExpense objects representing the user's constant expenses.
+     */
     public ConstantExpense[] getConstantExpenses(Integer id) {
 
         String sql = "SELECT * FROM Constantexpenses WHERE registration_id = ?";
@@ -259,6 +336,12 @@ public class BudgetExpenseDao {
 
     }
 
+    /**
+     * Returns an array of Expense objects associated with the given budget id.
+     *
+     * @param id the id of the budget to retrieve expenses from.
+     * @return an array of Expense objects associated with the given budget id.
+     */
     public Expense[] getExpenses(Integer id) {
         String sql = "SELECT * FROM Expenses WHERE BudgetId = ?";
         Expense[] result;
@@ -285,6 +368,13 @@ public class BudgetExpenseDao {
         return result;
     }
 
+    /**
+     * Changes the amount of a constant expense identified by the given id.
+     *
+     * @param id    the id of the constant expense to change.
+     * @param money the new amount of the constant expense.
+     * @return true if the constant expense was successfully updated, false otherwise.
+     */
     public boolean changeConstantExpenseValue(Integer id, Double money) {
         try {
             String sql = "UPDATE Constantexpenses SET Amount = ? WHERE ConstantexpenseId = ?";
@@ -299,6 +389,13 @@ public class BudgetExpenseDao {
         return false;
     }
 
+    /**
+     * Changes the amount of an expense identified by the given id.
+     *
+     * @param id    the id of the expense to change.
+     * @param money the new amount of the expense.
+     * @return true if the expense was successfully updated, false otherwise.
+     */
     public boolean changeExpenseMoney(Integer id, Double money) {
         try {
             String sql = "UPDATE Expenses SET Money = ? WHERE ExpenseId = ?";
@@ -313,6 +410,13 @@ public class BudgetExpenseDao {
         return false;
     }
 
+    /**
+     * Changes the amount of a budget identified by the given id.
+     *
+     * @param id    the id of the budget to change.
+     * @param money the new amount of the budget.
+     * @return true if the budget was successfully updated, false otherwise.
+     */
     public boolean changeBudgetMoney(Integer id, Double money) {
 
         try {
@@ -328,6 +432,14 @@ public class BudgetExpenseDao {
         return false;
     }
 
+    /**
+     * Modifies a budget identified by its original name, setting a new name and amount.
+     *
+     * @param ogName the original name of the budget to modify.
+     * @param money  the new amount of the budget.
+     * @param name   the new name of the budget.
+     * @return true if the budget was successfully modified, false otherwise.
+     */
     public boolean ModifyBudget(String ogName, Double money, String name) {
 
         try {
@@ -344,6 +456,12 @@ public class BudgetExpenseDao {
         return false;
     }
 
+    /**
+     * Deletes a budget identified by the given id.
+     *
+     * @param id the id of the budget to delete.
+     * @return true if the budget was successfully deleted, false otherwise.
+     */
     public boolean deleteBudget(Integer id) {
         Budget budget = getBudget(id);
 
@@ -363,11 +481,15 @@ public class BudgetExpenseDao {
         }
     }
 
+    /**
+     * Returns a HashMap with the name and amount of all expenses associated with the budget id.
+     *
+     * @param id the id of the budget to retrieve expenses from.
+     * @return a HashMap with the name and amount of all expenses associated with the budget id.
+     */
     public HashMap<String, Double> getExpenseNameAndAmount(Integer id) {
         String sql = "SELECT * FROM Expenses WHERE BudgetId = ?";
         HashMap<String, Double> result = new HashMap<>();
-
-
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -377,7 +499,6 @@ public class BudgetExpenseDao {
                 Expense expense = new Expense(rs.getInt(1), rs.getDouble(3), rs.getString(2), rs.getDate(5));
                 result.put(rs.getString(2), rs.getDouble(3));
             }
-
         } catch (SQLException e) {
             printSQLException(e);
         }

@@ -4,7 +4,6 @@ package fi.metropolia.expensetracker.module;
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
-import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -17,10 +16,13 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
+/**
+ * Singleton class to keep track of all the variables (expect salary)
+ * All the data goes through this class
+ */
 public class Variables {
     private static Variables INSTANCE = null;
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
-    private SettingsDao settingsDao = new SettingsDao();
 
     private final Map<String, Double> currencies;
 
@@ -33,6 +35,9 @@ public class Variables {
     }
 
     LocalizationManager lan = LocalizationManager.getInstance();
+    /**
+     * for the tips in the main view
+     */
     private ArrayList<String> quotes = new ArrayList<>() {{
         add("Saving money is a way to achieve financial freedom. Start small and make it a habit.");
         add("The key to saving is to spend less than you earn. Keep track of your expenses and create a budget.");
@@ -45,7 +50,9 @@ public class Variables {
         add("Make use of free entertainment options like libraries, parks, and community events.");
         add("Remember that every little bit counts. Even small savings can add up over time.");
     }};
-
+    /**
+     * expense categories for the expense view+
+     */
     private ArrayList<String> categories = new ArrayList<>() {{
         add("Groceries");
         add("Restaurants");
@@ -57,6 +64,9 @@ public class Variables {
         add("Other");
     }};
     private Integer loggedUserId;
+    /**
+     * constant expense categories for the budget and expense view, used as default
+     */
     private ArrayList<String> constExpenses = new ArrayList<>() {{
         add("Rent");
         add("Water bill");
@@ -65,12 +75,17 @@ public class Variables {
         add("Cell phone");
         add("Internet");
     }};
-
+    /**
+     * Constant expenses after localization and includes the amount also.
+     */
     private ArrayList<ConstantExpense> constantExpenses = new ArrayList<>();
 
     private Double currentCourseMultiplier = 1.00;
     private String currentCurrency = "EUR";
     private Budget activeBudget;
+    /**
+     * list of the users budgets
+     */
     private ArrayList<Budget> budgets = new ArrayList<>();
     private Double totalBudget = 0.00;
 
@@ -87,6 +102,11 @@ public class Variables {
         currentCurrency = course;
     }
 
+    /**
+     * Used in calculating the course after changing currency
+     *
+     * @param course of the coming currency
+     */
     public void setCurrentCourseMultiplier(String course) {
         RegisterLoginDao loginSignupDao = new RegisterLoginDao();
         IncomeDao incomeDao = new IncomeDao();
@@ -166,6 +186,11 @@ public class Variables {
         activeBudget = null;
     }
 
+    /**
+     * returns users budgets' names
+     *
+     * @return
+     */
     public ArrayList<String> getBudgetNames() {
         ArrayList<String> names = new ArrayList<>();
         names.add("New");
@@ -213,6 +238,9 @@ public class Variables {
         return categories;
     }
 
+    /**
+     * localizes the categories for the correct language, called upon initialization of the view
+     */
     public void refreshCategories() {
         categories.clear();
         categories.add(lan.getString("groceries"));
@@ -267,6 +295,9 @@ public class Variables {
         return constantExpenses;
     }
 
+    /**
+     * resets all the variables for example when user logs out
+     */
     public void resetAll() {
         loggedUserId = null;
         currentCourseMultiplier = 1.00;
@@ -277,6 +308,9 @@ public class Variables {
         constantExpenses = new ArrayList<>();
     }
 
+    /**
+     * resets all variables and sets them to default for example upon registration
+     */
     public void resetAndSetDefaults() {
         currentCourseMultiplier = 1.00;
         currentCurrency = "EUR";
@@ -298,6 +332,13 @@ public class Variables {
         }
     }
 
+    /**
+     * gets currencies from the API
+     *
+     * @param to
+     * @return object's double of the currency's course
+     * @throws IOException
+     */
     public double getCurrencyExchangeRateViaGETRequest(String to) throws IOException {
         String GET_URL = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/" + to.toLowerCase() + ".json";
         URL url = new URL(GET_URL);
@@ -331,6 +372,9 @@ public class Variables {
         return quotes.get(index);
     }
 
+    /**
+     * localizes the hints shown on main view, refreshed upon initialization.
+     */
     public void refreshTips() {
         for (int i = 0; i < quotes.size(); i++) {
             String n = Integer.toString(i);
