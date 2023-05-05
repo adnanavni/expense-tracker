@@ -31,8 +31,6 @@ public class LoginController {
     private PasswordField passwordField;
     @FXML
     private Button submitButton;
-
-    private RegisterLoginDao dao = new RegisterLoginDao();
     private SettingsDao settingsDao = new SettingsDao();
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
 

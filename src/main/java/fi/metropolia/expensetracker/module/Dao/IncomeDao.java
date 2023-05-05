@@ -12,9 +12,21 @@ import java.util.Date;
 
 import static fi.metropolia.expensetracker.module.Dao.RegisterLoginDao.printSQLException;
 
+/**
+
+ The IncomeDao class represents a Data Access Object (DAO) that provides methods to interact with the 'Incomes' table in the database.
+ It handles the retrieval, creation, modification and deletion of income records for a given user.
+ */
 public class IncomeDao {
     private final Connection conn = MariaDBConnector.getInstance();
 
+    /**
+     * Retrieves a Salary object based on the given IncomeID and Type
+     *
+     * @param id   The ID of the income record to be retrieved
+     * @param type The type of the income record to be retrieved
+     * @return Salary object if the record exists, null otherwise
+     */
     public Salary getSalary(Integer id, String type) {
         try {
             String sql = "SELECT * FROM Incomes WHERE IncomeID = ? AND Type = ?";
@@ -38,7 +50,13 @@ public class IncomeDao {
         return null;
     }
 
-
+    /**
+     * Deletes an income record based on the given IncomeID and Type
+     *
+     * @param id   The ID of the income record to be deleted
+     * @param type The type of the income record to be deleted
+     * @return true if the record was deleted successfully, false otherwise
+     */
     public boolean deleteSalary(Integer id, String type) {
         Salary salary = getSalary(id, type);
 
@@ -60,7 +78,17 @@ public class IncomeDao {
             return false;
         }
     }
-
+    /**
+     * Creates a new income record for a given user
+     *
+     * @param userID          The ID of the user
+     * @param type            The type of the income
+     * @param salary          The amount of the income before taxes
+     * @param salaryMinusTaxes The amount of the income after taxes
+     * @param date            The date of the income
+     * @param taxrate         The tax rate applied to the income
+     * @param currency        The currency of the income
+     */
 
     public void saveSalary(Integer userID, String type, Double salary, Double salaryMinusTaxes, Date date, Double taxrate, String currency) {
         try {
@@ -82,9 +110,16 @@ public class IncomeDao {
 
             preparedStatement.close();
         } catch (SQLException e) {
-            printSQLException(e);
+        printSQLException(e);
         }
     }
+    /**
+     * Retrieves all salaries for a given user ID and salary type.
+     * @param userID the ID of the user whose salaries are being retrieved
+     * @param type the type of salaries being retrieved "month" or  "day"
+     * @return an ArrayList of Salary objects representing the salaries matching the given criteria
+    */
+
 
     public ArrayList<Salary> getSalariesWithType(Integer userID, String type) {
 
@@ -112,6 +147,13 @@ public class IncomeDao {
         return salaries;
     }
 
+    /**
+     * Retrieves all salaries for a given user ID.
+     *
+     * @param userID the ID of the user whose salaries are being retrieved
+     * @return an ArrayList of Salary objects representing all salaries for the given user
+     */
+
     public ArrayList<Salary> getAllSalaries(Integer userID) {
 
         String sql = "SELECT * FROM Incomes WHERE userID = ?";
@@ -138,6 +180,15 @@ public class IncomeDao {
         return salaries;
     }
 
+    /**
+     * Updates the amount, amount minus taxes, and currency of a given income.
+     *
+     * @param id the ID of the income to be updated
+     * @param amount the new amount of the income
+     * @param amount_tax the new amount of the income minus taxes
+     * @param currency the new currency of the income
+     * @return true if the update was successful, false otherwise
+     */
     public boolean changeIncomeValues(Integer id, Double amount, Double amount_tax, String currency) {
         try {
             String sql = "UPDATE Incomes SET Amount = ?, Amount_Minus_Taxes = ?, Currency = ? WHERE IncomeID = ?";

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+/**
+ * SalarySingle is a singleton-class which keeps the data of different salaries
+ */
 public class SalarySingle {
     private static SalarySingle INSTANCE = null;
     private double daySalary;
@@ -43,11 +46,20 @@ public class SalarySingle {
     private SalarySingle() {
     }
 
+    /**
+     * Creates singleton instance if it hasn't been done before, otherwise just returns created instance
+     * */
     public static SalarySingle getInstance() {
         if (INSTANCE == null) INSTANCE = new SalarySingle();
         return INSTANCE;
     }
-
+    /**
+     * Calculates given salaryamount with given taxrate.
+     * @param taxRate user's given taxrate
+     * @param salary user salary without taken the taxes off
+     * @param type defines is the salary day-salary or a month salary.
+     * @return salaryamoount minus taxrate.
+     * */
     public double calculateSalaryWithTaxRate(double taxRate, double salary, String type) {
 
         this.taxRate = taxRate;
@@ -76,7 +88,11 @@ public class SalarySingle {
         this.salaryMinusTaxes = salary;
 
     }
-
+    /**
+     * Calculates day salary based on worked hours and hour salary
+     * @param hours worked hours
+     * @param hourSalary rate paid per hour of work
+    * */
     public void calculateDaySalary(double hours, double hourSalary) {
         this.daySalary = (hours * hourSalary);
     }
@@ -86,7 +102,6 @@ public class SalarySingle {
     }
 
     public double getDaySalary() {
-
         return this.daySalary;
     }
 
@@ -95,7 +110,6 @@ public class SalarySingle {
     }
 
     public double getDaySalaryMinusTaxes() {
-
         return this.daySalaryMinusTaxes;
     }
 
@@ -155,6 +169,12 @@ public class SalarySingle {
         this.age = age;
     }
 
+    /**
+     * Returns sum of all gotten salaries in a selected month. Uses getSalariesBetweenStartAndFinish-method to calculate the sum of salaries.
+     * @param monthNumber tells the selected month of the year
+     * @param type tells are the calculated salaries month-salaries or day-salaried.
+     * @return sum of the salaries of all month
+     * */
     public double geTotalSalaryOfMonth(int monthNumber, String type) throws ParseException {
         int year = LocalDate.now().getYear();
         int beforeYear = (year - 1);
@@ -204,6 +224,12 @@ public class SalarySingle {
         return totalSalary;
     }
 
+    /**
+     * Calculates together the salaries together between given dates
+     * @param start day of a month
+     * @param end day of a month
+     * @return sum of salaries between given start and end date.
+     * */
     public double getSalariesBetweenStartAndFinish(String start, String end, String type) throws ParseException {
         ArrayList<Double> salaries = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -231,6 +257,9 @@ public class SalarySingle {
         return salariesTogether;
     }
 
+    /**
+     * Clear all values of this singleton when user is logging out or if the user has deleted all own values.
+     * */
     public void resetAll() {
         monthSalaries.clear();
         daySalaries.clear();

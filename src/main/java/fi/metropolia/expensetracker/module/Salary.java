@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Date;
 
+/**
+ * Salary-object, which includes info about users singular salaries
+ * */
 public class Salary {
     private double salary;
     private double taxRate;
@@ -14,8 +17,10 @@ public class Salary {
     private LocalDate date;
     private String usedCurrency;
 
+    /**
+     * Reference to LocalizationManager - singleton, which is used to localize this Salary -object as well.
+     * */
     LocalizationManager localizationManager = LocalizationManager.getInstance();
-
 
     private double salaryMinusTaxes;
 
@@ -71,6 +76,9 @@ public class Salary {
     public void setId(int id) {
         this.id = id;
     }
+    /**
+     * @return salary-object in String-type with all salary info
+     * */
 
     @Override
     public String toString() {
