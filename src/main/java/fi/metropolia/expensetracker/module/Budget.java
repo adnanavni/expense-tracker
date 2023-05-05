@@ -2,6 +2,9 @@ package fi.metropolia.expensetracker.module;
 
 import java.util.ArrayList;
 
+/**
+ * Budget-object, which represents a budget created by the user
+ * */
 public class Budget {
     private double amount;
     private String name;
@@ -20,10 +23,18 @@ public class Budget {
         this.name = name;
     }
 
+    /**
+     * Adds an expense to the budgets expense list
+     * @param expense data of the expense to be added
+     * */
     public void addExpenseToBudget(Expense expense) {
         expenses.add(expense);
     }
 
+    /**
+     * Removes an expense from the budgets expense list
+     * @param expense data of the expense to be removed
+     * */
     public void removeExpenseFromBudget(Expense expense) {
         expenses.remove(expense);
     }
@@ -32,6 +43,9 @@ public class Budget {
         return expenses;
     }
 
+    /**
+     * Creates an empty ArrayList for expenses to reset the expenses of the budget
+     * */
     public void resetExpenses() {
         expenses = new ArrayList<>();
     }
