@@ -46,6 +46,16 @@ DB_password=somePassword
 Once you've set up your local database using the included databaseSetup.sql file, you can run MainApplication.java to
 launch the app.
 
+## UI
+![1](Documents/1.JPG)
+Main view
+
+![2](Documents/2.JPG)
+Budget view
+
+![3](Documents/3.JPG)
+Settings view
+
 ## Team
 
 * [Adnan Avni](https://github.com/adnanavni)
