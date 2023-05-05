@@ -21,6 +21,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 
+/**
+
+ This class is responsible for controlling the Month Salary functionality. It implements the Controller interface.
+ */
 public class IncomeController implements Controller {
     @FXML
     ComboBox monthsCombo;
@@ -65,6 +69,9 @@ public class IncomeController implements Controller {
     private Salary salary;
     private LocalizationManager lan = LocalizationManager.getInstance();
 
+    /**
+     Initializes the controller and sets the style and language of the elements.
+     */
     @Override
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -91,7 +98,13 @@ public class IncomeController implements Controller {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
-
+    /**
+     * Loads the daySalary-view.fxml file into the content AnchorPane, sets the AnchorPane as the root node, and passes
+     * the salarySingle and variables objects to the controller.
+     *
+     * @param event The ActionEvent triggered when the "Month" button is clicked.
+     * @throws IOException If the income-view.fxml file cannot be loaded.
+     */
     public void toDaySalaryView(ActionEvent event) throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("daySalary-view.fxml"));
 
@@ -102,6 +115,14 @@ public class IncomeController implements Controller {
         daySalaryController.setVariables(salarySingle, variables);
     }
 
+    /**
+
+     Sets the SalarySingle and Variables objects. Sets info to the views.
+
+     @param salary The SalarySingle object.
+
+     @param variables The Variables object.
+     */
     @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         ThemeManager styler = ThemeManager.getInstance();
@@ -121,7 +142,12 @@ public class IncomeController implements Controller {
         setIncomeHistoryClick();
 
     }
-
+    /**
+     * Sets the click event handler for the salaryHistory ListView. When an item is clicked, a confirmation alert is shown
+     * to the user to confirm the deletion of the selected salary item. If the user confirms the deletion, the salary item
+     * is deleted from the database, the salarySingle object, and the ListView. The ListView is then repopulated with the
+     * remaining salary items.
+     */
     private void setIncomeHistoryClick() {
 
         salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -158,6 +184,13 @@ public class IncomeController implements Controller {
         });
     }
 
+    /**
+     * Event handler for the "Add" button. When the button is clicked, a new salary item is created and added to the
+     * database, to the salarySingle object, and to the ListView. The ListView is then repopulated with the updated salary items.
+     * If the input values are invalid, a warning alert is shown to the user.
+     *
+     * @throws SQLException If an error occurs while communicating with the database.
+     */
     @FXML
     protected void onSalaryAddClick() throws SQLException {
         if ((addMonth != null && addTaxRate != null) && (addMonth.getText().matches("^[0-9]+$") || addTaxRate.getText().matches("^[0-9]+$"))) {
@@ -206,7 +239,11 @@ public class IncomeController implements Controller {
             alert.showAndWait();
         }
     }
-
+    /**
+     * Calculates the total salary for the selected month and updates the salaryComing label with the result.
+     *
+     * @throws ParseException If an error occurs while parsing the selected month from the monthsComb ComboBox.
+     */
     @FXML
     protected void calculateMonths() throws ParseException {
         int selectedIndex = monthsCombo.getSelectionModel().getSelectedIndex();
