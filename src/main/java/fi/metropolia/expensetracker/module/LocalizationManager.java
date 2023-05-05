@@ -4,8 +4,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- *  Singleton manager to keep the right bundle file for the localization on the app.
- *  All the localization in the app goes through this class
+ * Singleton manager to keep the right bundle file for the localization on the app.
+ * All the localization in the app goes through this class
  */
 public class LocalizationManager {
     private static LocalizationManager instance;
@@ -29,6 +29,7 @@ public class LocalizationManager {
 
     /**
      * Sets the locale for the app for the right use of bundle file.
+     *
      * @param locale
      */
     public void setLocale(Locale locale) {
@@ -39,6 +40,7 @@ public class LocalizationManager {
 
     /**
      * Gets the string from the bundle file
+     *
      * @param key
      * @return the key's value from the bundle file
      */

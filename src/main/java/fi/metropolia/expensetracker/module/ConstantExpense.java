@@ -44,6 +44,7 @@ public class ConstantExpense {
 
     /**
      * Type localized for the views. Checks that the constant expenses name comes right
+     *
      * @return the string for the views to use
      */
     public String toString() {

@@ -162,6 +162,7 @@ public class MainController {
 
     /**
      * Log Out
+     *
      * @throws IOException
      */
     public void changeWindowToLogin() throws IOException {

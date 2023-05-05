@@ -56,6 +56,7 @@ public class LoginController {
 
     /**
      * Login buttons on action
+     *
      * @param event
      * @throws SQLException
      * @throws IOException
@@ -66,13 +67,11 @@ public class LoginController {
         Window owner = submitButton.getScene().getWindow();
 
         if (userName.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, "formError",
-                    "Please enter your username!");
+            showAlert(Alert.AlertType.ERROR, owner, "formError", "Please enter your username!");
             return;
         }
         if (passwordField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, owner, "formError",
-                    "Please enter a password!");
+            showAlert(Alert.AlertType.ERROR, owner, "formError", "Please enter a password!");
             return;
         }
 
