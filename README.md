@@ -48,12 +48,15 @@ launch the app.
 
 ## UI
 ![1](Documents/1.JPG)
+
 Main view
 
 ![2](Documents/2.JPG)
+
 Budget view
 
 ![3](Documents/3.JPG)
+
 Settings view
 
 ## Team
