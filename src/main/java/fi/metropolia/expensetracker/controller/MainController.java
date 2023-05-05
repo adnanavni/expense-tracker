@@ -16,7 +16,6 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Currency;
-import java.util.Locale;
 import java.util.Random;
 
 public class MainController {
@@ -108,7 +107,6 @@ public class MainController {
     }
 
 
-
     public void changeWindowToBudget(ActionEvent event) throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("budget-view.fxml"));
         AnchorPane pane = fxmloader.load();
@@ -133,7 +131,7 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         ExpenseController expenseController = fxmloader.getController();
-        expenseController.setVariables( salarySingle, variables);
+        expenseController.setVariables(salarySingle, variables);
     }
 
     public void changeWindowToSettings() throws IOException {

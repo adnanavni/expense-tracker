@@ -8,12 +8,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+
+ The RegisterLoginDao class provides methods to interact with the UserInfo table in the database,
+
+ allowing for user registration and login.
+ */
 public class RegisterLoginDao {
 
     private static final String INSERT_QUERY = "INSERT INTO UserInfo (username, password) VALUES (?, ?)";
     private static final String SELECT_QUERY = "SELECT * FROM UserInfo WHERE username = ?";
     private final Connection conn = MariaDBConnector.getInstance();
 
+    /**
+     Prints detailed error messages in the console for SQLExceptions.
+     @param ex the SQLException object containing the error information
+     */
     public static void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
@@ -29,7 +39,12 @@ public class RegisterLoginDao {
             }
         }
     }
+    /**
 
+     Inserts a new user record with the provided username and password.
+     @param username the desired username for the new user
+     @param password the password for the new user
+     */
     public void insertRecord(String username, String password) {
         try {
 
@@ -44,7 +59,13 @@ public class RegisterLoginDao {
         }
     }
 
+    /**
 
+     Retrieves the password of the user with the provided username.
+     @param username the username of the desired user
+     @return the password of the user as a String, or null if the user does not exist
+     @throws SQLException if there is an error executing the SQL query
+     */
     public String getPassword(String username) throws SQLException {
 
         PreparedStatement prepPsswordState = conn.prepareStatement("SELECT password FROM UserInfo WHERE username=?");
@@ -59,6 +80,13 @@ public class RegisterLoginDao {
         return null;
     }
 
+    /**
+
+     Validates the provided username and password against the database records.
+     @param username the provided username
+     @param password the provided password
+     @return true if the username and password are valid, false otherwise
+     */
     public boolean validate(String username, String password) {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(SELECT_QUERY);
@@ -77,7 +105,12 @@ public class RegisterLoginDao {
         }
         return false;
     }
+    /**
 
+     Retrieves the ID of the user with the provided username.
+     @param name the username of the desired user
+     @return the ID of the user as an Integer, or null if the user does not exist
+     */
     public Integer loggedID(String name) {
 
         try {
@@ -98,8 +131,12 @@ public class RegisterLoginDao {
 
         return null;
     }
-
-
+    /**
+     * Check if the username already exists at the database
+     * @param username - name from which is checked matches from database
+     * @return true if username exists,
+     * @return false if username don't exists.
+     * */
 
     public boolean userExists(String username) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM UserInfo WHERE username = ?");
@@ -117,25 +154,5 @@ public class RegisterLoginDao {
             return false;
         }
     }
-
-    public boolean deleteUser(String username) throws SQLException {
-
-        if (userExists(username)) {
-            try {
-                String sql = "DELETE FROM UserInfo WHERE username = ?";
-                PreparedStatement preparedStatement = conn.prepareStatement(sql);
-                preparedStatement.setString(1, username);
-                preparedStatement.executeUpdate();
-                return true;
-            } catch (SQLException e) {
-                printSQLException(e);
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-
 
 }

@@ -78,12 +78,21 @@ public class BudgetExpenseDao {
     }
 
     public ConstantExpense getConstantExpenseByName(String name, Integer id) {
+
+        String str = name;
+        String firstLetter = str.substring(0, 1).toUpperCase();
+        String result = firstLetter + str.substring(1);
+
+        if (result.equals("Waterbill")) result = "Water bill";
+        if (result.equals("Carpayment")) result = "Car payment";
+        if (result.equals("Cellphone")) result = "Cell phone";
+
         try {
 
             String sql = "SELECT * FROM Constantexpenses WHERE Title = ? AND registration_id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
-            preparedStatement.setString(1, name);
+            preparedStatement.setString(1, result);
             preparedStatement.setInt(2, id);
 
 
