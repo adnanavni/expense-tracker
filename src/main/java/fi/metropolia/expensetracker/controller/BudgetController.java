@@ -16,7 +16,10 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.util.*;
+/**
 
+ This class is responsible for controlling budget and constant expense management. It implements the Controller interface.
+ */
 public class BudgetController implements Controller {
 
     @FXML
@@ -79,7 +82,9 @@ public class BudgetController implements Controller {
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
     private HashMap<String, Double> expenses;
 
-
+    /**
+     Initializes the controller and sets the style and language of the elements.
+     */
     @Override
     public void initialize() {
         variables = Variables.getInstance();
@@ -109,7 +114,14 @@ public class BudgetController implements Controller {
 
         updateCharts();
     }
+    /**
 
+     Sets the SalarySingle and Variables objects. Sets info to the views.
+
+     @param salary The SalarySingle object.
+
+     @param variables The Variables object.
+     */
     @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         this.variables = variables;
@@ -141,7 +153,10 @@ public class BudgetController implements Controller {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
-
+    /**
+     If the forms are filled correctly, adds a new budget to the budget selection and saves it to the database.
+     If the forms are filled incorrectly, creates an alert with an error message.
+     */
     @FXML
     protected void addToBudget() {
         String text = budgetName.getText();
@@ -181,7 +196,11 @@ public class BudgetController implements Controller {
             alert.showAndWait();
         }
     }
-
+    /**
+     Checks if the user selected New or one of their budgets.
+     If the user selected new, then it makes budget creation visible and if
+     the user selected one of their budgets the budget modification becomes visible.
+     */
     @FXML
     protected void onSelectTopic() {
         if (selectTopic.getValue() == "New") {
@@ -203,7 +222,9 @@ public class BudgetController implements Controller {
             updateCharts();
         }
     }
-
+    /**
+     Sets up the budget editing form.
+     */
     @FXML
     protected void modifyBudget() {
         modifyName.setPromptText(language.getString("name"));
@@ -215,7 +236,11 @@ public class BudgetController implements Controller {
         modifyBudget.setVisible(false);
         editBudget.setVisible(true);
     }
-
+    /**
+     Click function for the modify budget button, that checks if the form is filled correctly and then either makes
+     the name and or budget amount changes and saves them to the database or if the form is filled incorrectly,
+     creates an alert with an error message
+     */
     @FXML
     protected void modifyBtnClick() {
         String text = modifyName.getText();
@@ -268,12 +293,20 @@ public class BudgetController implements Controller {
     }
 
 
+    /**
+     Function for modification cancel button, it makes budget edit mode not visible.
+     */
     @FXML
     protected void cancelModifyClick() {
         modifyBudget.setVisible(true);
         editBudget.setVisible(false);
     }
 
+    /**
+     Function for budget deletion button.
+     First it creates an alert that confirms that the user wants to delete the selected budget,
+     then if the user confirms it removes the budget from the selection and the database.
+     */
     @FXML
     protected void deleteBtnClick() {
 
@@ -301,7 +334,11 @@ public class BudgetController implements Controller {
             modifyBudget.setVisible(false);
         }
     }
-
+    /**
+     * Checks if the given budget name already exists and if true creates and alert with an error message.
+     *
+     * @param name The budget name that is being checked
+     */
     private boolean isSameBudgetName(String name) {
         boolean isSame = false;
         for (Budget budget : variables.getBudgets()) {
@@ -317,6 +354,9 @@ public class BudgetController implements Controller {
         return isSame;
     }
 
+    /**
+     Updates the total amount of budget the user has to the total-label.
+     */
     private void update() {
         String totalBudgetAmount = String.format("%.2f", variables.getBudget());
         total.setText(language.getString("total") + " " + totalBudgetAmount + " " + currency.getSymbol());
@@ -330,7 +370,9 @@ public class BudgetController implements Controller {
             }
         }
     }
-
+    /**
+     Click function for the charts, that changes the currently visible expense statistics-chart
+     */
     @FXML
     protected void onChangeChartClick() {
         if (barChartShown) {
@@ -344,7 +386,9 @@ public class BudgetController implements Controller {
         }
     }
 
-
+    /**
+     Updates the data of the expense statistics-charts.
+     */
     public void updateCharts() {
 
         if (Variables.getInstance().getActiveBudget() != null) {
@@ -387,7 +431,9 @@ public class BudgetController implements Controller {
             pieStats.setVisible(false);
         }
     }
-
+    /**
+     Enables the set constant expense button
+     */
     @FXML
     protected void enableSetBtn() {
         if (selectCategory.getSelectionModel().getSelectedItem() != null) {
@@ -395,7 +441,10 @@ public class BudgetController implements Controller {
         }
 
     }
-
+    /**
+     Sets the new value given by the user to the selected constant expense, or if the form is filled incorrectly
+     it creates an alert with an error message.
+     */
     @FXML
     protected void setConstExpense() {
         if (constExpense.getText().matches("^[0-9]+$") && constExpense != null) {

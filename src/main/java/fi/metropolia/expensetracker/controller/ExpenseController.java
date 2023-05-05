@@ -19,6 +19,10 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+
+ This class is responsible for controlling adding/removing of expenses to/from the active budget. It implements the Controller interface.
+ */
 public class ExpenseController implements Controller {
     @FXML
     AnchorPane budgetPane;
@@ -61,7 +65,9 @@ public class ExpenseController implements Controller {
     private BudgetExpenseDao budgetExpenseDao = new BudgetExpenseDao();
     private Budget activeBudget;
 
-
+    /**
+     Initializes the controller and sets the style and language of the elements.
+     */
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
@@ -85,6 +91,14 @@ public class ExpenseController implements Controller {
         content.getChildren().setAll(pane);
     }
 
+    /**
+
+     Sets the SalarySingle and Variables objects. Sets info to the views.
+
+     @param salary The SalarySingle object.
+
+     @param variables The Variables object.
+     */
     @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         this.variables = variables;
@@ -112,6 +126,11 @@ public class ExpenseController implements Controller {
         styler.styleListView(expenseHistory);
         expenseHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
+            /**
+             * Sets the click event handler for the expenseHistory ListView. When items are clicked an alert appears that confirms that the clicked
+             * item wants to be removed. If the user clicks yes the item will be removed from the list, its budget and from the database.
+             * When clicking nothing/a not existing item an alert with an error message appears
+             */
             @Override
             public void handle(MouseEvent event) {
                 int selectedIndex = expenseHistory.getSelectionModel().getSelectedIndex();
@@ -149,6 +168,10 @@ public class ExpenseController implements Controller {
         });
     }
 
+    /**
+     * A click function for the expense add button. It checks if the requirements for the new expense are met
+     * and then either adds it to the list, currently active budget and the database or makes an alert with an error message.
+     */
     @FXML
     protected void onExpenseAddClick() {
         String number = addExpense.getText();
@@ -201,7 +224,9 @@ public class ExpenseController implements Controller {
         }
     }
 
-
+    /**
+     * Enables the add expense button if the requirements are met
+     */
     @FXML
     protected void btnEnable() {
         if (selectTopic.getSelectionModel().getSelectedItem() != null && addExpense.getText() != null) {
@@ -209,7 +234,10 @@ public class ExpenseController implements Controller {
         }
     }
 
-
+    /**
+     * Method for removing an expense, the expense will be removed from the expenseListView, active budget and the database.
+     * After removing the expense it also recalculates the remaining budget of the currently active budget.
+     */
     @FXML
     protected void removeBtn() {
 
@@ -233,6 +261,9 @@ public class ExpenseController implements Controller {
         activeBudgetTxt.setText(activeBudget.getName() + ": " + budgetText + " " + currency.getSymbol());
     }
 
+    /**
+     * Enables the constant expense button
+     */
     @FXML
     protected void btnEnbale() {
         ConstExpenseBtn.setDisable(false);
