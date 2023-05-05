@@ -118,24 +118,4 @@ public class RegisterLoginDao {
         }
     }
 
-    public boolean deleteUser(String username) throws SQLException {
-
-        if (userExists(username)) {
-            try {
-                String sql = "DELETE FROM UserInfo WHERE username = ?";
-                PreparedStatement preparedStatement = conn.prepareStatement(sql);
-                preparedStatement.setString(1, username);
-                preparedStatement.executeUpdate();
-                return true;
-            } catch (SQLException e) {
-                printSQLException(e);
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-
-
 }
