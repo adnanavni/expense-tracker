@@ -8,13 +8,24 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * This class provides a way to connect to a MariaDB database using the Singleton design pattern.
+ */
 public class MariaDBConnector {
+    /**
+     * Private constructor to prevent instantiation from outside the class.
+     */
     private static Connection conn = null;
 
     private MariaDBConnector() {
 
     }
 
+    /**
+     * Returns the single instance of the Connection object.
+     *
+     * @return the Connection object used to connect to the MariaDB database.
+     */
     public static Connection getInstance() {
         Properties props = new Properties();
         FileInputStream input = null;

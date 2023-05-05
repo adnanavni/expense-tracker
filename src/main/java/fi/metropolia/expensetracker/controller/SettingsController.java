@@ -16,6 +16,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * The SettingsController class is responsible for controlling the view for the user settings,
+ * where the user can change various settings including theme color, currency, language and age.
+ */
 public class SettingsController implements Controller {
     @FXML
     private AnchorPane content;
@@ -57,11 +61,17 @@ public class SettingsController implements Controller {
     private Button back;
 
     private Variables variables = Variables.getInstance();
+
     private Currency currency;
 
     private LocalizationManager lan = LocalizationManager.getInstance();
     private SettingsDao settingsDao = new SettingsDao();
 
+    /**
+     * This method initializes the controller and sets the default values for the ChoiceBox and ComboBox.
+     * It also sets the initial style for the content AnchorPane, and maps the color codes to their respective names.
+     * Finally, it calls the refresh() method to deal with localization.
+     */
     @Override
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -119,6 +129,11 @@ public class SettingsController implements Controller {
         refresh();
     }
 
+    /**
+     * Adds the age entered by the user to the database and updates the UI.
+     *
+     * @throws SQLException if there is an error while interacting with the database.
+     */
     public void addAgeClick() throws SQLException {
         if (ageField.getText().matches("^[0-9]+$") && ageField != null) {
             SalarySingle.getInstance().setAge(Integer.parseInt(ageField.getText()));
@@ -132,17 +147,32 @@ public class SettingsController implements Controller {
         }
     }
 
+    /**
+     * Sets the variables for the controller.
+     *
+     * @param salary    The SalarySingle instance for the application.
+     * @param variables The Variables instance for the application.
+     */
     @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         this.variables = variables;
     }
 
+    /**
+     * Returns the user to the main view of the application.
+     *
+     * @throws IOException If an error occurs while loading the main view.
+     */
     public void backToMain() throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
     }
 
+    /**
+     * Handles the user clicking the "Choose Currency" button thingy.
+     * Sets the current currency multiplier, gets the currency instance, and changes the user's currency in the database.
+     */
     @FXML
     protected void onChooseCurrencyBtnClick() {
         variables.setCurrentCourseMultiplier(selectCurrency.getSelectionModel().getSelectedItem().toString());
@@ -151,6 +181,12 @@ public class SettingsController implements Controller {
         settingsDao.changeUserCurrency(variables.getLoggedUserId(), selectCurrency.getSelectionModel().getSelectedItem().toString());
     }
 
+    /**
+     * Handles the user selecting a language from the dropdown menu.
+     * Changes the language to the selected locale and updates the user's language in the database.
+     *
+     * @throws NullPointerException If the selected item is null.
+     */
     @FXML
     protected void onSelectLanguage() {
         if (selectLanguage.getSelectionModel().getSelectedItem().toString().equals("English")) {
@@ -171,6 +207,11 @@ public class SettingsController implements Controller {
         }
     }
 
+    /**
+     * Deletes all user data from the database and resets variables to default values.
+     * Displays an alert to confirm the user's intention to delete their data,
+     * and another notification once the deletion is complete.
+     */
     @FXML
     public void deleteData() {
         Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
@@ -191,6 +232,11 @@ public class SettingsController implements Controller {
         }
     }
 
+    /**
+     * Refreshes the language settings of the UI elements on the settings view.
+     * Uses the current language settings to retrieve the correct text for each UI element
+     * and updates the text displayed on the element accordingly.
+     */
     private void refresh() {
         settings.setText(lan.getString("settings"));
         bgColor.setText(lan.getString("bgColor"));
