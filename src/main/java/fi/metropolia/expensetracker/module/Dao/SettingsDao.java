@@ -7,10 +7,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class represents the data access object for the Settings feature.
+ * It provides methods to change and retrieve user settings such as age, language, currency, theme color.
+ * It also provides a method to delete all user data.
+ */
 public class SettingsDao {
-
+    /**
+     * The connection instance used to interact with the database.
+     */
     private final Connection conn = MariaDBConnector.getInstance();
 
+    /**
+     * Prints the stack trace and error information for the given SQLException and its causes.
+     *
+     * @param ex the SQLException to print information for
+     */
     public static void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
@@ -27,6 +39,13 @@ public class SettingsDao {
         }
     }
 
+    /**
+     * Changes the user's currency in the database.
+     *
+     * @param id       The user's id.
+     * @param currency The new currency.
+     * @return True if the currency was successfully updated, false otherwise.
+     */
     public boolean changeUserCurrency(Integer id, String currency) {
 
         try {
@@ -42,6 +61,13 @@ public class SettingsDao {
         return false;
     }
 
+    /**
+     * Retrieves the user's age from the database.
+     *
+     * @param id The user's id.
+     * @return The user's age if it exists in the database, null otherwise.
+     * @throws SQLException If an error occurs while executing the SQL statement.
+     */
     public Integer getAge(int id) throws SQLException {
 
         PreparedStatement preparedStatement = conn.prepareStatement("SELECT Age FROM UserInfo WHERE id=?");
@@ -56,7 +82,13 @@ public class SettingsDao {
         return null;
     }
 
-
+    /**
+     * Changes the user's language in the database.
+     *
+     * @param id       The user's id.
+     * @param language The new language.
+     * @return True if the language was successfully updated, false otherwise.
+     */
     public boolean setLanguage(int id, String language) {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(" UPDATE UserInfo SET Language = ? WHERE id = ? ");
@@ -70,6 +102,12 @@ public class SettingsDao {
         return false;
     }
 
+    /**
+     * Retrieves the user's language from the database.
+     *
+     * @param id The user's id.
+     * @return The user's language if it exists in the database, null otherwise.
+     */
     public String getLanguage(int id) {
         try {
 
@@ -82,9 +120,15 @@ public class SettingsDao {
             printSQLException(e);
         }
         return null;
-
     }
 
+    /**
+     * Updates the age of a user in the database.
+     *
+     * @param id  the id of the user whose age will be updated
+     * @param age the new age to be set for the user
+     * @return true if the age was updated successfully, false otherwise
+     */
     public boolean setAge(int id, int age) {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement("UPDATE UserInfo SET Age = ? WHERE id = ?");
@@ -98,6 +142,12 @@ public class SettingsDao {
         return false;
     }
 
+    /**
+     * A method to retrieve the current theme color for a given user.
+     *
+     * @param id the unique ID of the user to retrieve the theme color for.
+     * @return a String representing the current theme color of the user, or null if the user does not exist.
+     */
     public String loggedThemeColor(Integer id) {
 
         try {
@@ -119,6 +169,13 @@ public class SettingsDao {
         return null;
     }
 
+    /**
+     * A method to change the theme color for a given user.
+     *
+     * @param id    the unique ID of the user to change the theme color for.
+     * @param color the new color to set as the user's theme color.
+     * @return a boolean indicating whether the theme color was successfully changed.
+     */
     public boolean changeUserThemeColor(Integer id, String color) {
         try {
             String sql = "UPDATE UserInfo SET ThemeColor = ? WHERE id = ?";
@@ -133,6 +190,11 @@ public class SettingsDao {
         return false;
     }
 
+    /**
+     * A method to delete all user data associated with a given user ID.
+     *
+     * @param userId the unique ID of the user to delete all data for.
+     */
     public void deleteUserData(Integer userId) {
         String deleteIncomes = "DELETE FROM Incomes WHERE UserID = ?";
         String deleteConstantExpenses = "DELETE FROM Constantexpenses WHERE registration_id = ?";
