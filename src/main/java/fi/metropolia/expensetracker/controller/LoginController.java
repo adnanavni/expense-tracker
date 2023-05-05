@@ -22,6 +22,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Controller for the login view and it's functionalities
+ */
 public class LoginController {
     @FXML
     private AnchorPane content;
@@ -51,6 +54,12 @@ public class LoginController {
         alert.show();
     }
 
+    /**
+     * Login buttons on action
+     * @param event
+     * @throws SQLException
+     * @throws IOException
+     */
     @FXML
     public void login(ActionEvent event) throws SQLException, IOException {
 

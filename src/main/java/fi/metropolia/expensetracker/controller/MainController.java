@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.Currency;
 import java.util.Random;
 
+/**
+ * This controller controls the main view's functionality.
+ */
 public class MainController {
     @FXML
     private Label budget;
@@ -44,15 +47,29 @@ public class MainController {
     private Button logOut;
 
     private int currentIndex = 0;
-
+    /**
+     * Creates the variables singleton
+     */
     private Variables variables = Variables.getInstance();
+    /**
+     * Creates the Salary singleton
+     */
     private SalarySingle salarySingle = SalarySingle.getInstance();
+    /**
+     * Gets the current currency used
+     */
     private Currency currency = Currency.getInstance(variables.getCurrentCurrency());
 
     private SettingsDao settingsDao = new SettingsDao();
+    /**
+     * Creates the localization manager singleton
+     */
     private LocalizationManager localizationManager = LocalizationManager.getInstance();
 
 
+    /**
+     * Initializes the views localization and sets the right theme
+     */
     @FXML
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
@@ -143,6 +160,10 @@ public class MainController {
         settingsController.setVariables(salarySingle, variables);
     }
 
+    /**
+     * Log Out
+     * @throws IOException
+     */
     public void changeWindowToLogin() throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("login_form-view.fxml"));
         AnchorPane pane = fxmloader.load();
