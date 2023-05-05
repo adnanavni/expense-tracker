@@ -16,7 +16,6 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Currency;
-import java.util.Locale;
 import java.util.Random;
 
 public class MainController {
@@ -52,6 +51,7 @@ public class MainController {
 
     private SettingsDao settingsDao = new SettingsDao();
     private LocalizationManager localizationManager = LocalizationManager.getInstance();
+
 
     @FXML
     public void initialize() {
@@ -107,14 +107,13 @@ public class MainController {
     }
 
 
-
     public void changeWindowToBudget(ActionEvent event) throws IOException {
         FXMLLoader fxmloader = new FXMLLoader(MainApplication.class.getResource("budget-view.fxml"));
         AnchorPane pane = fxmloader.load();
         content.getChildren().setAll(pane);
 
         BudgetController budgetController = fxmloader.getController();
-        budgetController.setVariables(variables);
+        budgetController.setVariables(salarySingle, variables);
     }
 
     public void changeWindowToIncome(ActionEvent event) throws IOException {
@@ -132,7 +131,7 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         ExpenseController expenseController = fxmloader.getController();
-        expenseController.setVariables(variables);
+        expenseController.setVariables(salarySingle, variables);
     }
 
     public void changeWindowToSettings() throws IOException {
@@ -141,7 +140,7 @@ public class MainController {
         content.getChildren().setAll(pane);
 
         SettingsController settingsController = fxmloader.getController();
-        settingsController.setVariables(variables, currency);
+        settingsController.setVariables(salarySingle, variables);
     }
 
     public void changeWindowToLogin() throws IOException {

@@ -3,7 +3,6 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
 import fi.metropolia.expensetracker.module.*;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,9 +15,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Currency;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Optional;
 
-public class DaySalaryController {
+public class DaySalaryController implements Controller {
     private Variables variables;
     private Currency currency;
     @FXML
@@ -78,6 +80,7 @@ public class DaySalaryController {
 
     private LocalizationManager lan = LocalizationManager.getInstance();
 
+    @Override
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         content.setStyle(themeManager.getStyle());
@@ -99,15 +102,17 @@ public class DaySalaryController {
         check.setText(lan.getString("check"));
     }
 
+
     public void backToMain(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(MainApplication.class.getResource("main-view.fxml"));
         content.getChildren().setAll(pane);
     }
 
+    @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         this.salarySingle = salary;
         this.variables = variables;
-        ThemeManager styler =  ThemeManager.getInstance();
+        ThemeManager styler = ThemeManager.getInstance();
         currency = Currency.getInstance(variables.getCurrentCurrency());
 
         addHourSalary.setPromptText(currency.getSymbol());
@@ -226,12 +231,12 @@ public class DaySalaryController {
         String salaryAmount = String.format("%.2f", SalarySingle.getInstance().geTotalSalaryOfMonth(selectedIndex, "DAY"));
         Locale finnish = new Locale("fi", "FI");
         if (lan.getLocale().equals(finnish)) {
-               salaryComing.setText(lan.getString("salarycomingText") + " " +  month + lan.getString("bendingWord") + " " + lan.getString("is") + " " +  salaryAmount + " " + currency.getSymbol());
-        }
-        else
-         salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());
+            salaryComing.setText(lan.getString("salarycomingText") + " " + month + lan.getString("bendingWord") + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());
+        } else
+            salaryComing.setText(lan.getString("salarycomingText") + " " + month + " " + lan.getString("is") + " " + salaryAmount + " " + currency.getSymbol());
 
 
     }
+
 }
 

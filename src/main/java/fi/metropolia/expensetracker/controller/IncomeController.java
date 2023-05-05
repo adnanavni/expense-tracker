@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 
-public class IncomeController {
+public class IncomeController implements Controller {
     @FXML
     ComboBox monthsCombo;
     private Currency currency;
@@ -65,7 +65,7 @@ public class IncomeController {
     private Salary salary;
     private LocalizationManager lan = LocalizationManager.getInstance();
 
-
+    @Override
     public void initialize() {
         ThemeManager themeManager = ThemeManager.getInstance();
         salarySingle.refreshMonthsCombLanguage();
@@ -102,6 +102,7 @@ public class IncomeController {
         daySalaryController.setVariables(salarySingle, variables);
     }
 
+    @Override
     public void setVariables(SalarySingle salary, Variables variables) {
         ThemeManager styler = ThemeManager.getInstance();
         this.salarySingle = salary;
@@ -117,6 +118,11 @@ public class IncomeController {
 
         monthsCombo.getItems().addAll(salarySingle.getMonths());
         mandatoryTaxes.setTooltip(new Tooltip("Pakolliset verot kuten työeläkemaksu ja työttömyysvakuusmaksu."));
+        setIncomeHistoryClick();
+
+    }
+
+    private void setIncomeHistoryClick() {
 
         salaryHistory.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

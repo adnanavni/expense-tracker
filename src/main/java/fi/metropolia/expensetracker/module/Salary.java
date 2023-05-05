@@ -1,7 +1,5 @@
 package fi.metropolia.expensetracker.module;
 
-import fi.metropolia.expensetracker.module.Dao.IncomeDao;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Currency;
@@ -21,7 +19,7 @@ public class Salary {
 
     private double salaryMinusTaxes;
 
-    public Salary(int id, double salary,  double salaryMinusTaxes, LocalDate date, String usedCurrency, String type, double taxRate) throws SQLException {
+    public Salary(int id, double salary, double salaryMinusTaxes, LocalDate date, String usedCurrency, String type, double taxRate) throws SQLException {
         this.salary = salary;
         this.date = date;
         this.usedCurrency = usedCurrency;
@@ -30,7 +28,9 @@ public class Salary {
         this.id = id;
         this.salaryMinusTaxes = salaryMinusTaxes;
     }
-    public Salary() {}
+
+    public Salary() {
+    }
 
     public double getSalary() {
         return this.salary;
@@ -39,6 +39,7 @@ public class Salary {
     public double getSalaryMinusTaxes() {
         return salaryMinusTaxes;
     }
+
     public void setSalary(Double salary) {
         this.salary = salary;
     }
@@ -74,7 +75,7 @@ public class Salary {
     @Override
     public String toString() {
         Currency currency = Currency.getInstance(Variables.getInstance().getCurrentCurrency());
-        return date + " " +  localizationManager.getString("salaryText") + String.format("%.2f", taxRate) + "% "  +
+        return date + " " + localizationManager.getString("salaryText") + String.format("%.2f", taxRate) + "% " +
                 localizationManager.getString("is") + " " + String.format("%.2f", salaryMinusTaxes) + " " + currency.getSymbol();
     }
 }

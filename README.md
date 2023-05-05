@@ -1,18 +1,41 @@
 # Expense Tracker
-This is a simple desktop app to track your expenses. It is a group project made for OTP1 course in Metropolia UAS. The group consisted of 4 engineering students. 
-The purpose of the course was learning agile frameworks. We took turns for scrum master position. The scrum master period was 2 weeks.
 
-The subject chosen for the project was a expense tracker app, which can be used for tracking your personal expenses. The user can make budjets and extract the expenses
-from those budjets. It is also possible to check your income and add your tax rate, it doesn't matter if you have an hourly wage or a monthly wage, because both features
-are included. The user can keep track of his expenses with graphs.
+Expense Tracker is a simple desktop application designed for tracking personal expenses. This project was created by a
+team of four engineering students as part of the OTP1 and OTP2 courses at Metropolia UAS. Our goal was to learn agile
+frameworks, so we took turns serving as the scrum master throughout the project.
 
-The software is made with Java. GUI is made with JavaFX. The tools used for these are IntelliJ IDEA and SceneBuilder. The apps dependencies and building is made with Maven.
-The software connects to a MYSQL database made with MariaDB. The database is located in Metropolia UAS educloud server, but you can use your own computer to host the database, 
-because Metropolia VPN connection is required for the cloud database. The test are made with JUnit 5.
+## Features
+
+* Create budgets and track expenses
+* Extract expenses from budgets
+* View income and add tax rate for accurate budget tracking
+* Support for both hourly and monthly wage tracking
+* View expenses in graphical format
+* Localization support for multiple languages
+
+With the added localization feature, users can now switch between different languages to use the app in their preferred
+language. This enhances the user experience for non-native English speakers and makes the app more accessible to a wider
+audience.
+
+## Technologies used
+
+* Java
+* JavaFX (for GUI)
+* IntelliJ IDEA (IDE)
+* SceneBuilder (for designing UI)
+* Maven (for dependency management and building)
+* JUnit 5 (for testing)
+* MariaDB (for the database)
+* Metropolia UAS educloud server (for hosting the database)
+
+Metropolia VPN connection is required for the cloud database!
+
 
 ## Instructions
-You can get started by cloning this repository and building it in IntelliJ with Java version 16 or higher. You have to make an .evn file 
-```src/main/java/fi/metropolia/expensetracker/datasource``` in this folder. The .env file must contain the following variables 
+
+To get started with Expense Tracker, clone the repository and build it in IntelliJ with Java version 16 or higher. Then,
+create an .env file in the ```src/main/java/fi/metropolia/expensetracker/datasource``` folder. The .env file should
+contain the following variables:
 
 ```.env
 DB_name=expensetracker
@@ -20,11 +43,11 @@ DB_username=someUserName
 DB_password=somePassword
 ```
 
-You can setup your local database with the databaseSetup.sql file.
-
-After this is all done you can just run MainApplication.java
+Once you've set up your local database using the included databaseSetup.sql file, you can run MainApplication.java to
+launch the app.
 
 ## Team
+
 * [Adnan Avni](https://github.com/adnanavni)
 * [Roope Kylli](https://github.com/roopeky)
 * [Ilona Juvonen](https://github.com/IlonaJuv)

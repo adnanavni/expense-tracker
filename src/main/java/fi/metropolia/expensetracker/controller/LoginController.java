@@ -3,8 +3,8 @@ package fi.metropolia.expensetracker.controller;
 import fi.metropolia.expensetracker.MainApplication;
 import fi.metropolia.expensetracker.module.*;
 import fi.metropolia.expensetracker.module.Dao.BudgetExpenseDao;
-import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.IncomeDao;
+import fi.metropolia.expensetracker.module.Dao.RegisterLoginDao;
 import fi.metropolia.expensetracker.module.Dao.SettingsDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -60,7 +60,7 @@ public class LoginController {
 
         if (userName.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, owner, "formError",
-                   "Please enter your username!");
+                    "Please enter your username!");
             return;
         }
         if (passwordField.getText().isEmpty()) {
@@ -95,7 +95,7 @@ public class LoginController {
 
     private void setLanguage() {
         String language = settingsDao.getLanguage(Variables.getInstance().getLoggedUserId());
-        String lan = language.substring(0,2);
+        String lan = language.substring(0, 2);
         String country = language.substring(3);
         LocalizationManager.getInstance().setLocale(new Locale(lan, country));
     }
@@ -128,6 +128,7 @@ public class LoginController {
             Variables.getInstance().setActiveBudget(Variables.getInstance().getBudgets().get(0).getName());
         }
     }
+
     public void assertConstantexpenses() {
         ConstantExpense[] constantExpenses = budgetExpenseDao.getConstantExpenses(Variables.getInstance().getLoggedUserId());
         if (constantExpenses.length == 0) {

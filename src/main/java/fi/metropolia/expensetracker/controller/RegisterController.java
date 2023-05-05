@@ -70,7 +70,7 @@ public class RegisterController {
                     "Please enter same password again");
             return;
         }
-        if(!passwordField.getText().equals(secondPasswordField.getText()) ) {
+        if (!passwordField.getText().equals(secondPasswordField.getText())) {
             showAlert(Alert.AlertType.ERROR, owner, "formError",
                     "Passwords are not the same");
             return;
@@ -87,7 +87,7 @@ public class RegisterController {
             createUser(name);
 
             showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration successful!",
-                    "Welcome" + " " +  userName.getText());
+                    "Welcome" + " " + userName.getText());
 
             changeWindowToHome();
         }
@@ -98,6 +98,7 @@ public class RegisterController {
         loginSignupDao.insertRecord(name, hashedPassword);
         Variables.getInstance().setLoggedUserId(loginSignupDao.loggedID(name));
 
+        Variables.getInstance().resetAndSetDefaults();
         SettingsDao settingsDao = new SettingsDao();
         settingsDao.setLanguage(loginSignupDao.loggedID(name), "en_GB");
 

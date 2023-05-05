@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * Hash passwords for storage, and test passwords against password tokens.
+ *
  * @author erickson
  * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
  */
